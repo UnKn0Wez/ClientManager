@@ -1,7 +1,5 @@
 package com.wt.component;
 
-import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +14,6 @@ import java.io.IOException;
  **/
 public class CustomPanel extends JPanel {
     private String fileName;
-
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
