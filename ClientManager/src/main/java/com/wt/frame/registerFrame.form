@@ -103,7 +103,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Button"/>
+              <text value="客户注册"/>
             </properties>
           </component>
           <component id="c8bce" class="javax.swing.JLabel">
@@ -269,14 +269,14 @@
               <toolTipText value="注册信息表"/>
             </properties>
           </component>
-          <component id="2b9d5" class="javax.swing.JButton">
+          <component id="2b9d5" class="javax.swing.JButton" binding="contactRegButton">
             <constraints>
               <grid row="13" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="80" height="-1"/>
               </grid>
             </constraints>
             <properties>
-              <text value="Button"/>
+              <text value="客户注册"/>
             </properties>
           </component>
           <component id="6e03a" class="javax.swing.JLabel">

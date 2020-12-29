@@ -40,4 +40,22 @@ public class UserServiceImpl implements UserService {
         }
         return resultEntity;
     }
+
+    @Override
+    public void clientRegister(User user) {
+        try {
+            userDao.clientRegister(user);
+        } catch (SQLException e) {
+            System.err.println("新增客户信息发生错误");
+        }
+    }
+
+    @Override
+    public void contactRegister(User user) {
+        try {
+            userDao.contactRegister(user);
+        } catch (SQLException e) {
+            System.err.println("新增员工信息发生错误");
+        }
+    }
 }

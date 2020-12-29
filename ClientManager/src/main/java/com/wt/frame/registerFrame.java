@@ -1,11 +1,16 @@
 package com.wt.frame;
 
 import com.wt.component.CustomPanel;
+import com.wt.entity.User;
+import com.wt.factory.ServiceFactory;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * @ClassName registerFrame
@@ -30,12 +35,13 @@ public class RegisterFrame extends JFrame{
     private JRadioButton clientRadio;
     private JPanel topPanel;
     private JLabel contactImg;
+    private JButton contactRegButton;
     private File file;
 
 
     public RegisterFrame() {
-
         init();
+        //将2个单选框加入一个group
         ButtonGroup group = new ButtonGroup();
         group.add(clientRadio);
         group.add(contactRadio);
@@ -51,6 +57,7 @@ public class RegisterFrame extends JFrame{
                 mainPanel.revalidate();
             }
         });
+        //单选框监听，决定显示哪个注册表
         contactRadio.addActionListener(e->{
             if(clientRadio.isSelected()){
                 contactPanel.setVisible(true);
@@ -63,6 +70,7 @@ public class RegisterFrame extends JFrame{
                 mainPanel.revalidate();
             }
         });
+        //客户头像选择监听
         imgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -78,6 +86,7 @@ public class RegisterFrame extends JFrame{
                 }
             }
         });
+        //员工头像选择监听
         contactImg.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -94,6 +103,16 @@ public class RegisterFrame extends JFrame{
             }
         });
 
+        clientRegButton.addActionListener(e -> {
+            User client=new User();
+            client.setUserName(userNameField.getText());
+            client.setPassword(Arrays.toString(clientSecPw.getPassword()));
+            client.setRealName(realNameField.getText());
+            client.setUserPhone(phoneField.getText());
+            client.setUserAddress(adressField.getText());
+            ServiceFactory.getUserServiceInstance().clientRegister(client);
+            dispose();
+        });
     }
     public void init(){
         clientPanel.setFileName("./images/regPanel.png");

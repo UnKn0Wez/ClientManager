@@ -13,4 +13,6 @@ import java.util.List;
  **/
 public interface UserService {
     ResultEntity login(String uName, String password);
+    void clientRegister(User user);
+    void contactRegister(User user);
 }

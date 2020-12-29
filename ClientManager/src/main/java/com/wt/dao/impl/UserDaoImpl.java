@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,5 +45,44 @@ public class UserDaoImpl implements UserDao {
         pstmt.close();
         jdbcUtil.closeConnection();
         return user;
+    }
+
+    @Override
+    public void contactRegister(User user) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String ist = "INSERT INTO t_user(user_id,user_name,`password`,user_role) " +
+                "values(?,?,?,?)";
+        PreparedStatement pstmt = connection.prepareStatement(ist);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String date = LocalDateTime.now().format(df);
+        pstmt.setString(1,date);
+        pstmt.setString(2,user.getUserName());
+        pstmt.setString(3,user.getPassword());
+        pstmt.setString(4,user.getUserRole());
+        pstmt.executeUpdate();
+        pstmt.close();
+        connection.close();
+    }
+
+    @Override
+    public void clientRegister(User user) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String ist = "INSERT INTO t_user(user_id,user_name,realname,user_phone,client_address,`password`,user_role) " +
+                "values(?,?,?,?,?,?,?)";
+        PreparedStatement pstmt = connection.prepareStatement(ist);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String date = LocalDateTime.now().format(df);
+        pstmt.setString(1,date);
+        pstmt.setString(2,user.getUserName());
+        pstmt.setString(3,user.getRealName());
+        pstmt.setString(4,user.getUserPhone());
+        pstmt.setString(5,user.getUserAddress());
+        pstmt.setString(6,user.getPassword());
+        pstmt.setString(7,user.getUserRole());
+        pstmt.executeUpdate();
+        pstmt.close();
+        connection.close();
     }
 }

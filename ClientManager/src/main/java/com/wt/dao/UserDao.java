@@ -13,4 +13,6 @@ import java.util.List;
  **/
 public interface UserDao {
     User logins(String account) throws SQLException;
+    void clientRegister(User user)throws SQLException;
+    void contactRegister(User user)throws SQLException;
 }
