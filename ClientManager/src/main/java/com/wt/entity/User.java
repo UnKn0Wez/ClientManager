@@ -19,29 +19,33 @@ public class User {
     /**
      * 用户ID
      */
-    private Integer userId;
+    private String userId;
     /**
      * 客户ID
      */
-    private Integer clientId;
+    private String clientId;
     //联系人ID
-    private Integer contactId;
+    private String contactId;
     //用户名
     private String userName;
     //真实姓名
     private String realName;
     //用户手机号
     private String userPhone;
+    //客户地址
+    private String userAddress;
     //客户信用度
     private String clientCredit;
     //购买时间
     private String buyTime;
     //部门ID
-    private Integer depId;
+    private String depId;
     //产品ID
-    private Integer productId;
+    private String productId;
     //工资
     private Double salary;
     //用户身份
     private String userRole;
+    //用户密码
+    private String password;
 }

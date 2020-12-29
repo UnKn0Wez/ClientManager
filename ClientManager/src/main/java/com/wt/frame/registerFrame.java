@@ -11,11 +11,11 @@ import java.awt.*;
  * @Author UnKnW
  * @Date 2020/12/29 14:00
  **/
-public class RegisterFrame extends JFrame{
+public class registerFrame extends JFrame{
     private JPanel mainPanel;
     private CustomPanel registerPanel;
 
-    public RegisterFrame() {
+    public registerFrame() {
         init();
 
     }
@@ -30,6 +30,6 @@ public class RegisterFrame extends JFrame{
     }
 
     public static void main(String[] args) {
-        new RegisterFrame();
+        new registerFrame();
     }
 }

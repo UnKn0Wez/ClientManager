@@ -15,21 +15,16 @@ import java.io.IOException;
  * @Date 2020/12/29 14:23
  **/
 public class CustomPanel extends JPanel {
-    private final String path;
+    private String fileName;
 
-    public CustomPanel(String path) {
-        this.path = path;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Image bg = null;
-        try {
-            bg = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+        ImageIcon icon = new ImageIcon(fileName);
+        Image image = icon.getImage();
+        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), icon.getImageObserver());
     }
 }
