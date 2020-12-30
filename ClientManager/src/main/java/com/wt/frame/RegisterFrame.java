@@ -1,20 +1,14 @@
 package com.wt.frame;
 
-import com.wt.component.CustomPanel;
 import com.wt.component.RoundBorder;
 import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 
 /**
@@ -23,7 +17,7 @@ import java.util.Arrays;
  * @Author UnKnW
  * @Date 2020/12/29 14:00
  **/
-public class registerFrame extends JFrame{
+public class RegisterFrame extends JFrame{
     private JPanel mainPanel;
     private JPanel clientPanel;
     private JPanel contactPanel;
@@ -46,7 +40,7 @@ public class registerFrame extends JFrame{
 
 
 
-    public registerFrame() {
+    public RegisterFrame() {
         init();
         Border border=new RoundBorder(200);
         Border border1=new RoundBorder(10);
@@ -143,6 +137,6 @@ public class registerFrame extends JFrame{
     }
 
     public static void main(String[] args) {
-        new registerFrame();
+        new RegisterFrame();
     }
 }
