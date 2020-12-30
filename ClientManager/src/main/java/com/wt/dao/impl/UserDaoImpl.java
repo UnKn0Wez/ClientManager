@@ -34,10 +34,12 @@ public class UserDaoImpl implements UserDao {
                     .userName(rs.getString("user_name"))
                     .realName(rs.getString("realname"))
                     .userRole(rs.getString("user_role"))
-                    .password(rs.getString("password")).build();
+                    .password(rs.getString("password"))
+                    .userImag(rs.getString("user_img")).build();
             UserVo uv=new UserVo();
             uv.setuName(user.getUserName());
             uv.setuRole(user.getUserRole());
+            uv.setuImg(user.getUserImag());
         }
         rs.close();
         pstmt.close();

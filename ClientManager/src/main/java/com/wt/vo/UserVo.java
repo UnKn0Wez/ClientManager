@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class UserVo {
     public static String uName;
     public static String uRole;
+    public static String uImg;
 
     public void setuName(String uName) {
         this.uName = uName;
@@ -29,5 +30,13 @@ public class UserVo {
 
     public String getuRole() {
         return this.uRole;
+    }
+
+    public void setuImg(String uImg) {
+        this.uImg = uImg;
+    }
+
+    public String getuImg() {
+        return this.uImg;
     }
 }
