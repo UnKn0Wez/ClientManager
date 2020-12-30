@@ -20,7 +20,7 @@ import java.awt.*;
 public class LoginFrame extends JFrame {
     private JPanel mainPanel;
     private CustomPanel logoPanel;
-    private JPanel loginPanel;
+    private CustomPanel loginPanel;
     private JPanel bodyPanel;
     private JTextField uNameText;
     private JButton loginButton;
@@ -63,9 +63,9 @@ public class LoginFrame extends JFrame {
         setSize(new Dimension(1200,800));
         setVisible(true);
         //设置图片Panel
-        logoPanel.setFileName("./images/loginBack.jpg");
+        loginPanel.setFileName("./images/loginBack.jpg");
         //设置输入框与按钮圆角
-        Border border = new RoundBorder(10);
+        Border border = new RoundBorder(10,Color.decode("#838383"));
         loginButton.setBorder(border);
         registButton.setBorder(border);
         uNameText.setBorder(border);

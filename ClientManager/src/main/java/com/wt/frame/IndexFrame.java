@@ -43,8 +43,8 @@ public class IndexFrame extends JFrame{
 
     IndexFrame(){
         init();
-        Border border=new RoundBorder(250);
-        Border border1=new RoundBorder(15);
+        Border border=new RoundBorder(250,Color.black);
+        Border border1=new RoundBorder(15,Color.decode("#E2E2E2"));
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
         headLabel.setBorder(border);

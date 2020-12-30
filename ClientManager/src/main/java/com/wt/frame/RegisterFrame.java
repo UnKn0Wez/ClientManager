@@ -6,6 +6,7 @@ import com.wt.factory.ServiceFactory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -42,8 +43,8 @@ public class RegisterFrame extends JFrame{
 
     public RegisterFrame() {
         init();
-        Border border=new RoundBorder(200);
-        Border border1=new RoundBorder(10);
+        Border border=new RoundBorder(200, Color.black);
+        Border border1=new RoundBorder(10,Color.black);
         imgLabel.setBorder(border);
         clientRegButton.setBorder(border1);
         cancelButton.setBorder(border1);

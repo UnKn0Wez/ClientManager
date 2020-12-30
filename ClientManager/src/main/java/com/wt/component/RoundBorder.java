@@ -11,6 +11,7 @@ import java.awt.*;
  **/
 public class RoundBorder implements Border {
     public int radius;
+    public Color color;
     @Override
     public Insets getBorderInsets(Component c) {
         return new Insets(1,1,1,1);
@@ -23,10 +24,11 @@ public class RoundBorder implements Border {
 
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y,int width, int height) {
-        g.setColor(Color.decode("#E2E2E2"));
+        g.setColor(color);
         g.drawRoundRect(0, 0, c.getWidth()-1, c.getHeight()-1, radius, radius);
     }
-    public RoundBorder(int radius){
+    public RoundBorder(int radius,Color color){
         this.radius=radius;
+        this.color=color;
     }
 }
