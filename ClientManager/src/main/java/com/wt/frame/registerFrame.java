@@ -23,7 +23,7 @@ import java.util.Arrays;
  * @Author UnKnW
  * @Date 2020/12/29 14:00
  **/
-public class RegisterFrame extends JFrame{
+public class registerFrame extends JFrame{
     private JPanel mainPanel;
     private JPanel clientPanel;
     private JPanel contactPanel;
@@ -45,7 +45,8 @@ public class RegisterFrame extends JFrame{
     private File file;
 
 
-    public RegisterFrame() throws MalformedURLException {
+
+    public registerFrame() {
         init();
         Border border=new RoundBorder(200);
         Border border1=new RoundBorder(10);
@@ -142,10 +143,6 @@ public class RegisterFrame extends JFrame{
     }
 
     public static void main(String[] args) {
-        try {
-            new RegisterFrame();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        new registerFrame();
     }
 }
