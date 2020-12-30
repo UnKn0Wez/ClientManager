@@ -36,12 +36,17 @@ public class IndexFrame extends JFrame{
     private JLabel missionLabel;
     private JLabel depLabel;
     private JLabel strongLael;
+    private JPanel contactSearchPanel;
+    private JPanel contactContentPanel;
     private final CardLayout C;
+    private UserVo uv=new UserVo();
 
     IndexFrame(){
         init();
         Border border=new RoundBorder(250);
-        UserVo uv=new UserVo();
+        Border border1=new RoundBorder(15);
+        contactSearchPanel.setBorder(border1);
+        contactContentPanel.setBorder(border1);
         headLabel.setBorder(border);
         headLabel.setText("<html><img src='"+uv.getuImg()+"' width='160' height='160'/></html>");
         loginName.setText(uv.getuName());
@@ -55,7 +60,7 @@ public class IndexFrame extends JFrame{
         indexPanel.add("5",missionPanel);
         indexPanel.add("6",depPanel);
         indexPanel.add("7",strongPanel);
-        C.show(indexPanel, "1");
+        hidePanel();
         contactLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -98,6 +103,30 @@ public class IndexFrame extends JFrame{
                 C.show(indexPanel, "7");
             }
         });
+    }
+
+    //根据身份显示不同的页面
+    public void hidePanel(){
+        String role=uv.getuRole();
+        if("Admin".equals(role)){
+            C.show(indexPanel, "1");
+            return;
+        }
+        if("Client".equals(role)){
+            C.show(indexPanel, "4");
+            clientLabel.setVisible(false);
+            contactLabel.setVisible(false);
+            productLabel.setVisible(false);
+            depLabel.setVisible(false);
+            return;
+        }
+        if("Contact".equals(role)){
+            C.show(indexPanel, "2");
+            contactLabel.setVisible(false);
+            productLabel.setVisible(false);
+            depLabel.setVisible(false);
+            return;
+        }
     }
 
     public void init(){

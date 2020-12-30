@@ -23,7 +23,7 @@ public class RoundBorder implements Border {
 
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y,int width, int height) {
-        g.setColor(Color.black);
+        g.setColor(Color.decode("#E2E2E2"));
         g.drawRoundRect(0, 0, c.getWidth()-1, c.getHeight()-1, radius, radius);
     }
     public RoundBorder(int radius){
