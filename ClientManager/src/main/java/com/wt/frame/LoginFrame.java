@@ -1,7 +1,7 @@
 package com.wt.frame;
 
 import com.wt.component.CustomPanel;
-import com.wt.component.RoundButton;
+import com.wt.component.RoundBorder;
 import com.wt.factory.ServiceFactory;
 import com.wt.utils.ResultEntity;
 import com.wt.vo.UserVo;
@@ -9,7 +9,6 @@ import com.wt.vo.UserVo;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.sql.ResultSet;
 
 /**
  * @ClassName LoginFrame
@@ -73,7 +72,7 @@ public class LoginFrame extends JFrame {
         //设置图片Panel
         logoPanel.setFileName("./images/loginBack.jpg");
         //设置输入框与按钮圆角
-        Border border = new RoundButton();
+        Border border = new RoundBorder(10);
         loginButton.setBorder(border);
         registButton.setBorder(border);
         uNameText.setBorder(border);

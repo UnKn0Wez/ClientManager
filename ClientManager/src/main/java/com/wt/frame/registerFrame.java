@@ -1,15 +1,20 @@
 package com.wt.frame;
 
 import com.wt.component.CustomPanel;
+import com.wt.component.RoundBorder;
 import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 /**
@@ -20,15 +25,14 @@ import java.util.Arrays;
  **/
 public class RegisterFrame extends JFrame{
     private JPanel mainPanel;
-    private CustomPanel clientPanel;
-    private CustomPanel contactPanel;
+    private JPanel clientPanel;
+    private JPanel contactPanel;
     private JTextField userNameField;
     private JPasswordField clientPw;
     private JPasswordField clientSecPw;
     private JTextField realNameField;
     private JTextField phoneField;
     private JTextField adressField;
-    private JLabel clientTitle;
     private JButton clientRegButton;
     private JLabel imgLabel;
     private JRadioButton contactRadio;
@@ -36,16 +40,23 @@ public class RegisterFrame extends JFrame{
     private JPanel topPanel;
     private JLabel contactImg;
     private JButton contactRegButton;
+    private JButton cancelButton;
+    private JButton 取消Button;
     private File file;
 
 
-    public RegisterFrame() {
+    public RegisterFrame() throws MalformedURLException {
         init();
+        Border border=new RoundBorder(200);
+        Border border1=new RoundBorder(10);
+        imgLabel.setBorder(border);
+        clientRegButton.setBorder(border1);
+        cancelButton.setBorder(border1);
         //将2个单选框加入一个group
         ButtonGroup group = new ButtonGroup();
         group.add(clientRadio);
         group.add(contactRadio);
-        clientRadio.addActionListener(e->{
+        contactRadio.addActionListener(e->{
             if(clientRadio.isSelected()){
                 contactPanel.setVisible(true);
                 clientPanel.setVisible(false);
@@ -58,7 +69,7 @@ public class RegisterFrame extends JFrame{
             }
         });
         //单选框监听，决定显示哪个注册表
-        contactRadio.addActionListener(e->{
+        clientRadio.addActionListener(e->{
             if(clientRadio.isSelected()){
                 contactPanel.setVisible(true);
                 clientPanel.setVisible(false);
@@ -113,21 +124,28 @@ public class RegisterFrame extends JFrame{
             ServiceFactory.getUserServiceInstance().clientRegister(client);
             dispose();
         });
+        cancelButton.addActionListener(e -> {
+            dispose();
+        });
     }
     public void init(){
-        clientPanel.setFileName("./images/regPanel.png");
-        contactPanel.setFileName("./images/regPanel.png");
+        //clientPanel.setFileName("./images/regPanel.png");
+        //contactPanel.setFileName("./images/regPanel.png");
         clientPanel.repaint();
         contactPanel.repaint();
         setTitle("registerFrame");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450,900);
+        setSize(600,800);
         this.setLocationRelativeTo(null);
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        new RegisterFrame();
+        try {
+            new RegisterFrame();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 }
