@@ -1,8 +1,11 @@
 package com.wt.frame;
 
+import com.wt.component.RoundBorder;
+import com.wt.vo.UserVo;
 import org.apache.poi.ss.formula.functions.Index;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 /**
@@ -14,9 +17,14 @@ import java.awt.*;
 public class IndexFrame extends JFrame{
     private JPanel mainPanel;
     private JPanel menuPanel;
+    private JLabel headLabel;
 
     IndexFrame(){
         init();
+        Border border=new RoundBorder(250);
+        UserVo uv=new UserVo();
+        headLabel.setBorder(border);
+        headLabel.setText("<html><img src='"+uv.getuImg()+"' width='160' height='160'/></html>");
     }
 
     public void init(){

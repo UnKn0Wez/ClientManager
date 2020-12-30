@@ -5,6 +5,7 @@ import com.wt.component.RoundBorder;
 import com.wt.factory.ServiceFactory;
 import com.wt.utils.ResultEntity;
 import com.wt.vo.UserVo;
+import org.apache.poi.ss.formula.functions.Index;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -44,16 +45,8 @@ public class LoginFrame extends JFrame {
             if(resultEntity.getCode()==0){
                 //根据不同身份进入不同页面
                 UserVo uv=new UserVo();
-                if(uv.getuRole()=="Admin"){
-                    return;
-                }
-                if(uv.getuRole()=="Client"){
-                    return;
-                }
-                if(uv.getuRole()=="Contact"){
-                    return;
-                }
                 this.dispose();
+                new IndexFrame();
             }
             else {
                 uNameText.setText("");
