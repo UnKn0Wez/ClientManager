@@ -35,7 +35,7 @@ public class RegisterFrame extends JFrame{
     private JLabel contactImg;
     private JButton contactRegButton;
     private JButton cancelButton;
-    private JButton 取消Button;
+    private JButton contactCelButton;
     private File file;
 
 
@@ -47,6 +47,9 @@ public class RegisterFrame extends JFrame{
         imgLabel.setBorder(border);
         clientRegButton.setBorder(border1);
         cancelButton.setBorder(border1);
+        contactRegButton.setBorder(border1);
+        contactCelButton.setBorder(border1);
+
         //将2个单选框加入一个group
         ButtonGroup group = new ButtonGroup();
         group.add(clientRadio);
