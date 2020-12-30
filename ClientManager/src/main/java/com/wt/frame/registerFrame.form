@@ -417,13 +417,14 @@
           <component id="4c82b" class="javax.swing.JRadioButton" binding="contactRadio">
             <constraints/>
             <properties>
-              <selected value="true"/>
+              <selected value="false"/>
               <text value="我是员工"/>
             </properties>
           </component>
           <component id="ad092" class="javax.swing.JRadioButton" binding="clientRadio">
             <constraints/>
             <properties>
+              <selected value="true"/>
               <text value="我是客户"/>
             </properties>
           </component>
