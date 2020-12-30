@@ -40,6 +40,8 @@ public class User {
     private String buyTime;
     //部门ID
     private String depId;
+    //用户头像
+    private String userImag;
     //产品ID
     private String productId;
     //工资

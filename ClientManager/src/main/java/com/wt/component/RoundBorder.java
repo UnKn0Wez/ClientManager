@@ -10,7 +10,8 @@ import java.awt.*;
  * @Date 2020/12/29 15:03
  **/
 public class RoundBorder implements Border {
-    private Integer data;
+    public int radius;
+    public Color color;
     @Override
     public Insets getBorderInsets(Component c) {
         return new Insets(1,1,1,1);
@@ -23,10 +24,11 @@ public class RoundBorder implements Border {
 
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y,int width, int height) {
-        g.setColor(Color.black);
-        g.drawRoundRect(0, 0, c.getWidth()-1, c.getHeight()-1, data, data);
+        g.setColor(color);
+        g.drawRoundRect(0, 0, c.getWidth()-1, c.getHeight()-1, radius, radius);
     }
-    public RoundBorder(Integer data){
-        this.data=data;
+    public RoundBorder(int radius,Color color){
+        this.radius=radius;
+        this.color=color;
     }
 }

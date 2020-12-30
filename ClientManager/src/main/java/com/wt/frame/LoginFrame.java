@@ -5,6 +5,7 @@ import com.wt.component.RoundBorder;
 import com.wt.factory.ServiceFactory;
 import com.wt.utils.ResultEntity;
 import com.wt.vo.UserVo;
+import org.apache.poi.ss.formula.functions.Index;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -19,7 +20,7 @@ import java.awt.*;
 public class LoginFrame extends JFrame {
     private JPanel mainPanel;
     private CustomPanel logoPanel;
-    private JPanel loginPanel;
+    private CustomPanel loginPanel;
     private JPanel bodyPanel;
     private JTextField uNameText;
     private JButton loginButton;
@@ -44,16 +45,8 @@ public class LoginFrame extends JFrame {
             if(resultEntity.getCode()==0){
                 //根据不同身份进入不同页面
                 UserVo uv=new UserVo();
-                if(uv.getuRole()=="Admin"){
-                    return;
-                }
-                if(uv.getuRole()=="Client"){
-                    return;
-                }
-                if(uv.getuRole()=="Contact"){
-                    return;
-                }
                 this.dispose();
+                new IndexFrame();
             }
             else {
                 uNameText.setText("");
@@ -70,9 +63,9 @@ public class LoginFrame extends JFrame {
         setSize(new Dimension(1200,800));
         setVisible(true);
         //设置图片Panel
-        logoPanel.setFileName("./images/loginBack.jpg");
+        loginPanel.setFileName("./images/loginBack.jpg");
         //设置输入框与按钮圆角
-        Border border = new RoundBorder(10);
+        Border border = new RoundBorder(10,Color.decode("#838383"));
         loginButton.setBorder(border);
         registButton.setBorder(border);
         uNameText.setBorder(border);
