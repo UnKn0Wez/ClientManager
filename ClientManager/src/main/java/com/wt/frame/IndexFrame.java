@@ -2,12 +2,9 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
-import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
-import jdk.internal.dynalink.support.AutoDiscovery;
-import org.apache.poi.ss.formula.functions.Index;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
@@ -17,12 +14,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-<<<<<<< HEAD
-import java.awt.dnd.Autoscroll;
-=======
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
->>>>>>> qzw
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -58,14 +49,10 @@ public class IndexFrame extends JFrame{
     private JTextField contactSearchText;
     private JTextField contactProSearchText;
     private JButton contactSearchButton;
-    private JComboBox depSearchCombox;
-<<<<<<< HEAD
+    private JComboBox<Department> depSearchCombox;
     private JButton button1;
     private JButton button2;
     private JPanel contactBodyPanel;
-=======
-    private JLabel exitLabel;
->>>>>>> qzw
     private final CardLayout C;
     private UserVo uv=new UserVo();
 
@@ -137,7 +124,6 @@ public class IndexFrame extends JFrame{
                 C.show(indexPanel, "7");
             }
         });
-<<<<<<< HEAD
         showContact(ServiceFactory.getUserServiceInstance().selectAll());
     }
 
@@ -191,18 +177,12 @@ public class IndexFrame extends JFrame{
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-=======
-        exitLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                dispose();
->>>>>>> qzw
             }
         });
     }
 
     public void contactComboxInit(){
-        depSearchCombox.addItem("请选择部门");
+        depSearchCombox.addItem(Department.builder().depName("请选择部门").depId("1").build());
         List<Department> departmentList= ServiceFactory.getDepServiceInstance().selectDepAll();
         for (Department department:departmentList){
             depSearchCombox.addItem(department);
@@ -235,11 +215,9 @@ public class IndexFrame extends JFrame{
 
     public void init(){
         setContentPane(mainPanel);
-        setUndecorated(true);
         setTitle("主页");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(1200,800));
-        this.setLocationRelativeTo(null);
         setVisible(true);
     }
 
