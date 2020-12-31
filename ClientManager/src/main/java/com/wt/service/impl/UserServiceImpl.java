@@ -5,6 +5,7 @@ import com.wt.entity.User;
 import com.wt.factory.DaoFactory;
 import com.wt.service.UserService;
 import com.wt.utils.ResultEntity;
+import com.wt.vo.ContactVo;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
@@ -57,5 +58,16 @@ public class UserServiceImpl implements UserService {
         } catch (SQLException e) {
             System.err.println("新增员工信息发生错误");
         }
+    }
+
+    @Override
+    public List<ContactVo> selectAll() {
+        List<ContactVo> contactList = null;
+        try {
+            contactList = userDao.selectAll();
+        } catch (SQLException e) {
+            System.err.println("查询学生信息发生错误");
+        }
+        return contactList;
     }
 }
