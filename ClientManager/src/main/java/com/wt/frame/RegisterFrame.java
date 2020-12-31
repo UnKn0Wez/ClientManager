@@ -8,6 +8,7 @@ import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.utils.AliOSSUtil;
 import com.wt.utils.CopeImageUtil;
+import com.wt.utils.MyMd5Util;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -48,9 +49,12 @@ public class RegisterFrame extends JFrame{
     private JTextField contactNameField;
     private JPasswordField contactPwField;
     private JPasswordField contactSecPwField;
+    private JTextField contactPhoneField;
+    private JTextField contactRealField;
     private File file;
     private String depId;
     private String productId;
+    private Integer bb=0;
 
 
 
@@ -64,13 +68,13 @@ public class RegisterFrame extends JFrame{
         contactCelButton.setBorder(border1);
         List<Department> departmentList=ServiceFactory.getDepServiceInstance().selectDepAll();
         depCombobox.removeAllItems();
-        depCombobox.addItem(Department.builder().depName("请选择部门").build());
+        depCombobox.addItem(Department.builder().depName("请选择部门").depId("1").build());
         for (Department department:departmentList){
             depCombobox.addItem(department);
         }
         List<Product> productList=ServiceFactory.getDepServiceInstance().selectProAll();
         proCombobox.removeAllItems();
-        proCombobox.addItem(Product.builder().productName("请选择产品").build());
+        proCombobox.addItem(Product.builder().productName("请选择产品").productId("1").build());
         for(Product product:productList){
             proCombobox.addItem(product);
         }
@@ -121,6 +125,7 @@ public class RegisterFrame extends JFrame{
                     imgLabel.setText("");
                     imgLabel.setIcon(icon);
                 }
+                bb++;
             }
         });
         //员工头像选择监听
@@ -137,64 +142,77 @@ public class RegisterFrame extends JFrame{
                     contactImg.setText("");
                     contactImg.setIcon(icon);
                 }
+                bb++;
             }
         });
 
-        clientRegButton.addActionListener(e -> {
-            User client=new User();
-            if(clientPw.getPassword()==clientSecPw.getPassword()){
-                client.setPassword(Arrays.toString(contactSecPwField.getPassword()));
-            }else{
-                JOptionPane.showMessageDialog(null,"两次密码不相同");
-            }
-            client.setUserName(userNameField.getText());
-            client.setPassword(Arrays.toString(clientSecPw.getPassword()));
-            client.setRealName(realNameField.getText());
-            client.setUserPhone(phoneField.getText());
-            client.setUserAddress(adressField.getText());
-            client.setUserRole("client");
-            File file1=new File(copeImageUtil.fileCut(file.getAbsolutePath()));
-            client.setUserImag(AliOSSUtil.ossUpload(file1));
-            ServiceFactory.getUserServiceInstance().clientRegister(client);
-            dispose();
-        });
-        contactRegButton.addActionListener(e->{
-            User contact=new User();
-            if(Arrays.equals(contactPwField.getPassword(), contactPwField.getPassword())){
-                contact.setPassword(Arrays.toString(contactSecPwField.getPassword()));
-            }else{
-                JOptionPane.showMessageDialog(null,"两次密码不相同");
-            }
-            contact.setUserName(contactNameField.getText());
-            contact.setDepId(depId);
-            contact.setProductId(productId);
-            contact.setUserRole("contact");
-            File file1=new File(copeImageUtil.fileCut(file.getAbsolutePath()));
-            contact.setUserImag(AliOSSUtil.ossUpload(file1));
-            ServiceFactory.getUserServiceInstance().clientRegister(contact);
-            dispose();
-        });
+
         cancelButton.addActionListener(e -> {
             dispose();
         });
         contactCelButton.addActionListener(e -> {
             dispose();
         });
-        depCombobox.addItemListener(e -> {
-            if(e.getStateChange()== ItemEvent.DESELECTED){
+        depCombobox.addActionListener(e -> {
                 int index=depCombobox.getSelectedIndex();
                 if(index!=0){
                     depId=depCombobox.getItemAt(index).getDepId();
                 }
-            }
         });
-        proCombobox.addItemListener(e->{
-            if(e.getStateChange()==ItemEvent.DESELECTED){
+        proCombobox.addActionListener(e->{
                 int index=proCombobox.getSelectedIndex();
                 if(index!=0){
                     productId=proCombobox.getItemAt(index).getProductId();
                 }
+        });
+        clientRegButton.addActionListener(e -> {
+            User client=new User();
+            String pw= String.valueOf(clientPw.getPassword());
+            String secPw= String.valueOf(clientSecPw.getPassword());
+            if(pw.equals(secPw)){
+                client.setPassword(MyMd5Util.md5(secPw));
+            }else{
+                JOptionPane.showMessageDialog(null,"两次密码不相同");
             }
+            client.setUserName(userNameField.getText());
+            client.setRealName(realNameField.getText());
+            client.setUserPhone(phoneField.getText());
+            client.setUserAddress(adressField.getText());
+            client.setUserRole("Client");
+            if(bb!=0){
+                File file1=new File(copeImageUtil.fileCut(file.getAbsolutePath()));
+                client.setUserImag(AliOSSUtil.ossUpload(file1));
+            }else{
+                client.setUserImag("https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201230095732.jpg");
+                bb=0;
+            }
+            ServiceFactory.getUserServiceInstance().clientRegister(client);
+            dispose();
+        });
+        contactRegButton.addActionListener(e->{
+            User contact=new User();
+            String pw= String.valueOf(contactPwField.getPassword());
+            String secPw=String.valueOf(contactSecPwField.getPassword());
+            if(pw.equals(secPw)){
+                contact.setPassword(MyMd5Util.md5(secPw));
+            }else{
+                JOptionPane.showMessageDialog(null,"两次密码不相同");
+            }
+            contact.setUserName(contactNameField.getText());
+            contact.setDepId(depId);
+            contact.setProductId(productId);
+            contact.setUserRole("Contact");
+            contact.setUserPhone(contactPhoneField.getText());
+            contact.setRealName(contactRealField.getText());
+            if(bb!=0){
+                File file1=new File(copeImageUtil.fileCut(file.getAbsolutePath()));
+                contact.setUserImag(AliOSSUtil.ossUpload(file1));
+            }else{
+                contact.setUserImag("https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201230095732.jpg");
+                bb=0;
+            }
+            ServiceFactory.getUserServiceInstance().contactRegister(contact);
+            dispose();
         });
     }
     public void init(){
