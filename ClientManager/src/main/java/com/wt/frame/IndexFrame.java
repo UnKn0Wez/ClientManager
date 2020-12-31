@@ -7,6 +7,8 @@ import org.apache.poi.ss.formula.functions.Index;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -42,6 +44,7 @@ public class IndexFrame extends JFrame{
     private JTextField contactProSearchText;
     private JButton contactSearchButton;
     private JComboBox depSearchCombox;
+    private JLabel exitLabel;
     private final CardLayout C;
     private UserVo uv=new UserVo();
 
@@ -113,6 +116,12 @@ public class IndexFrame extends JFrame{
                 C.show(indexPanel, "7");
             }
         });
+        exitLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
     }
 
     public void contactComboxInit(){
@@ -145,9 +154,11 @@ public class IndexFrame extends JFrame{
 
     public void init(){
         setContentPane(mainPanel);
+        setUndecorated(true);
         setTitle("主页");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(1200,800));
+        this.setLocationRelativeTo(null);
         setVisible(true);
     }
 

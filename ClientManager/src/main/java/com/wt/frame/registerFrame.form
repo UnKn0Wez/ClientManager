@@ -50,7 +50,9 @@
                 <preferred-size width="250" height="25"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <visible value="true"/>
+            </properties>
           </component>
           <component id="bd892" class="javax.swing.JTextField" binding="realNameField">
             <constraints>
@@ -222,7 +224,7 @@
           </component>
         </children>
       </grid>
-      <grid id="6ddeb" binding="contactPanel" layout-manager="GridLayoutManager" row-count="12" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="15">
+      <grid id="6ddeb" binding="contactPanel" layout-manager="GridLayoutManager" row-count="14" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="15">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -273,7 +275,7 @@
           </hspacer>
           <component id="2b9d5" class="javax.swing.JButton" binding="contactRegButton">
             <constraints>
-              <grid row="10" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="12" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="80" height="30"/>
               </grid>
             </constraints>
@@ -323,7 +325,7 @@
           </component>
           <component id="4805d" class="javax.swing.JLabel">
             <constraints>
-              <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
@@ -344,7 +346,7 @@
           </component>
           <component id="f03f4" class="javax.swing.JButton" binding="contactCelButton">
             <constraints>
-              <grid row="10" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
+              <grid row="12" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="80" height="30"/>
               </grid>
             </constraints>
@@ -376,7 +378,7 @@
           </component>
           <component id="e59cb" class="javax.swing.JLabel">
             <constraints>
-              <grid row="11" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="13" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="-1" height="75"/>
               </grid>
             </constraints>
@@ -386,7 +388,7 @@
           </component>
           <component id="a5cc0" class="javax.swing.JLabel">
             <constraints>
-              <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="11" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="-1" height="25"/>
               </grid>
             </constraints>
@@ -396,13 +398,13 @@
           </component>
           <component id="53540" class="javax.swing.JComboBox" binding="depCombobox">
             <constraints>
-              <grid row="7" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="9" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
           </component>
           <component id="97ab" class="javax.swing.JLabel">
             <constraints>
-              <grid row="8" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="10" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
@@ -413,9 +415,45 @@
           </component>
           <component id="80cc4" class="javax.swing.JComboBox" binding="proCombobox">
             <constraints>
-              <grid row="8" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="10" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
+          </component>
+          <component id="4f87d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="8" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <foreground color="-16777216"/>
+              <text value="手机号码"/>
+            </properties>
+          </component>
+          <component id="8c544" class="javax.swing.JTextField" binding="contactPhoneField">
+            <constraints>
+              <grid row="8" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="250" height="25"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="83fa0" class="javax.swing.JTextField" binding="contactRealField">
+            <constraints>
+              <grid row="7" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="250" height="25"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="fca18" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <foreground color="-16777216"/>
+              <text value="真实姓名"/>
+            </properties>
           </component>
         </children>
       </grid>
