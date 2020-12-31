@@ -116,7 +116,7 @@ public class IndexFrame extends JFrame{
     }
 
     public void contactComboxInit(){
-
+        //List<>
     }
 
     //根据身份显示不同的页面
