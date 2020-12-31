@@ -3,6 +3,7 @@ package com.wt.dao.impl;
 import com.wt.dao.UserDao;
 import com.wt.entity.User;
 import com.wt.utils.JdbcUtil;
+import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
 
 import javax.management.relation.Role;
@@ -68,6 +69,38 @@ public class UserDaoImpl implements UserDao {
         pstmt.executeUpdate();
         pstmt.close();
         connection.close();
+    }
+
+    @Override
+    public List<ContactVo> selectAll() throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
+                "from t_user,t_department,t_product " +
+                "where t_user.dep_id=t_department.dep_id " +
+                "and t_user.product_id=t_product.product_id " +
+                "and user_role = 'Contact'";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<ContactVo> list = new ArrayList<>();
+        while (rs.next()) {
+            ContactVo student = ContactVo.builder()
+                    .userId(rs.getString("user_id"))
+                    .contactId(rs.getString("contact_id"))
+                    .userName(rs.getString("user_name"))
+                    .realName(rs.getString("realname"))
+                    .userPhone(rs.getString("user_phone"))
+                    .depName(rs.getString("dep_name"))
+                    .salary(rs.getDouble("salary"))
+                    .userImag(rs.getString("user_img"))
+                    .productName(rs.getString("product_name"))
+                    .build();
+            list.add(student);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return list;
     }
 
     @Override
