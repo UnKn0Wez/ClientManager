@@ -18,4 +18,9 @@ import lombok.NoArgsConstructor;
 public class Department {
     private String depId;
     private String depName;
+
+    @Override
+    public String toString() {
+        return depName;
+    }
 }

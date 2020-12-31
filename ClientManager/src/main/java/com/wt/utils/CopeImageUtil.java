@@ -1,5 +1,7 @@
 package com.wt.utils;
 
+import com.wt.entity.Path;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -8,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.UUID;
 
 /**
  * @ClassName CopeImageUtil
@@ -16,10 +19,10 @@ import java.net.URL;
  * @Date 2020/12/30 9:10
  **/
 public class CopeImageUtil {
-    public BufferedImage fileCut(String path) {
+    public String fileCut(String path) {
         BufferedImage avatarImage = null;
         try {
-            File file = new File("path");
+            File file = new File(path);
             avatarImage = ImageIO.read(file);
             avatarImage = scaleByPercentage(avatarImage, avatarImage.getWidth(),  avatarImage.getWidth());
             int width = avatarImage.getWidth();
@@ -48,16 +51,19 @@ public class CopeImageUtil {
             graphics.setColor(Color.WHITE);
             graphics.drawOval(border1, border1, width - border1 * 2, width - border1 * 2);
             graphics.dispose();
-            OutputStream os = new FileOutputStream("");//发布项目时，如：Tomcat 他会在服务器本地tomcat webapps文件下创建此文件名
+            String uuid= UUID.randomUUID().toString();
+            String path1="C:/Users/Public/Pictures/"+uuid+".png";
+            OutputStream os = new FileOutputStream(path1);
+            //发布项目时，如：Tomcat 他会在服务器本地tomcat webapps文件下创建此文件名
             ImageIO.write(formatAvatarImage, "PNG", os);
-            return formatAvatarImage;
+            return path1;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public BufferedImage urlCut(String headUrl) {
+    public String urlCut(String headUrl) {
         BufferedImage avatarImage = null;
         try {
             avatarImage = ImageIO.read(new URL(headUrl));
@@ -88,9 +94,14 @@ public class CopeImageUtil {
             graphics.setColor(Color.WHITE);
             graphics.drawOval(border1, border1, width - border1 * 2, width - border1 * 2);
             graphics.dispose();
-            OutputStream os = new FileOutputStream("");//发布项目时，如：Tomcat 他会在服务器本地tomcat webapps文件下创建此文件名
+            String uuid= UUID.randomUUID().toString();
+            //发布项目时，如：Tomcat 他会在服务器本地tomcat webapps文件下创建此文件名
+            String path="C:/Users/Public/Pictures/"+uuid+".png";
+            OutputStream os = new FileOutputStream(path);
             ImageIO.write(formatAvatarImage, "PNG", os);
-            return formatAvatarImage;
+            File file = new File(path);
+            Path.setPath(AliOSSUtil.ossUpload(file));
+            return path;
         } catch (Exception e) {
             e.printStackTrace();
         }

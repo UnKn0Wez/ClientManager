@@ -1,6 +1,8 @@
 package com.wt.factory;
 
+import com.wt.dao.DepDao;
 import com.wt.dao.UserDao;
+import com.wt.dao.impl.DepDaoImpl;
 import com.wt.dao.impl.UserDaoImpl;
 
 /**
@@ -11,4 +13,5 @@ import com.wt.dao.impl.UserDaoImpl;
  **/
 public class DaoFactory {
     public static UserDao getUserDaoInstance(){return new UserDaoImpl();}
+    public static DepDao getDepDaoInstance(){return new DepDaoImpl();}
 }
