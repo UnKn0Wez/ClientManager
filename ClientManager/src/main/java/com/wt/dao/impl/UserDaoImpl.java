@@ -54,18 +54,22 @@ public class UserDaoImpl implements UserDao {
     public void contactRegister(User user) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String ist = "INSERT INTO t_user(user_id,user_name,`password`,user_role,dep_id,product_id,user_img) " +
-                "values(?,?,?,?,?,?,?)";
+        String ist = "INSERT INTO t_user(user_id,contact_id,user_name,user_phone,dep_id,product_id,user_img,password,user_role,realname)\n" +
+                "values(?,?,?,?,?,?,?,?,?,?);";
         PreparedStatement pstmt = connection.prepareStatement(ist);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String date = LocalDateTime.now().format(df);
         pstmt.setString(1,date);
-        pstmt.setString(2,user.getUserName());
-        pstmt.setString(3,user.getPassword());
+        pstmt.setString(3,user.getUserName());
+        pstmt.setString(8,user.getPassword());
         pstmt.setString(4,user.getUserRole());
         pstmt.setString(5,user.getDepId());
         pstmt.setString(6,user.getProductId());
         pstmt.setString(7,user.getUserImag());
+        pstmt.setString(4,user.getUserPhone());
+        pstmt.setString(2,"Contact"+date);
+        pstmt.setString(9,"Contact");
+        pstmt.setString(10,user.getRealName());
         pstmt.executeUpdate();
         pstmt.close();
         connection.close();
@@ -107,8 +111,8 @@ public class UserDaoImpl implements UserDao {
     public void clientRegister(User user) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String ist = "INSERT INTO t_user(user_id,user_name,realname,user_phone,client_address,`password`,user_role,user_img) " +
-                "values(?,?,?,?,?,?,?,?)";
+        String ist = "INSERT INTO t_user(user_id,user_name,realname,user_phone,client_address,`password`,user_role,user_img,client_id) " +
+                "values(?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt = connection.prepareStatement(ist);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String date = LocalDateTime.now().format(df);
@@ -120,6 +124,7 @@ public class UserDaoImpl implements UserDao {
         pstmt.setString(6,user.getPassword());
         pstmt.setString(7,user.getUserRole());
         pstmt.setString(8,user.getUserImag());
+        pstmt.setString(9,"Client"+date);
         pstmt.executeUpdate();
         pstmt.close();
         connection.close();
