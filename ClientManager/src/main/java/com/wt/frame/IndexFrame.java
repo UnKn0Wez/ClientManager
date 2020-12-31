@@ -38,6 +38,10 @@ public class IndexFrame extends JFrame{
     private JLabel strongLael;
     private JPanel contactSearchPanel;
     private JPanel contactContentPanel;
+    private JTextField contactSearchText;
+    private JTextField contactProSearchText;
+    private JButton contactSearchButton;
+    private JComboBox depSearchCombox;
     private final CardLayout C;
     private UserVo uv=new UserVo();
 
@@ -45,11 +49,17 @@ public class IndexFrame extends JFrame{
         init();
         Border border=new RoundBorder(250,Color.black);
         Border border1=new RoundBorder(15,Color.decode("#E2E2E2"));
+        Border border2 = new RoundBorder(10,Color.decode("#838383"));
+        contactSearchButton.setBorder(border2);
+        depSearchCombox.setBorder(border2);
+        contactSearchText.setBorder(border2);
+        contactProSearchText.setBorder(border2);
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
         headLabel.setBorder(border);
         headLabel.setText("<html><img src='"+uv.getuImg()+"' width='160' height='160'/></html>");
         loginName.setText(uv.getuName());
+
         //创建CardLayout
         C = new CardLayout();
         indexPanel.setLayout(C);
@@ -103,6 +113,10 @@ public class IndexFrame extends JFrame{
                 C.show(indexPanel, "7");
             }
         });
+    }
+
+    public void contactComboxInit(){
+
     }
 
     //根据身份显示不同的页面
