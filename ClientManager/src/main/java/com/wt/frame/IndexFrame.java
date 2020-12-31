@@ -2,22 +2,15 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
-import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
-import jdk.internal.dynalink.support.AutoDiscovery;
-import org.apache.poi.ss.formula.functions.Index;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
+import javax.swing.table.*;
 import java.awt.*;
-import java.awt.dnd.Autoscroll;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -53,7 +46,7 @@ public class IndexFrame extends JFrame{
     private JTextField contactSearchText;
     private JTextField contactProSearchText;
     private JButton contactSearchButton;
-    private JComboBox depSearchCombox;
+    private JComboBox<Department> depSearchCombox;
     private JButton button1;
     private JButton button2;
     private JPanel contactBodyPanel;
@@ -132,7 +125,10 @@ public class IndexFrame extends JFrame{
     }
 
     public void showContact(List<ContactVo> contacts){
-        JTable table = new JTable();
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel){ @Override
+        public boolean isCellEditable(int row, int column) { return false; }};
         DefaultTableModel model = new DefaultTableModel();
         table.setModel(model);
         model.setColumnIdentifiers(new String[]{"员工编号","用户名","员工姓名","电话号码","所属部门","负责产品","工资",""});
@@ -186,7 +182,7 @@ public class IndexFrame extends JFrame{
     }
 
     public void contactComboxInit(){
-        depSearchCombox.addItem("请选择部门");
+        depSearchCombox.addItem(Department.builder().depName("请选择部门").depId("1").build());
         List<Department> departmentList= ServiceFactory.getDepServiceInstance().selectDepAll();
         for (Department department:departmentList){
             depSearchCombox.addItem(department);
