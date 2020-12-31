@@ -1,16 +1,22 @@
 package com.wt.frame;
 
 import com.wt.component.RoundBorder;
+import com.wt.entity.Department;
+import com.wt.entity.Path;
+import com.wt.entity.Product;
 import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
+import com.wt.utils.AliOSSUtil;
+import com.wt.utils.CopeImageUtil;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName registerFrame
@@ -37,46 +43,67 @@ public class RegisterFrame extends JFrame{
     private JButton contactRegButton;
     private JButton cancelButton;
     private JButton contactCelButton;
+    private JComboBox<Department> depCombobox;
+    private JComboBox<Product> proCombobox;
+    private JTextField contactNameField;
+    private JPasswordField contactPwField;
+    private JPasswordField contactSecPwField;
     private File file;
+    private String depId;
+    private String productId;
 
 
 
     public RegisterFrame() {
         init();
-        Border border=new RoundBorder(200, Color.black);
+        CopeImageUtil copeImageUtil=new CopeImageUtil();
         Border border1=new RoundBorder(10,Color.black);
-        imgLabel.setBorder(border);
         clientRegButton.setBorder(border1);
         cancelButton.setBorder(border1);
         contactRegButton.setBorder(border1);
         contactCelButton.setBorder(border1);
-
+        List<Department> departmentList=ServiceFactory.getDepServiceInstance().selectDepAll();
+        depCombobox.removeAllItems();
+        depCombobox.addItem(Department.builder().depName("请选择部门").build());
+        for (Department department:departmentList){
+            depCombobox.addItem(department);
+        }
+        List<Product> productList=ServiceFactory.getDepServiceInstance().selectProAll();
+        proCombobox.removeAllItems();
+        proCombobox.addItem(Product.builder().productName("请选择产品").build());
+        for(Product product:productList){
+            proCombobox.addItem(product);
+        }
+        //CopeImageUtil copeImageUtil = new CopeImageUtil();
+        copeImageUtil.urlCut("https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201229190028.png");
+        imgLabel.setText("<html><img src="+ Path.getPath() +" width='160' height='160'></html>");
+        contactImg.setText("<html><img src="+ Path.getPath() +" width='160' height='160'></html>");
         //将2个单选框加入一个group
         ButtonGroup group = new ButtonGroup();
         group.add(clientRadio);
         group.add(contactRadio);
         contactRadio.addActionListener(e->{
             if(clientRadio.isSelected()){
-                contactPanel.setVisible(true);
-                clientPanel.setVisible(false);
+                contactPanel.setVisible(false);
+                clientPanel.setVisible(true);
                 mainPanel.revalidate();
             }
             if(contactRadio.isSelected()){
-                clientPanel.setVisible(true);
-                contactPanel.setVisible(false);
+                clientPanel.setVisible(false);
+                contactPanel.setVisible(true);
                 mainPanel.revalidate();
             }
         });
         //单选框监听，决定显示哪个注册表
         clientRadio.addActionListener(e->{
             if(clientRadio.isSelected()){
-                contactPanel.setVisible(true);
-                clientPanel.setVisible(false);
+                contactPanel.setVisible(false);
+                clientPanel.setVisible(true);
                 mainPanel.revalidate();
             }
             if(contactRadio.isSelected()){
-                clientPanel.setVisible(true);
-                contactPanel.setVisible(false);
+                clientPanel.setVisible(false);
+                contactPanel.setVisible(true);
                 mainPanel.revalidate();
             }
         });
@@ -89,7 +116,7 @@ public class RegisterFrame extends JFrame{
                 int result = fileChooser.showOpenDialog(rootPane);
                 if(result == JFileChooser.APPROVE_OPTION){
                     file = fileChooser.getSelectedFile();
-                    ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+                    ImageIcon icon = new ImageIcon(copeImageUtil.fileCut(file.getAbsolutePath()));
                     icon.setImage(icon.getImage().getScaledInstance(100,100,100));
                     imgLabel.setText("");
                     imgLabel.setIcon(icon);
@@ -105,7 +132,7 @@ public class RegisterFrame extends JFrame{
                 int result = fileChooser.showOpenDialog(rootPane);
                 if(result == JFileChooser.APPROVE_OPTION){
                     file = fileChooser.getSelectedFile();
-                    ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+                    ImageIcon icon = new ImageIcon(copeImageUtil.fileCut(file.getAbsolutePath()));
                     icon.setImage(icon.getImage().getScaledInstance(100,100,100));
                     contactImg.setText("");
                     contactImg.setIcon(icon);
@@ -115,16 +142,59 @@ public class RegisterFrame extends JFrame{
 
         clientRegButton.addActionListener(e -> {
             User client=new User();
+            if(clientPw.getPassword()==clientSecPw.getPassword()){
+                client.setPassword(Arrays.toString(contactSecPwField.getPassword()));
+            }else{
+                JOptionPane.showMessageDialog(null,"两次密码不相同");
+            }
             client.setUserName(userNameField.getText());
             client.setPassword(Arrays.toString(clientSecPw.getPassword()));
             client.setRealName(realNameField.getText());
             client.setUserPhone(phoneField.getText());
             client.setUserAddress(adressField.getText());
+            client.setUserRole("client");
+            File file1=new File(copeImageUtil.fileCut(file.getAbsolutePath()));
+            client.setUserImag(AliOSSUtil.ossUpload(file1));
             ServiceFactory.getUserServiceInstance().clientRegister(client);
+            dispose();
+        });
+        contactRegButton.addActionListener(e->{
+            User contact=new User();
+            if(Arrays.equals(contactPwField.getPassword(), contactPwField.getPassword())){
+                contact.setPassword(Arrays.toString(contactSecPwField.getPassword()));
+            }else{
+                JOptionPane.showMessageDialog(null,"两次密码不相同");
+            }
+            contact.setUserName(contactNameField.getText());
+            contact.setDepId(depId);
+            contact.setProductId(productId);
+            contact.setUserRole("contact");
+            File file1=new File(copeImageUtil.fileCut(file.getAbsolutePath()));
+            contact.setUserImag(AliOSSUtil.ossUpload(file1));
+            ServiceFactory.getUserServiceInstance().clientRegister(contact);
             dispose();
         });
         cancelButton.addActionListener(e -> {
             dispose();
+        });
+        contactCelButton.addActionListener(e -> {
+            dispose();
+        });
+        depCombobox.addItemListener(e -> {
+            if(e.getStateChange()== ItemEvent.DESELECTED){
+                int index=depCombobox.getSelectedIndex();
+                if(index!=0){
+                    depId=depCombobox.getItemAt(index).getDepId();
+                }
+            }
+        });
+        proCombobox.addItemListener(e->{
+            if(e.getStateChange()==ItemEvent.DESELECTED){
+                int index=proCombobox.getSelectedIndex();
+                if(index!=0){
+                    productId=proCombobox.getItemAt(index).getProductId();
+                }
+            }
         });
     }
     public void init(){
@@ -132,6 +202,7 @@ public class RegisterFrame extends JFrame{
         //contactPanel.setFileName("./images/regPanel.png");
         clientPanel.repaint();
         contactPanel.repaint();
+        setUndecorated(true);
         setTitle("registerFrame");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
