@@ -51,6 +51,7 @@ public class RegisterFrame extends JFrame{
     private JPasswordField contactSecPwField;
     private JTextField contactPhoneField;
     private JTextField contactRealField;
+    private JLabel xxField;
     private File file;
     private String depId;
     private String productId;
@@ -60,6 +61,12 @@ public class RegisterFrame extends JFrame{
 
     public RegisterFrame() {
         init();
+        xxField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
         CopeImageUtil copeImageUtil=new CopeImageUtil();
         Border border1=new RoundBorder(10,Color.black);
         clientRegButton.setBorder(border1);
