@@ -53,11 +53,18 @@ public class IndexFrame extends JFrame{
     private JButton button1;
     private JButton button2;
     private JPanel contactBodyPanel;
+    private JLabel xField;
     private final CardLayout C;
     private UserVo uv=new UserVo();
 
     IndexFrame(){
         init();
+        xField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
         Border border=new RoundBorder(250,Color.black);
         Border border1=new RoundBorder(15,Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10,Color.decode("#838383"));
@@ -215,9 +222,11 @@ public class IndexFrame extends JFrame{
 
     public void init(){
         setContentPane(mainPanel);
+        setUndecorated(true);
         setTitle("主页");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(1200,800));
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
