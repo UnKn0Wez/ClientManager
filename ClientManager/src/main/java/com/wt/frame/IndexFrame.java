@@ -5,7 +5,6 @@ import com.wt.entity.Department;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ClientVo;
-import com.wt.vo.ContactVo;
 import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
 import com.wt.thread.ContactDetailDispose;
@@ -17,8 +16,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -66,6 +63,14 @@ public class IndexFrame extends JFrame {
     private JTextField clientAddressText;
     private JComboBox clientCreditCombobox;
     private JComboBox<Product> contactProSearchCombo;
+    private JPanel productBodyPanel;
+    private JPanel productSearchPanel;
+    private JTextField productNameField;
+    private JComboBox productTypeCombo;
+    private JButton productDetailButton;
+    private JButton addProductButton;
+    private JButton productSearchButton;
+    private JPanel productContentPanel;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
@@ -95,10 +100,17 @@ public class IndexFrame extends JFrame {
         clientAddressText.setBorder(border2);
         clientCreditCombobox.setBorder(border2);
         buyTimeText.setBorder(border2);
+        productNameField.setBorder(border2);
+        productTypeCombo.setBorder(border2);
+        productSearchButton.setBorder(border2);
+        productDetailButton.setBorder(border2);
+        addProductButton.setBorder(border2);
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
         clientContentPanel.setBorder(border1);
         clientSearchPanel.setBorder(border1);
+        productSearchPanel.setBorder(border1);
+        productBodyPanel.setBorder(border1);
         headLabel.setBorder(border);
         headLabel.setText("<html><img src='" + uv.getuImg() + "' width='160' height='160'/></html>");
         loginName.setText(uv.getuName());
@@ -115,12 +127,12 @@ public class IndexFrame extends JFrame {
         indexPanel.add("6", depPanel);
         indexPanel.add("7", strongPanel);
         hidePanel();
+        ShowValuesUtil svu=new ShowValuesUtil();
         contactLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
-                ShowValuesUtil svu=new ShowValuesUtil();
-                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel);
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
@@ -134,6 +146,7 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
+                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel,productBodyPanel);
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
@@ -160,9 +173,10 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
-        ShowValuesUtil svu=new ShowValuesUtil();
-        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel);
         //联系人详细页面切换
+
+        ContactDetailDispose cdd=new ContactDetailDispose();
         contactDetail_button.addActionListener(e->{
             MyTable myTable = new MyTable();
             JTable Contact_table= myTable.getuContact_table();
@@ -170,7 +184,6 @@ public class IndexFrame extends JFrame {
                 contact_id=Contact_table.getSelectedRow();
                 UserDetailVo udv=new UserDetailVo();
                 udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id,0).toString());
-                ContactDetailDispose cdd=new ContactDetailDispose();
                 new ContactDetailFrame();
                 WindowState ws=new WindowState();
                 ws.setustates(true);
@@ -186,9 +199,17 @@ public class IndexFrame extends JFrame {
             int index=contactProSearchCombo.getSelectedIndex();
             int index1=depSearchCombox.getSelectedIndex();
             contactBodyPanel.removeAll();
-            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(),depSearchCombox.getItemAt(index1).getDepId(),contactProSearchCombo.getItemAt(index).getProductId()),contactContentPanel,contactBodyPanel,depPanel);
+            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(),depSearchCombox.getItemAt(index1).getDepId(),contactProSearchCombo.getItemAt(index).getProductId()),contactContentPanel,contactBodyPanel);
             contactBodyPanel.revalidate();
             contactBodyPanel.repaint();
+        });
+        addContact_button.addActionListener(e->{
+            new AddContactFrame();
+            WindowState ws=new WindowState();
+            ws.setustates(true);
+            cdd.setCdf(true);
+            cdd.setcontentPanel(contactContentPanel,contactBodyPanel,depPanel);
+            new Thread(cdd).start();
         });
     }
 
