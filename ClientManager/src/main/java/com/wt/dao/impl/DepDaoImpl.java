@@ -74,7 +74,7 @@ public class DepDaoImpl implements DepDao {
         while(rs.next()){
             Product product = new Product();
             product.setProductId(rs.getString("product_id"));
-            product.setPrice(rs.getString("product_name"));
+            product.setPrice(rs.getDouble("product_name"));
             product.setProductDate(rs.getDate("product_date"));
             product.setProductName(rs.getString("product_type"));
             product.setProductType(rs.getString("price"));

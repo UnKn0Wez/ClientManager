@@ -19,4 +19,5 @@ public interface UserDao {
     List<ContactVo> selectAll()throws SQLException;
     void deleteContact(String contactId) throws SQLException;
     ContactVo selectByContact(String contact_Id)throws SQLException;
+    void updateContact(String user_id,User user) throws SQLException;
 }
