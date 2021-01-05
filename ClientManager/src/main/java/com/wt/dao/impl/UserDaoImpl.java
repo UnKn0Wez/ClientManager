@@ -7,10 +7,7 @@ import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
 
 import javax.management.relation.Role;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -105,6 +102,17 @@ public class UserDaoImpl implements UserDao {
         pstmt.close();
         jdbcUtil.closeConnection();
         return list;
+    }
+
+    @Override
+    public void deleteContact(String contactId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="delete from t_user where contact_id='"+contactId+"'";
+        PreparedStatement pstmt=connection.prepareStatement(sql);
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
     }
 
     @Override

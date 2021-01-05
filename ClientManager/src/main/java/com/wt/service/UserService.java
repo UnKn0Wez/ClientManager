@@ -17,4 +17,5 @@ public interface UserService {
     void clientRegister(User user);
     void contactRegister(User user);
     List<ContactVo> selectAll();
+    void deleteContact(String userId);
 }
