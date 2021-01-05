@@ -5,6 +5,7 @@ import com.wt.utils.ResultEntity;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -24,4 +25,7 @@ public interface UserService {
     List<ClientVo> selectByClient(String clientId,String address,String ClientCredit);
     void updateContact(String user_id,User user);
     List<ContactVo> searchInfo(String contactName, String depId, String proID);
+    void deleteClient(String clientId);
+    void updateClient(ClientVo clientVo);
+    ClientVo selectByClient(String clientId);
 }

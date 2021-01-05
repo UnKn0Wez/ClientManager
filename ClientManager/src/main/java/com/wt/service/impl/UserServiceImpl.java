@@ -130,4 +130,33 @@ public class UserServiceImpl implements UserService {
         }
         return contactVos;
     }
+
+    @Override
+    public void deleteClient(String clientId) {
+        try {
+            userDao.deleteClient(clientId);
+        } catch (SQLException e) {
+            System.err.println("删除客户信息出现异常");
+        }
+    }
+
+    @Override
+    public void updateClient(ClientVo clientVo) {
+        try {
+            userDao.updateClient(clientVo);
+        } catch (SQLException e) {
+            System.err.println("更新客户信息出现异常");
+        }
+    }
+
+    @Override
+    public ClientVo selectByClient(String clientId) {
+        ClientVo clientVo = null;
+        try {
+            clientVo = userDao.selectByClient(clientId);
+        } catch (SQLException e) {
+            System.err.println("根据ID查询客户信息出现异常");
+        }
+        return clientVo;
+    }
 }

@@ -317,8 +317,63 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteClient(String clientId) throws SQLException {
+    public void updateClient(ClientVo clientVo) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "update t_user " +
+                "set realname=?,"+
+                "user_phone=?,"+
+                "user_img=?,"+
+                "client_address=?"+
+                "where client_id=?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,clientVo.getRealName());
+        pstmt.setString(2,clientVo.getUserPhone());
+        pstmt.setString(3,clientVo.getUserImg());
+        pstmt.setString(4,clientVo.getClientAddress());
+        pstmt.setString(5,clientVo.getClientId());
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+    }
 
+    @Override
+    public ClientVo selectByClient(String clientId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT user_id,user_name,realname,user_phone,client_credit,user_img,client_address \n" +
+                "from t_user where user_role='Client'and client_id=?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,clientId);
+        ResultSet rs = pstmt.executeQuery();
+        ClientVo clientVo = null;
+        while (rs.next()) {
+            clientVo = ClientVo.builder()
+                    .userRole("Client")
+                    .clientAddress(rs.getString("client_address"))
+                    .userImg(rs.getString("user_img"))
+                    .clientCredit(rs.getString("client_credit"))
+                    .userPhone(rs.getString("user_phone"))
+                    .realName(rs.getString("realname"))
+                    .userName(rs.getString("user_name"))
+                    .userId(rs.getString("user_id"))
+                    .build();
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return clientVo;
+    }
+
+    @Override
+    public void deleteClient(String clientId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "delete from t_user where client_id='" + clientId + "'";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
     }
 
     @Override

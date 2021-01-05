@@ -16,6 +16,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -65,17 +67,25 @@ public class IndexFrame extends JFrame {
     private JComboBox<Product> contactProSearchCombo;
     private JPanel rightPanel;
     private JButton clientSelectButton;
+    private JLabel mainXLabel;
+    private JButton clientDetailButton;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
     private JTable Contact_table;
     private JTable Client_table;
     private String ClientCredit;
-
+    private String clientId;
 
 
     IndexFrame() {
         init();
+        mainXLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
         Border border = new RoundBorder(250, Color.black);
         Border border1 = new RoundBorder(15, Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10, Color.decode("#838383"));
@@ -114,8 +124,8 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
-                ShowValuesUtil svu=new ShowValuesUtil();
-                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+                ShowValuesUtil svu = new ShowValuesUtil();
+                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel, depPanel);
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
@@ -155,56 +165,67 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
-        ShowValuesUtil svu=new ShowValuesUtil();
-        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+        ShowValuesUtil svu = new ShowValuesUtil();
+        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel, depPanel);
         //联系人详细页面切换
-        contactDetail_button.addActionListener(e->{
+        contactDetail_button.addActionListener(e -> {
             MyTable myTable = new MyTable();
-            JTable Contact_table= myTable.getuContact_table();
-            if(Contact_table.getSelectedRowCount()==1){
-                contact_id=Contact_table.getSelectedRow();
-                UserDetailVo udv=new UserDetailVo();
-                udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id,0).toString());
-                ContactDetailDispose cdd=new ContactDetailDispose();
+            JTable Contact_table = myTable.getuContact_table();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                contact_id = Contact_table.getSelectedRow();
+                UserDetailVo udv = new UserDetailVo();
+                udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id, 0).toString());
+                ContactDetailDispose cdd = new ContactDetailDispose();
                 new ContactDetailFrame();
-                WindowState ws=new WindowState();
+                WindowState ws = new WindowState();
                 ws.setustates(true);
                 cdd.setCdf(true);
-                cdd.setcontentPanel(contactContentPanel,contactBodyPanel,depPanel);
+                cdd.setcontentPanel(contactContentPanel, contactBodyPanel, depPanel);
                 new Thread(cdd).start();
-            }
-            else {
-                JOptionPane.showMessageDialog(null,"请选择一行数据！");
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一行数据！");
             }
         });
         clientSelectButton.addActionListener(e -> {
-                    String realName = clientSearchText.getText();
-                    String address = clientAddressText.getText();
-                    int index = clientCreditCombobox.getSelectedIndex();
-                    ClientCredit = clientCreditCombobox.getItemAt(index);
-                    showClient(ServiceFactory.getUserServiceInstance().selectByClient(realName, address, ClientCredit));
-                    clientBodyPanel.revalidate();
-                    clientBodyPanel.repaint();
+            String realName = clientSearchText.getText();
+            String address = clientAddressText.getText();
+            int index = clientCreditCombobox.getSelectedIndex();
+            ClientCredit = clientCreditCombobox.getItemAt(index);
+            showClient(ServiceFactory.getUserServiceInstance().selectByClient(realName, address, ClientCredit));
+            clientBodyPanel.revalidate();
+            clientBodyPanel.repaint();
 
-                });
-                contactSearchButton.addActionListener(e -> {
-                    int index = contactProSearchCombo.getSelectedIndex();
-                    int index1 = depSearchCombox.getSelectedIndex();
-                    contactBodyPanel.removeAll();
-                    svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(), depSearchCombox.getItemAt(index1).getDepId(), contactProSearchCombo.getItemAt(index).getProductId()), contactContentPanel, contactBodyPanel, depPanel);
-                    contactBodyPanel.revalidate();
-                    contactBodyPanel.repaint();
-                });
-        contactSearchButton.addActionListener(e->{
-            int index=contactProSearchCombo.getSelectedIndex();
-            int index1=depSearchCombox.getSelectedIndex();
+        });
+        contactSearchButton.addActionListener(e -> {
+            int index = contactProSearchCombo.getSelectedIndex();
+            int index1 = depSearchCombox.getSelectedIndex();
             contactBodyPanel.removeAll();
-            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(),depSearchCombox.getItemAt(index1).getDepId(),contactProSearchCombo.getItemAt(index).getProductId()),contactContentPanel,contactBodyPanel,depPanel);
+            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(), depSearchCombox.getItemAt(index1).getDepId(), contactProSearchCombo.getItemAt(index).getProductId()), contactContentPanel, contactBodyPanel, depPanel);
             contactBodyPanel.revalidate();
             contactBodyPanel.repaint();
         });
+        contactSearchButton.addActionListener(e -> {
+            int index = contactProSearchCombo.getSelectedIndex();
+            int index1 = depSearchCombox.getSelectedIndex();
+            contactBodyPanel.removeAll();
+            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(), depSearchCombox.getItemAt(index1).getDepId(), contactProSearchCombo.getItemAt(index).getProductId()), contactContentPanel, contactBodyPanel, depPanel);
+            contactBodyPanel.revalidate();
+            contactBodyPanel.repaint();
+        });
+        clientDetailButton.addActionListener(e -> {
+            if(Client_table.getRowCount()==1){
+                int index=Client_table.getSelectedRow();
+                ClientDetailVo cdv = new ClientDetailVo();
+                cdv.setClientDetailId(Client_table.getValueAt(index,0).toString());
+                new ClientDetailFrame();
+            }else{
+                JOptionPane.showMessageDialog(null,"清选择一条数据");
+                return;
+            }
+        });
     }
-    public void showClient (List < ClientVo > clientVos) {
+
+    public void showClient(List<ClientVo> clientVos) {
         clientBodyPanel.removeAll();
         TableModel tableModel;
         tableModel = new DefaultTableModel();
@@ -217,13 +238,11 @@ public class IndexFrame extends JFrame {
         DefaultTableModel model = new DefaultTableModel();
         Client_table.setModel(model);
         model.setColumnIdentifiers(new String[]{"客户编号", "用户名", "客户姓名", "电话号码", "信任度", "家庭地址"});
-
         for (ClientVo clientVo : clientVos) {
             Object[] objects = new Object[]{
                     clientVo.getClientId(), clientVo.getUserName(),
                     clientVo.getRealName(), clientVo.getUserPhone(),
-                    clientVo.getClientCredit(),
-                    clientVo.getClientAddress()
+                    clientVo.getClientCredit(), clientVo.getClientAddress(),
             };
             model.addRow(objects);
         }
@@ -254,34 +273,34 @@ public class IndexFrame extends JFrame {
         Client_table.getSelectionModel().addListSelectionListener(e -> {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem deleteItem = new JMenuItem("导出");
+        JMenuItem deleteItem = new JMenuItem("删除");
+        JMenuItem outItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
+        jPopupMenu.add(outItem);
         Client_table.add(jPopupMenu);
         Client_table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                int index = Client_table.getSelectedRow();
+                if (e.getButton() == 3) {
+                    jPopupMenu.show(Client_table, e.getX(), e.getY());
+                    if (Client_table.getSelectedRowCount() == 1) {
+                        clientId = Client_table.getValueAt(index, 0).toString();
+                        deleteItem.addActionListener(e1 -> {
+                            int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
+                            if (choice == 0) {
+                                ServiceFactory.getUserServiceInstance().deleteClient(clientId);
+                                JOptionPane.showMessageDialog(null, "删除客户成功");
+                                clientBodyPanel.removeAll();
+                                showClient(ServiceFactory.getUserServiceInstance().selectClientAll());
+                                clientBodyPanel.revalidate();
+                                clientBodyPanel.repaint();
+                            }
+                        });
+                    }
+                }
             }
         });
-    }
-
-
-
-    public static void scrollPanel(JTable table, JTableHeader header) {
-        TableColumn tc = table.getColumnModel().getColumn(7);
-        tc.setMaxWidth(0);
-        tc.setMinWidth(0);
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
-        hr.setHorizontalAlignment(JLabel.CENTER);
-        header.setDefaultRenderer(hr);
-        header.setPreferredSize(new Dimension(header.getWidth(), 40));
-        header.setFont(new Font("楷体", Font.PLAIN, 18));
-        table.setTableHeader(header);
-        table.setRowHeight(35);
-        table.setBackground(Color.white);
-        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
-        r.setHorizontalAlignment(JLabel.CENTER);
-        table.setDefaultRenderer(Object.class, r);
-        table.setBackground(Color.white);
     }
 
     public void proComboxInit() {
