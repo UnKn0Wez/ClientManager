@@ -28,12 +28,16 @@ public class ContactVo {
     private String realName;
     //用户手机号
     private String userPhone;
-    //部门ID
+    //部门名称
     private String depName;
     //用户头像
     private String userImag;
-    //产品ID
+    //产品名称
     private String productName;
     //工资
     private Double salary;
+    //部门ID
+    private String depId;
+    //产品ID
+    private String ProId;
 }

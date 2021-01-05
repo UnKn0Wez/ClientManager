@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         try {
             contactList = userDao.selectByContact(contact_Id);
         } catch (SQLException e) {
-            System.err.println("查询学生信息发生错误");
+            System.err.println("查询联系人信息发生错误");
         }
         return contactList;
     }
@@ -110,6 +110,24 @@ public class UserServiceImpl implements UserService {
         } catch (SQLException e) {
             System.err.println("根据关键字查询客户信息发生错误");
         }
-        return clientVo;
+        return clientVo;}
+        @Override
+    public void updateContact(String user_id, User user) {
+        try{
+            userDao.updateContact(user_id,user);
+        }catch (SQLException e){
+            System.err.println("修改联系人信息出现异常");
+        }
+    }
+
+    @Override
+    public List<ContactVo> searchInfo(String contactName, String depId, String proID) {
+        List<ContactVo> contactVos = null;
+        try {
+            contactVos = userDao.searchInfo(contactName,depId,proID);
+        } catch (SQLException e) {
+            System.err.println("查询客户信息发生错误");
+        }
+        return contactVos;
     }
 }

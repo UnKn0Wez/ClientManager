@@ -7,7 +7,6 @@ import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
 
-import javax.management.relation.Role;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -151,14 +150,14 @@ public class UserDaoImpl implements UserDao {
     public ContactVo selectByContact(String contact_Id) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
+        String sql = "select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary,t_user.dep_id,t_user.product_id " +
                 "from t_user,t_department,t_product " +
                 "where t_user.dep_id=t_department.dep_id " +
                 "and t_user.product_id=t_product.product_id " +
                 "and contact_id ='" + contact_Id + "'";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        ContactVo student=null;
+        ContactVo student = null;
         while (rs.next()) {
             student = ContactVo.builder()
                     .userId(rs.getString("user_id"))
@@ -170,6 +169,8 @@ public class UserDaoImpl implements UserDao {
                     .salary(rs.getDouble("salary"))
                     .userImag(rs.getString("user_img"))
                     .productName(rs.getString("product_name"))
+                    .depId(rs.getString("t_user.dep_id"))
+                    .ProId(rs.getString("t_user.product_id"))
                     .build();
         }
         rs.close();
@@ -194,47 +195,46 @@ public class UserDaoImpl implements UserDao {
         String sqlByTwoY = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
                 "FROM t_user where user_role='Client' and\n" +
                 "client_address LIKE ? and client_credit<=60";
-        String sqlY="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+        String sqlY = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
                 "FROM t_user where user_role='Client' and\n" +
                 "client_credit>=60";
-        String sqlX="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+        String sqlX = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
                 "FROM t_user where user_role='Client' and\n" +
                 "client_credit<=60";
-        String sqlA="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+        String sqlA = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
                 "FROM t_user where user_role='Client' and\n" +
                 "realname LIKE ? and client_address LIKE ? and client_credit<=60";
-        String sqlB="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+        String sqlB = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
                 "FROM t_user where user_role='Client' and\n" +
                 "realname LIKE ? and client_address LIKE ? and client_credit>=60";
         PreparedStatement pstmt;
-        if("信任".equals(clientCredit)){
-            if("".equals(clientId)&&!("".equals(address))){
-                pstmt=connection.prepareStatement(sqlByTwo);
-                pstmt.setString(1,"%"+address+"%");
-            }else if(!("".equals(clientId))&&"".equals(address)){
-                pstmt=connection.prepareStatement(sqlByOne);
-                pstmt.setString(1,"%"+clientId+"%");
-            }else if("".equals(clientId)&&"".equals(address)){
-                pstmt=connection.prepareStatement(sqlY);
-            }else {
-                pstmt=connection.prepareStatement(sqlB);
-                pstmt.setString(1,"%"+clientId+"%");
-                pstmt.setString(2,"%"+address+"%");
+        if ("信任".equals(clientCredit)) {
+            if ("".equals(clientId) && !("".equals(address))) {
+                pstmt = connection.prepareStatement(sqlByTwo);
+                pstmt.setString(1, "%" + address + "%");
+            } else if (!("".equals(clientId)) && "".equals(address)) {
+                pstmt = connection.prepareStatement(sqlByOne);
+                pstmt.setString(1, "%" + clientId + "%");
+            } else if ("".equals(clientId) && "".equals(address)) {
+                pstmt = connection.prepareStatement(sqlY);
+            } else {
+                pstmt = connection.prepareStatement(sqlB);
+                pstmt.setString(1, "%" + clientId + "%");
+                pstmt.setString(2, "%" + address + "%");
             }
-        }
-        else{
-            if("".equals(clientId)&&!("".equals(address))){
-                pstmt=connection.prepareStatement(sqlByTwoY);
-                pstmt.setString(1,"%"+address+"%");
-            }else if(!("".equals(clientId))&&"".equals(address)){
-                pstmt=connection.prepareStatement(sqlByOneX);
-                pstmt.setString(1,"%"+clientId+"%");
-            }else if(("".equals(clientId))&&("".equals(address))){
-                pstmt=connection.prepareStatement(sqlX);
-            }else {
-                pstmt=connection.prepareStatement(sqlA);
-                pstmt.setString(1,"%"+clientId+"%");
-                pstmt.setString(2,"%"+address+"%");
+        } else {
+            if ("".equals(clientId) && !("".equals(address))) {
+                pstmt = connection.prepareStatement(sqlByTwoY);
+                pstmt.setString(1, "%" + address + "%");
+            } else if (!("".equals(clientId)) && "".equals(address)) {
+                pstmt = connection.prepareStatement(sqlByOneX);
+                pstmt.setString(1, "%" + clientId + "%");
+            } else if (("".equals(clientId)) && ("".equals(address))) {
+                pstmt = connection.prepareStatement(sqlX);
+            } else {
+                pstmt = connection.prepareStatement(sqlA);
+                pstmt.setString(1, "%" + clientId + "%");
+                pstmt.setString(2, "%" + address + "%");
             }
         }
         ResultSet rs = pstmt.executeQuery();
@@ -249,7 +249,64 @@ public class UserDaoImpl implements UserDao {
                     .clientCredit(rs.getString("client_credit"))
                     .userImg(rs.getString("user_img"))
                     .clientAddress(rs.getString("client_address"))
-                    .userRole("Client")
+                    .userRole("Client").build();
+            list.add(student);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return list;
+    }
+
+    @Override
+    public void updateContact(String user_id, User user) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "update t_user " +
+                "set realname='" + user.getRealName() + "'," +
+                "user_phone='" + user.getUserPhone() + "'," +
+                "dep_id='" + user.getDepId() + "'," +
+                "product_id='" + user.getProductId() + "'," +
+                "user_img='" + user.getUserImag() + "'" +
+                "where user_id='" + user_id + "'";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+    }
+
+    @Override
+    public List<ContactVo> searchInfo(String contactName, String depId, String proId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
+                "from t_user,t_department,t_product " +
+                "where t_user.dep_id=t_department.dep_id " +
+                "and t_user.product_id=t_product.product_id " +
+                "and user_role = 'Contact'";
+        if (contactName != null) {
+            sql += "and realname like '%" + contactName + "%'";
+        }
+        if (depId != null && !"1".equals(depId)) {
+            sql += "and dep_id = '" + depId + "'";
+        }
+        if (proId != null && !"1".equals(proId)) {
+            sql += "and product_id = '" + proId + "'";
+        }
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<ContactVo> list = new ArrayList<>();
+        while (rs.next()) {
+            ContactVo student = ContactVo.builder()
+                    .userId(rs.getString("user_id"))
+                    .contactId(rs.getString("contact_id"))
+                    .userName(rs.getString("user_name"))
+                    .realName(rs.getString("realname"))
+                    .userPhone(rs.getString("user_phone"))
+                    .depName(rs.getString("dep_name"))
+                    .salary(rs.getDouble("salary"))
+                    .userImag(rs.getString("user_img"))
+                    .productName(rs.getString("product_name"))
                     .build();
             list.add(student);
         }
