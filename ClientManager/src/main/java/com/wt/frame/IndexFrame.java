@@ -2,16 +2,21 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
+import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
+import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
+import javax.xml.ws.Service;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -64,6 +69,8 @@ public class IndexFrame extends JFrame {
     private int contact_id;
     private JTable Contact_table;
     private JTable Client_table;
+
+
 
     IndexFrame() {
         init();
@@ -149,6 +156,20 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
+
+        //联系人详细页面切换
+        contactDetail_button.addActionListener(e->{
+            if(Contact_table.getSelectedRowCount()==1){
+                contact_id=Contact_table.getSelectedRow();
+                UserDetailVo udv=new UserDetailVo();
+                udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id,0).toString());
+                new ContactDetailFrame();
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"请选择一行数据！");
+            }
+        });
+        showContact(ServiceFactory.getUserServiceInstance().selectAll());
     }
 
     public void showClient(List<ClientVo> clientVos) {
@@ -223,6 +244,7 @@ public class IndexFrame extends JFrame {
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
         model.setColumnIdentifiers(new String[]{"员工编号", "用户名", "员工姓名", "电话号码", "所属部门", "负责产品", "工资", ""});
+
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
                     contact.getContactId(),
@@ -241,6 +263,7 @@ public class IndexFrame extends JFrame {
         mypane.add(Contact_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
+
         scrollPane.setBackground(Color.white);
         contactBodyPanel.add(scrollPane);
         contactBodyPanel.revalidate();
@@ -248,12 +271,27 @@ public class IndexFrame extends JFrame {
         Contact_table.getSelectionModel().addListSelectionListener(e -> {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem deleteItem = new JMenuItem("导出");
+        JMenuItem deleteItem = new JMenuItem("删除");
         jPopupMenu.add(deleteItem);
         Contact_table.add(jPopupMenu);
+        //删除联系人
         Contact_table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    if(Contact_table.getSelectedRowCount()==1){
+                        contact_id=Contact_table.getSelectedRow();
+                        int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
+                        if (choice == 0) {
+                            ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
+                            JOptionPane.showMessageDialog(null,"删除联系人成功");
+                            contactBodyPanel.removeAll();
+                            showContact(ServiceFactory.getUserServiceInstance().selectAll());
+                            contactBodyPanel.revalidate();
+                            contactBodyPanel.repaint();
+                        }
+                    }
+                }
             }
         });
     }

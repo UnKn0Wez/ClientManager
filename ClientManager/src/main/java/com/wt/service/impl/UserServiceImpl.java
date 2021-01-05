@@ -74,12 +74,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ClientVo> selectClientAll() {
-        List<ClientVo> clientVos=null;
+        List<ClientVo> clientVos = null;
         try {
-            clientVos=userDao.selectClientAll();
+            clientVos = userDao.selectClientAll();
         } catch (SQLException e) {
             System.err.println("查询客户信息发生错误");
         }
         return clientVos;
+    }
+    @Override
+    public void deleteContact(String userId) {
+        try{
+            userDao.deleteContact(userId);
+        }catch (SQLException e){
+            System.err.println("删除联系人信息出现异常");
+        }
+    }
+
+    @Override
+    public List<ContactVo> selectByContact(String contact_Id) {
+        List<ContactVo> contactList = null;
+        try {
+            contactList = userDao.selectByContact(contact_Id);
+        } catch (SQLException e) {
+            System.err.println("查询学生信息发生错误");
+        }
+        return contactList;
     }
 }
