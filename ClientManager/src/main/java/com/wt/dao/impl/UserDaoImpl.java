@@ -110,7 +110,7 @@ public class UserDaoImpl implements UserDao {
     public List<ClientVo> selectClientAll() throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,buy_time,user_img,client_address" +
+        String sql = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address" +
                 " FROM t_user " +
                 "where user_role='Client';";
         PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -124,7 +124,6 @@ public class UserDaoImpl implements UserDao {
                     .realName(rs.getString("realname"))
                     .userPhone(rs.getString("user_phone"))
                     .clientCredit(rs.getString("client_credit"))
-                    .buyTime(rs.getDate("buy_time"))
                     .userImg(rs.getString("user_img"))
                     .clientAddress(rs.getString("client_address"))
                     .userRole("Client")
@@ -177,6 +176,92 @@ public class UserDaoImpl implements UserDao {
         pstmt.close();
         jdbcUtil.closeConnection();
         return student;
+    }
+
+    @Override
+    public List selectByClient(String clientId, String address, String clientCredit) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sqlByOne = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "realname LIKE ? and client_credit>=60";
+        String sqlByTwo = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "client_address LIKE ? and client_credit>=60";
+        String sqlByOneX = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "realname LIKE ? and client_credit<=60";
+        String sqlByTwoY = "SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "client_address LIKE ? and client_credit<=60";
+        String sqlY="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "client_credit>=60";
+        String sqlX="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "client_credit<=60";
+        String sqlA="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "realname LIKE ? and client_address LIKE ? and client_credit<=60";
+        String sqlB="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,user_img,client_address " +
+                "FROM t_user where user_role='Client' and\n" +
+                "realname LIKE ? and client_address LIKE ? and client_credit>=60";
+        PreparedStatement pstmt;
+        if("信任".equals(clientCredit)){
+            if("".equals(clientId)&&!("".equals(address))){
+                pstmt=connection.prepareStatement(sqlByTwo);
+                pstmt.setString(1,"%"+address+"%");
+            }else if(!("".equals(clientId))&&"".equals(address)){
+                pstmt=connection.prepareStatement(sqlByOne);
+                pstmt.setString(1,"%"+clientId+"%");
+            }else if("".equals(clientId)&&"".equals(address)){
+                pstmt=connection.prepareStatement(sqlY);
+            }else {
+                pstmt=connection.prepareStatement(sqlB);
+                pstmt.setString(1,"%"+clientId+"%");
+                pstmt.setString(2,"%"+address+"%");
+            }
+        }
+        else{
+            if("".equals(clientId)&&!("".equals(address))){
+                pstmt=connection.prepareStatement(sqlByTwoY);
+                pstmt.setString(1,"%"+address+"%");
+            }else if(!("".equals(clientId))&&"".equals(address)){
+                pstmt=connection.prepareStatement(sqlByOneX);
+                pstmt.setString(1,"%"+clientId+"%");
+            }else if(("".equals(clientId))&&("".equals(address))){
+                pstmt=connection.prepareStatement(sqlX);
+            }else {
+                pstmt=connection.prepareStatement(sqlA);
+                pstmt.setString(1,"%"+clientId+"%");
+                pstmt.setString(2,"%"+address+"%");
+            }
+        }
+        ResultSet rs = pstmt.executeQuery();
+        List<ClientVo> list = new ArrayList<>();
+        while (rs.next()) {
+            ClientVo student = ClientVo.builder()
+                    .userId(rs.getString("user_id"))
+                    .clientId(rs.getString("client_id"))
+                    .userName(rs.getString("user_name"))
+                    .realName(rs.getString("realname"))
+                    .userPhone(rs.getString("user_phone"))
+                    .clientCredit(rs.getString("client_credit"))
+                    .userImg(rs.getString("user_img"))
+                    .clientAddress(rs.getString("client_address"))
+                    .userRole("Client")
+                    .build();
+            list.add(student);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return list;
+    }
+
+    @Override
+    public void deleteClient(String clientId) throws SQLException {
+
     }
 
     @Override

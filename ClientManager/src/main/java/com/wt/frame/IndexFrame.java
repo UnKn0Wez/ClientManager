@@ -2,7 +2,6 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
-import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
@@ -13,10 +12,7 @@ import sun.swing.table.DefaultTableCellHeaderRenderer;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
-import javax.xml.ws.Service;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -63,23 +59,23 @@ public class IndexFrame extends JFrame {
     private JTextField clientSearchText;
     private JTextField buyTimeText;
     private JTextField clientAddressText;
-    private JComboBox clientCreditCombobox;
+    private JComboBox<String> clientCreditCombobox;
+    private JButton clientDetail_button;
+    private JButton addClient_button;
+    private JButton clientSelectButton;
+    private JPanel rightPanel;
+    private JPanel xPanel;
+    private JLabel mainXLabel;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
     private JTable Contact_table;
     private JTable Client_table;
-
+    private String ClientCredit;
 
 
     IndexFrame() {
         init();
-        xField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                dispose();
-            }
-        });
         Border border = new RoundBorder(250, Color.black);
         Border border1 = new RoundBorder(15, Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10, Color.decode("#838383"));
@@ -92,12 +88,16 @@ public class IndexFrame extends JFrame {
         clientSearchText.setBorder(border2);
         clientAddressText.setBorder(border2);
         clientCreditCombobox.setBorder(border2);
-        buyTimeText.setBorder(border2);
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
         clientContentPanel.setBorder(border1);
         clientSearchPanel.setBorder(border1);
+        clientSelectButton.setBorder(border2);
+        clientDetail_button.setBorder(border2);
+        addClient_button.setBorder(border2);
         headLabel.setBorder(border);
+        clientCreditCombobox.addItem("信任");
+        clientCreditCombobox.addItem("不信任");
         headLabel.setText("<html><img src='" + uv.getuImg() + "' width='160' height='160'/></html>");
         loginName.setText(uv.getuName());
         contactComboxInit();
@@ -170,9 +170,25 @@ public class IndexFrame extends JFrame {
             }
         });
         showContact(ServiceFactory.getUserServiceInstance().selectAll());
+        //关闭按钮
+        mainXLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
+        clientSelectButton.addActionListener(e -> {
+            String realName=clientSearchText.getText();
+            String address=clientAddressText.getText();
+            int index=clientCreditCombobox.getSelectedIndex();
+            ClientCredit=clientCreditCombobox.getItemAt(index);
+            showClient(ServiceFactory.getUserServiceInstance().selectByClient(realName,address,ClientCredit));
+            clientBodyPanel.revalidate();
+            clientBodyPanel.repaint();
+        });
     }
-
     public void showClient(List<ClientVo> clientVos) {
+        clientBodyPanel.removeAll();
         TableModel tableModel;
         tableModel = new DefaultTableModel();
         Client_table = new JTable(tableModel) {
@@ -183,18 +199,17 @@ public class IndexFrame extends JFrame {
         };
         DefaultTableModel model = new DefaultTableModel();
         Client_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"客户编号", "用户名", "客户姓名", "电话号码", "信任度", "购买时间", "家庭地址"});
+        model.setColumnIdentifiers(new String[]{"客户编号", "用户名", "客户姓名", "电话号码", "信任度", "家庭地址"});
 
         for (ClientVo clientVo : clientVos) {
             Object[] objects = new Object[]{
                     clientVo.getClientId(), clientVo.getUserName(),
                     clientVo.getRealName(), clientVo.getUserPhone(),
-                    clientVo.getClientCredit(), clientVo.getBuyTime(),
+                    clientVo.getClientCredit(),
                     clientVo.getClientAddress()
             };
             model.addRow(objects);
         }
-
         JTableHeader header = Client_table.getTableHeader();
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
@@ -233,6 +248,7 @@ public class IndexFrame extends JFrame {
     }
 
     public void showContact(List<ContactVo> contacts) {
+        contactBodyPanel.removeAll();
         TableModel tableModel;
         tableModel = new DefaultTableModel();
         Contact_table = new JTable(tableModel) {

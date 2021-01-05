@@ -28,5 +28,4 @@ public class ClientVo {
     private String userImg;
     private String clientAddress;
     private String clientCredit;
-    private Date buyTime;
 }

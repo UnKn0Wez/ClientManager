@@ -101,4 +101,15 @@ public class UserServiceImpl implements UserService {
         }
         return contactList;
     }
+
+    @Override
+    public List<ClientVo> selectByClient(String clientId, String address, String ClientCredit) {
+        List<ClientVo> clientVo=null;
+        try {
+            clientVo=userDao.selectByClient(clientId,address,ClientCredit);
+        } catch (SQLException e) {
+            System.err.println("根据关键字查询客户信息发生错误");
+        }
+        return clientVo;
+    }
 }
