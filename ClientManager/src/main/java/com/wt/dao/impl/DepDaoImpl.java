@@ -62,30 +62,4 @@ public class DepDaoImpl implements DepDao {
         jdbcUtil.closeConnection();
         return departmentList;
     }
-<<<<<<< HEAD
-=======
-
-    @Override
-    public List<Product> selectAllPro() throws SQLException {
-        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
-        Connection connection = jdbcUtil.getConnection();
-        String sql = "SELECT * FROM t_product";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        List<Product> products = new ArrayList<>();
-        while(rs.next()){
-            Product product = new Product();
-            product.setProductId(rs.getString("product_id"));
-            product.setPrice(rs.getDouble("product_name"));
-            product.setProductDate(rs.getDate("product_date"));
-            product.setProductName(rs.getString("product_type"));
-            product.setProductType(rs.getString("price"));
-            products.add(product);
-        }
-        rs.close();
-        pstmt.close();
-        jdbcUtil.closeConnection();
-        return products;
-    }
->>>>>>> xtx
 }

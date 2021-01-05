@@ -43,7 +43,6 @@ public class LoginFrame extends JFrame {
             ResultEntity resultEntity= ServiceFactory.getUserServiceInstance().login(uNameText.getText(),String.valueOf(passWordText.getText()));
             JOptionPane.showMessageDialog(null,resultEntity.getMessage());
             if(resultEntity.getCode()==0){
-                //根据不同身份进入不同页面
                 UserVo uv=new UserVo();
                 this.dispose();
                 new IndexFrame();

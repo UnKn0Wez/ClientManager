@@ -22,4 +22,5 @@ public interface UserService {
     void deleteContact(String userId);
     ContactVo selectByContact(String contact_Id);
     void updateContact(String user_id,User user);
+    List<ContactVo> searchInfo(String contactName, String depId, String proID);
 }

@@ -7,7 +7,6 @@ import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
 
-import javax.management.relation.Role;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -152,11 +151,7 @@ public class UserDaoImpl implements UserDao {
     public ContactVo selectByContact(String contact_Id) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-<<<<<<< HEAD
-        String sql = "select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
-=======
         String sql="select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary,t_user.dep_id,t_user.product_id " +
->>>>>>> xtx
                 "from t_user,t_department,t_product " +
                 "where t_user.dep_id=t_department.dep_id " +
                 "and t_user.product_id=t_product.product_id " +
@@ -200,6 +195,47 @@ public class UserDaoImpl implements UserDao {
         pstmt.execute();
         pstmt.close();
         jdbcUtil.closeConnection();
+    }
+
+    @Override
+    public List<ContactVo> searchInfo(String contactName, String depId, String proId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
+                "from t_user,t_department,t_product " +
+                "where t_user.dep_id=t_department.dep_id " +
+                "and t_user.product_id=t_product.product_id " +
+                "and user_role = 'Contact'";
+        if(contactName!=null){
+            sql+="and realname like '%"+contactName+"%'";
+        }
+        if(depId!=null&&!"1".equals(depId)){
+            sql+="and dep_id = '"+depId+"'";
+        }
+        if(proId!=null&&!"1".equals(proId)){
+            sql+="and product_id = '"+proId+"'";
+        }
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<ContactVo> list = new ArrayList<>();
+        while (rs.next()) {
+            ContactVo student = ContactVo.builder()
+                    .userId(rs.getString("user_id"))
+                    .contactId(rs.getString("contact_id"))
+                    .userName(rs.getString("user_name"))
+                    .realName(rs.getString("realname"))
+                    .userPhone(rs.getString("user_phone"))
+                    .depName(rs.getString("dep_name"))
+                    .salary(rs.getDouble("salary"))
+                    .userImag(rs.getString("user_img"))
+                    .productName(rs.getString("product_name"))
+                    .build();
+            list.add(student);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return list;
     }
 
     @Override

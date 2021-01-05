@@ -2,23 +2,23 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
+import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
-<<<<<<< HEAD
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
-=======
 import com.wt.thread.ContactDetailDispose;
 import com.wt.utils.ShowValuesUtil;
 import com.wt.vo.*;
->>>>>>> xtx
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -52,7 +52,6 @@ public class IndexFrame extends JFrame {
     private JPanel contactSearchPanel;
     private JPanel contactContentPanel;
     private JTextField contactSearchText;
-    private JTextField contactProSearchText;
     private JButton contactSearchButton;
     private JComboBox<Department> depSearchCombox;
     private JButton addContact_button;
@@ -66,6 +65,7 @@ public class IndexFrame extends JFrame {
     private JTextField buyTimeText;
     private JTextField clientAddressText;
     private JComboBox clientCreditCombobox;
+    private JComboBox<Product> contactProSearchCombo;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
@@ -88,7 +88,7 @@ public class IndexFrame extends JFrame {
         contactSearchButton.setBorder(border2);
         depSearchCombox.setBorder(border2);
         contactSearchText.setBorder(border2);
-        contactProSearchText.setBorder(border2);
+        contactProSearchCombo.setBorder(border2);
         addContact_button.setBorder(border2);
         contactDetail_button.setBorder(border2);
         clientSearchText.setBorder(border2);
@@ -103,6 +103,7 @@ public class IndexFrame extends JFrame {
         headLabel.setText("<html><img src='" + uv.getuImg() + "' width='160' height='160'/></html>");
         loginName.setText(uv.getuName());
         contactComboxInit();
+        proComboxInit();
         //创建CardLayout
         C = new CardLayout();
         indexPanel.setLayout(C);
@@ -118,7 +119,8 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
-                showContact(ServiceFactory.getUserServiceInstance().selectAll());
+                ShowValuesUtil svu=new ShowValuesUtil();
+                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
@@ -158,12 +160,8 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
-<<<<<<< HEAD
-
-=======
         ShowValuesUtil svu=new ShowValuesUtil();
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
->>>>>>> xtx
         //联系人详细页面切换
         contactDetail_button.addActionListener(e->{
             MyTable myTable = new MyTable();
@@ -184,9 +182,16 @@ public class IndexFrame extends JFrame {
                 JOptionPane.showMessageDialog(null,"请选择一行数据！");
             }
         });
+        contactSearchButton.addActionListener(e->{
+            int index=contactProSearchCombo.getSelectedIndex();
+            int index1=depSearchCombox.getSelectedIndex();
+            contactBodyPanel.removeAll();
+            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(),depSearchCombox.getItemAt(index1).getDepId(),contactProSearchCombo.getItemAt(index).getProductId()),contactContentPanel,contactBodyPanel,depPanel);
+            contactBodyPanel.revalidate();
+            contactBodyPanel.repaint();
+        });
     }
 
-<<<<<<< HEAD
     public void showClient(List<ClientVo> clientVos) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
@@ -247,72 +252,6 @@ public class IndexFrame extends JFrame {
         });
     }
 
-    public void showContact(List<ContactVo> contacts) {
-        TableModel tableModel;
-        tableModel = new DefaultTableModel();
-        Contact_table = new JTable(tableModel) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        DefaultTableModel model = new DefaultTableModel();
-        Contact_table.setModel(model);
-
-        model.setColumnIdentifiers(new String[]{"员工编号","员工姓名","用户名","电话号码","所属部门","负责产品","工资",""});
-        for (ContactVo contact : contacts) {
-            Object[] objects = new Object[]{
-                    contact.getContactId(),
-                    contact.getRealName(), contact.getUserName(),
-                    contact.getUserPhone(), contact.getDepName(),
-                    contact.getProductName(), contact.getSalary()
-            };
-            model.addRow(objects);
-        }
-        JTableHeader header = Contact_table.getTableHeader();
-        scrollPanel(Contact_table, header);
-        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
-        JPanel mypane = new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
-        mypane.add(header, BorderLayout.NORTH);
-        mypane.add(Contact_table, BorderLayout.CENTER);
-        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
-
-        scrollPane.setBackground(Color.white);
-        contactBodyPanel.add(scrollPane);
-        contactBodyPanel.revalidate();
-        contactBodyPanel.repaint();
-        Contact_table.getSelectionModel().addListSelectionListener(e -> {
-        });
-        JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem deleteItem = new JMenuItem("删除");
-        jPopupMenu.add(deleteItem);
-        Contact_table.add(jPopupMenu);
-        //删除联系人
-        Contact_table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == 3) {
-                    if(Contact_table.getSelectedRowCount()==1){
-                        contact_id=Contact_table.getSelectedRow();
-                        int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
-                        if (choice == 0) {
-                            ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
-                            JOptionPane.showMessageDialog(null,"删除联系人成功");
-                            contactBodyPanel.removeAll();
-                            showContact(ServiceFactory.getUserServiceInstance().selectAll());
-                            contactBodyPanel.revalidate();
-                            contactBodyPanel.repaint();
-                        }
-                    }
-                }
-            }
-        });
-    }
-=======
->>>>>>> xtx
-
     public static void scrollPanel(JTable table, JTableHeader header) {
         TableColumn tc = table.getColumnModel().getColumn(7);
         tc.setMaxWidth(0);
@@ -329,6 +268,14 @@ public class IndexFrame extends JFrame {
         r.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class, r);
         table.setBackground(Color.white);
+    }
+
+    public void proComboxInit() {
+        contactProSearchCombo.addItem(Product.builder().productName("请选择产品").productId("1").build());
+        List<Product> productList = ServiceFactory.getProductServiceInstance().selectAllProduct();
+        for (Product product : productList) {
+            contactProSearchCombo.addItem(product);
+        }
     }
 
     public void contactComboxInit() {

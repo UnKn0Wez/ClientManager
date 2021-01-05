@@ -79,24 +79,29 @@ public class ShowValuesUtil {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("删除");
+        JMenuItem outItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
+        jPopupMenu.add(outItem);
         Contact_table.add(jPopupMenu);
         //删除联系人
         Contact_table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 3) {
+                    jPopupMenu.show(Contact_table, e.getX(), e.getY());
                     if(Contact_table.getSelectedRowCount()==1){
                         contact_id=Contact_table.getSelectedRow();
-                        int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
-                        if (choice == 0) {
-                            ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
-                            JOptionPane.showMessageDialog(null,"删除联系人成功");
-                            contactBodyPanel.removeAll();
-                            showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
-                            contactBodyPanel.revalidate();
-                            contactBodyPanel.repaint();
-                        }
+                        deleteItem.addActionListener(e1->{
+                            int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
+                            if (choice == 0) {
+                                ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
+                                JOptionPane.showMessageDialog(null,"删除联系人成功");
+                                contactBodyPanel.removeAll();
+                                showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+                                contactBodyPanel.revalidate();
+                                contactBodyPanel.repaint();
+                            }
+                        });
                     }
                 }
             }
