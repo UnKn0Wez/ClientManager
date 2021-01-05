@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @Date 2020/12/29 13:09
  **/
 public class JdbcUtil {
-    private static final String URL = "jdbc:mysql://10.40.154.16:3306/crm_manager?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=GMT%2B8";
+    private static final String URL = "jdbc:mysql://10.40.163.97:3306/crm_manager?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=GMT%2B8";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "123456";
     private static Connection connection= null;

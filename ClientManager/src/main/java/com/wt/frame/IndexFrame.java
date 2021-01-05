@@ -47,12 +47,14 @@ public class IndexFrame extends JFrame{
     private JTextField contactProSearchText;
     private JButton contactSearchButton;
     private JComboBox<Department> depSearchCombox;
-    private JButton button1;
-    private JButton button2;
+    private JButton addContact_button;
+    private JButton contactDetail_button;
     private JPanel contactBodyPanel;
     private JLabel xField;
     private final CardLayout C;
     private UserVo uv=new UserVo();
+    private int contact_id;
+    JTable Contact_table;
 
     IndexFrame(){
         init();
@@ -69,6 +71,8 @@ public class IndexFrame extends JFrame{
         depSearchCombox.setBorder(border2);
         contactSearchText.setBorder(border2);
         contactProSearchText.setBorder(border2);
+        addContact_button.setBorder(border2);
+        contactDetail_button.setBorder(border2);
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
         headLabel.setBorder(border);
@@ -134,10 +138,10 @@ public class IndexFrame extends JFrame{
     public void showContact(List<ContactVo> contacts){
         TableModel tableModel;
         tableModel = new DefaultTableModel();
-        JTable table = new JTable(tableModel){ @Override
+        Contact_table= new JTable(tableModel){ @Override
         public boolean isCellEditable(int row, int column) { return false; }};
         DefaultTableModel model = new DefaultTableModel();
-        table.setModel(model);
+        Contact_table.setModel(model);
         model.setColumnIdentifiers(new String[]{"员工编号","用户名","员工姓名","电话号码","所属部门","负责产品","工资",""});
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
@@ -148,40 +152,40 @@ public class IndexFrame extends JFrame{
             };
             model.addRow(objects);
         }
-        TableColumn tc = table.getColumnModel().getColumn(7);
+        TableColumn tc = Contact_table.getColumnModel().getColumn(7);
         tc.setMaxWidth(0);
         tc.setMinWidth(0);
-        JTableHeader header = table.getTableHeader();
+        JTableHeader header = Contact_table.getTableHeader();
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         header.setDefaultRenderer(hr);
         header.setPreferredSize(new Dimension(header.getWidth(), 40));
         header.setFont(new Font("楷体", Font.PLAIN, 18));
-        table.setTableHeader(header);
-        table.setRowHeight(35);
-        table.setBackground(Color.white);
+        Contact_table.setTableHeader(header);
+        Contact_table.setRowHeight(35);
+        Contact_table.setBackground(Color.white);
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(JLabel.CENTER);
-        table.setDefaultRenderer(Object.class, r);
-        table.setBackground(Color.white);
-        table.setPreferredSize(new Dimension(contactContentPanel.getWidth(),contactContentPanel.getHeight()));
+        Contact_table.setDefaultRenderer(Object.class, r);
+        Contact_table.setBackground(Color.white);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(),contactContentPanel.getHeight()));
         JPanel mypane=new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300,table.getRowCount()*table.getRowHeight()));
+        mypane.setPreferredSize(new Dimension(300,Contact_table.getRowCount()*Contact_table.getRowHeight()));
         mypane.add(header,BorderLayout.NORTH);
-        mypane.add(table,BorderLayout.CENTER);
+        mypane.add(Contact_table,BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(table.getWidth(),table.getHeight()));
+        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(),Contact_table.getHeight()));
         scrollPane.setBackground(Color.white);
         contactBodyPanel.add(scrollPane);
         contactBodyPanel.revalidate();
         contactBodyPanel.repaint();
-        table.getSelectionModel().addListSelectionListener(e -> {
+        Contact_table.getSelectionModel().addListSelectionListener(e -> {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
-        table.add(jPopupMenu);
-        table.addMouseListener(new MouseAdapter() {
+        Contact_table.add(jPopupMenu);
+        Contact_table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
             }
