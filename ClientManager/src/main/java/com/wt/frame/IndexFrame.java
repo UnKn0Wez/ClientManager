@@ -2,21 +2,23 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
-import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
+<<<<<<< HEAD
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
+=======
+import com.wt.thread.ContactDetailDispose;
+import com.wt.utils.ShowValuesUtil;
+import com.wt.vo.*;
+>>>>>>> xtx
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
-import javax.xml.ws.Service;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -156,22 +158,35 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
+<<<<<<< HEAD
 
+=======
+        ShowValuesUtil svu=new ShowValuesUtil();
+        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+>>>>>>> xtx
         //联系人详细页面切换
         contactDetail_button.addActionListener(e->{
+            MyTable myTable = new MyTable();
+            JTable Contact_table= myTable.getuContact_table();
             if(Contact_table.getSelectedRowCount()==1){
                 contact_id=Contact_table.getSelectedRow();
                 UserDetailVo udv=new UserDetailVo();
                 udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id,0).toString());
+                ContactDetailDispose cdd=new ContactDetailDispose();
                 new ContactDetailFrame();
+                WindowState ws=new WindowState();
+                ws.setustates(true);
+                cdd.setCdf(true);
+                cdd.setcontentPanel(contactContentPanel,contactBodyPanel,depPanel);
+                new Thread(cdd).start();
             }
             else {
                 JOptionPane.showMessageDialog(null,"请选择一行数据！");
             }
         });
-        showContact(ServiceFactory.getUserServiceInstance().selectAll());
     }
 
+<<<<<<< HEAD
     public void showClient(List<ClientVo> clientVos) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
@@ -295,6 +310,8 @@ public class IndexFrame extends JFrame {
             }
         });
     }
+=======
+>>>>>>> xtx
 
     public static void scrollPanel(JTable table, JTableHeader header) {
         TableColumn tc = table.getColumnModel().getColumn(7);

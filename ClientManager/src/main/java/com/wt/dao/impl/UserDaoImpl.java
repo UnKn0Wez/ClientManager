@@ -152,7 +152,11 @@ public class UserDaoImpl implements UserDao {
     public ContactVo selectByContact(String contact_Id) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
+<<<<<<< HEAD
         String sql = "select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
+=======
+        String sql="select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary,t_user.dep_id,t_user.product_id " +
+>>>>>>> xtx
                 "from t_user,t_department,t_product " +
                 "where t_user.dep_id=t_department.dep_id " +
                 "and t_user.product_id=t_product.product_id " +
@@ -171,12 +175,31 @@ public class UserDaoImpl implements UserDao {
                     .salary(rs.getDouble("salary"))
                     .userImag(rs.getString("user_img"))
                     .productName(rs.getString("product_name"))
+                    .depId(rs.getString("t_user.dep_id"))
+                    .ProId(rs.getString("t_user.product_id"))
                     .build();
         }
         rs.close();
         pstmt.close();
         jdbcUtil.closeConnection();
         return student;
+    }
+
+    @Override
+    public void updateContact(String user_id, User user) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="update t_user " +
+                "set realname='"+user.getRealName()+"'," +
+                "user_phone='"+user.getUserPhone()+"'," +
+                "dep_id='"+user.getDepId()+"'," +
+                "product_id='"+user.getProductId()+"'," +
+                "user_img='"+user.getUserImag()+"'" +
+                "where user_id='"+user_id+"'";
+        PreparedStatement pstmt=connection.prepareStatement(sql);
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
     }
 
     @Override
