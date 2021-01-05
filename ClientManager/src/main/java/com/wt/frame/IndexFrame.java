@@ -2,15 +2,20 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
+import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ContactVo;
+import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
+import javax.xml.ws.Service;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -53,7 +58,7 @@ public class IndexFrame extends JFrame{
     private JLabel xField;
     private final CardLayout C;
     private UserVo uv=new UserVo();
-    private int contact_id;
+    private Integer contact_id;
     JTable Contact_table;
 
     IndexFrame(){
@@ -132,6 +137,18 @@ public class IndexFrame extends JFrame{
                 C.show(indexPanel, "7");
             }
         });
+        //联系人详细页面切换
+        contactDetail_button.addActionListener(e->{
+            if(Contact_table.getSelectedRowCount()==1){
+                contact_id=Contact_table.getSelectedRow();
+                UserDetailVo udv=new UserDetailVo();
+                udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id,0).toString());
+
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"请选择一行数据！");
+            }
+        });
         showContact(ServiceFactory.getUserServiceInstance().selectAll());
     }
 
@@ -182,12 +199,27 @@ public class IndexFrame extends JFrame{
         Contact_table.getSelectionModel().addListSelectionListener(e -> {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem deleteItem = new JMenuItem("导出");
+        JMenuItem deleteItem = new JMenuItem("删除");
         jPopupMenu.add(deleteItem);
         Contact_table.add(jPopupMenu);
+        //删除联系人
         Contact_table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    if(Contact_table.getSelectedRowCount()==1){
+                        contact_id=Contact_table.getSelectedRow();
+                        int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
+                        if (choice == 0) {
+                            ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
+                            JOptionPane.showMessageDialog(null,"删除联系人成功");
+                            contactBodyPanel.removeAll();
+                            showContact(ServiceFactory.getUserServiceInstance().selectAll());
+                            contactBodyPanel.revalidate();
+                            contactBodyPanel.repaint();
+                        }
+                    }
+                }
             }
         });
     }

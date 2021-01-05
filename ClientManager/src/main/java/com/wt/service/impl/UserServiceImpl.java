@@ -70,4 +70,13 @@ public class UserServiceImpl implements UserService {
         }
         return contactList;
     }
+
+    @Override
+    public void deleteContact(String userId) {
+        try{
+            userDao.deleteContact(userId);
+        }catch (SQLException e){
+            System.err.println("删除联系人信息出现异常");
+        }
+    }
 }
