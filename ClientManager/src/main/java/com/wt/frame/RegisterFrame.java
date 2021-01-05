@@ -74,7 +74,7 @@ public class RegisterFrame extends JFrame{
         for (Department department:departmentList){
             depCombobox.addItem(department);
         }
-        List<Product> productList=ServiceFactory.getDepServiceInstance().selectProAll();
+        List<Product> productList=ServiceFactory.getProductServiceInstance().selectAllProduct();
         proCombobox.removeAllItems();
         proCombobox.addItem(Product.builder().productName("请选择产品").productId("1").build());
         for(Product product:productList){

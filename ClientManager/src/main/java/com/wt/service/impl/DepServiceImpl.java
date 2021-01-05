@@ -29,14 +29,5 @@ public class DepServiceImpl implements DepService {
         return departmentList;
     }
 
-    @Override
-    public List<Product> selectProAll() {
-        List<Product> productList=null;
-        try {
-            productList=depDao.selectAllPro();
-        } catch (SQLException e) {
-            System.err.println("查询产品发生错误！");
-        }
-        return productList;
-    }
+
 }

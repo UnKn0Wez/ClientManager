@@ -13,5 +13,4 @@ import java.util.List;
  **/
 public interface DepService {
     List<Department> selectDepAll();
-    List<Product> selectProAll();
 }
