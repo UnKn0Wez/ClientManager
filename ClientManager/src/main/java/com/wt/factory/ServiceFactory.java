@@ -1,8 +1,10 @@
 package com.wt.factory;
 
 import com.wt.service.DepService;
+import com.wt.service.ProductService;
 import com.wt.service.UserService;
 import com.wt.service.impl.DepServiceImpl;
+import com.wt.service.impl.ProductServiceServiceImpl;
 import com.wt.service.impl.UserServiceImpl;
 
 /**
@@ -14,4 +16,5 @@ import com.wt.service.impl.UserServiceImpl;
 public class ServiceFactory {
     public static UserService getUserServiceInstance(){return new UserServiceImpl();}
     public static DepService getDepServiceInstance(){return new DepServiceImpl();}
+    public static ProductService getProductServiceInstance(){return new ProductServiceServiceImpl();}
 }

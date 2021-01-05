@@ -163,7 +163,7 @@ public class IndexFrame extends JFrame {
         public boolean isCellEditable(int row, int column) { return false; }};
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"员工编号","用户名","员工姓名","电话号码","所属部门","负责产品","工资",""});
+        model.setColumnIdentifiers(new String[]{"员工编号","员工姓名","用户名","电话号码","所属部门","负责产品","工资",""});
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
                     contact.getContactId(),

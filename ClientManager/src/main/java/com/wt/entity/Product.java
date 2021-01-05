@@ -23,7 +23,7 @@ public class Product {
     private String productName;
     private Date productDate;
     private String productType;
-    private String price;
+    private Double price;
     @Override
     public String toString() {
         return productName;
