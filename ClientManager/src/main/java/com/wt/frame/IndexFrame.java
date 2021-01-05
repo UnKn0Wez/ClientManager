@@ -60,13 +60,10 @@ public class IndexFrame extends JFrame {
     private JPanel clientBodyPanel;
     private JPanel clientSearchPanel;
     private final CardLayout C;
-<<<<<<< HEAD
-    private UserVo uv = new UserVo();
-=======
+
     private UserVo uv=new UserVo();
     private Integer contact_id;
     JTable Contact_table;
->>>>>>> 7b606bf03209e3e17884ef219e493800932c52dc
 
     IndexFrame() {
         init();
@@ -150,7 +147,7 @@ public class IndexFrame extends JFrame {
                 contact_id=Contact_table.getSelectedRow();
                 UserDetailVo udv=new UserDetailVo();
                 udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id,0).toString());
-
+                new ContactDetailFrame();
             }
             else {
                 JOptionPane.showMessageDialog(null,"请选择一行数据！");
@@ -162,23 +159,11 @@ public class IndexFrame extends JFrame {
     public void showContact(List<ContactVo> contacts) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
-<<<<<<< HEAD
-        JTable table = new JTable(tableModel) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        DefaultTableModel model = new DefaultTableModel();
-        table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"员工编号", "用户名", "员工姓名", "电话号码", "所属部门", "负责产品", "工资", ""});
-=======
         Contact_table= new JTable(tableModel){ @Override
         public boolean isCellEditable(int row, int column) { return false; }};
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
         model.setColumnIdentifiers(new String[]{"员工编号","用户名","员工姓名","电话号码","所属部门","负责产品","工资",""});
->>>>>>> 7b606bf03209e3e17884ef219e493800932c52dc
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
                     contact.getContactId(),
@@ -188,17 +173,6 @@ public class IndexFrame extends JFrame {
             };
             model.addRow(objects);
         }
-<<<<<<< HEAD
-        JTableHeader header= table.getTableHeader();
-        scrollPanel(table,header);
-        table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
-        JPanel myPanel = new JPanel(new BorderLayout());
-        myPanel.setPreferredSize(new Dimension(300, table.getRowCount() * table.getRowHeight()));
-        myPanel.add(header, BorderLayout.NORTH);
-        myPanel.add(table, BorderLayout.CENTER);
-        JScrollPane scrollPane = new JScrollPane(myPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(table.getWidth(), table.getHeight()));
-=======
         TableColumn tc = Contact_table.getColumnModel().getColumn(7);
         tc.setMaxWidth(0);
         tc.setMinWidth(0);
@@ -220,9 +194,8 @@ public class IndexFrame extends JFrame {
         mypane.setPreferredSize(new Dimension(300,Contact_table.getRowCount()*Contact_table.getRowHeight()));
         mypane.add(header,BorderLayout.NORTH);
         mypane.add(Contact_table,BorderLayout.CENTER);
-        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(),Contact_table.getHeight()));
->>>>>>> 7b606bf03209e3e17884ef219e493800932c52dc
         scrollPane.setBackground(Color.white);
         contactBodyPanel.add(scrollPane);
         contactBodyPanel.revalidate();
@@ -271,7 +244,6 @@ public class IndexFrame extends JFrame {
         r.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class, r);
         table.setBackground(Color.white);
-
     }
 
     public void contactComboxInit() {
