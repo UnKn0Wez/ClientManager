@@ -20,5 +20,5 @@ public interface UserService {
     List<ContactVo> selectAll();
     List<ClientVo> selectClientAll();
     void deleteContact(String userId);
-    List<ContactVo> selectByContact(String contact_Id);
+    ContactVo selectByContact(String contact_Id);
 }

@@ -15,5 +15,4 @@ import java.util.List;
 public interface DepDao {
     List<Department> selectDep(String num) throws SQLException;
     List<Department> selectAllDep()throws SQLException;
-    List<Product> selectAllPro()throws SQLException;
 }

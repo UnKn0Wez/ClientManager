@@ -149,7 +149,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<ContactVo> selectByContact(String contact_Id) throws SQLException {
+    public ContactVo selectByContact(String contact_Id) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
         String sql = "select user_id,contact_id,user_name,realname,user_phone,dep_name,product_name,user_img,salary " +
@@ -159,9 +159,9 @@ public class UserDaoImpl implements UserDao {
                 "and contact_id ='" + contact_Id + "'";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        List<ContactVo> list = new ArrayList<>();
+        ContactVo student=null;
         while (rs.next()) {
-            ContactVo student = ContactVo.builder()
+            student = ContactVo.builder()
                     .userId(rs.getString("user_id"))
                     .contactId(rs.getString("contact_id"))
                     .userName(rs.getString("user_name"))
@@ -172,12 +172,11 @@ public class UserDaoImpl implements UserDao {
                     .userImag(rs.getString("user_img"))
                     .productName(rs.getString("product_name"))
                     .build();
-            list.add(student);
         }
         rs.close();
         pstmt.close();
         jdbcUtil.closeConnection();
-        return list;
+        return student;
     }
 
     @Override

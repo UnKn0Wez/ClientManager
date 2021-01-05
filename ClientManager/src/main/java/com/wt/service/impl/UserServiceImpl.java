@@ -92,8 +92,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ContactVo> selectByContact(String contact_Id) {
-        List<ContactVo> contactList = null;
+    public ContactVo selectByContact(String contact_Id) {
+        ContactVo contactList = null;
         try {
             contactList = userDao.selectByContact(contact_Id);
         } catch (SQLException e) {
