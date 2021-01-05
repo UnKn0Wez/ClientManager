@@ -3,6 +3,7 @@ package com.wt.frame;
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
 import com.wt.factory.ServiceFactory;
+import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
@@ -54,14 +55,15 @@ public class IndexFrame extends JFrame {
     private JPanel clientContentPanel;
     private JPanel clientBodyPanel;
     private JPanel clientSearchPanel;
+    private JTextField clientSearchText;
+    private JTextField buyTimeText;
+    private JTextField clientAddressText;
+    private JComboBox clientCreditCombobox;
     private final CardLayout C;
-<<<<<<< HEAD
     private UserVo uv = new UserVo();
-=======
-    private UserVo uv=new UserVo();
     private int contact_id;
-    JTable Contact_table;
->>>>>>> 7b606bf03209e3e17884ef219e493800932c52dc
+    private JTable Contact_table;
+    private JTable Client_table;
 
     IndexFrame() {
         init();
@@ -80,8 +82,14 @@ public class IndexFrame extends JFrame {
         contactProSearchText.setBorder(border2);
         addContact_button.setBorder(border2);
         contactDetail_button.setBorder(border2);
+        clientSearchText.setBorder(border2);
+        clientAddressText.setBorder(border2);
+        clientCreditCombobox.setBorder(border2);
+        buyTimeText.setBorder(border2);
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
+        clientContentPanel.setBorder(border1);
+        clientSearchPanel.setBorder(border1);
         headLabel.setBorder(border);
         headLabel.setText("<html><img src='" + uv.getuImg() + "' width='160' height='160'/></html>");
         loginName.setText(uv.getuName());
@@ -101,12 +109,14 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
+                showContact(ServiceFactory.getUserServiceInstance().selectAll());
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "2");
+                showClient(ServiceFactory.getUserServiceInstance().selectClientAll());
             }
         });
         productLabel.addMouseListener(new MouseAdapter() {
@@ -139,29 +149,80 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
-        showContact(ServiceFactory.getUserServiceInstance().selectAll());
     }
 
-    public void showContact(List<ContactVo> contacts) {
+    public void showClient(List<ClientVo> clientVos) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
-<<<<<<< HEAD
-        JTable table = new JTable(tableModel) {
+        Client_table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         DefaultTableModel model = new DefaultTableModel();
-        table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"员工编号", "用户名", "员工姓名", "电话号码", "所属部门", "负责产品", "工资", ""});
-=======
-        Contact_table= new JTable(tableModel){ @Override
-        public boolean isCellEditable(int row, int column) { return false; }};
+        Client_table.setModel(model);
+        model.setColumnIdentifiers(new String[]{"客户编号", "用户名", "客户姓名", "电话号码", "信任度", "购买时间", "家庭地址"});
+
+        for (ClientVo clientVo : clientVos) {
+            Object[] objects = new Object[]{
+                    clientVo.getClientId(), clientVo.getUserName(),
+                    clientVo.getRealName(), clientVo.getUserPhone(),
+                    clientVo.getClientCredit(), clientVo.getBuyTime(),
+                    clientVo.getClientAddress()
+            };
+            model.addRow(objects);
+        }
+
+        JTableHeader header = Client_table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setFont(new Font("楷体", Font.PLAIN, 18));
+        Client_table.setTableHeader(header);
+        Client_table.setRowHeight(35);
+        Client_table.setBackground(Color.white);
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        Client_table.setDefaultRenderer(Object.class, r);
+        Client_table.setBackground(Color.white);
+        Client_table.setPreferredSize(new Dimension(clientContentPanel.getWidth(), clientContentPanel.getHeight()));
+        JPanel mypanel = new JPanel(new BorderLayout());
+        mypanel.setPreferredSize(new Dimension(300, Client_table.getRowCount() * Client_table.getRowHeight()));
+        mypanel.add(header, BorderLayout.NORTH);
+        mypanel.add(Client_table, BorderLayout.CENTER);
+        JScrollPane scrollPanel = new JScrollPane(mypanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanel.setPreferredSize(new Dimension(Client_table.getWidth(), Client_table.getHeight()));
+        scrollPanel.setBackground(Color.white);
+        clientBodyPanel.add(scrollPanel);
+        clientBodyPanel.revalidate();
+        clientBodyPanel.repaint();
+        Client_table.getSelectionModel().addListSelectionListener(e -> {
+        });
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem deleteItem = new JMenuItem("导出");
+        jPopupMenu.add(deleteItem);
+        Client_table.add(jPopupMenu);
+        Client_table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+        });
+    }
+
+    public void showContact(List<ContactVo> contacts) {
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        Contact_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"员工编号","用户名","员工姓名","电话号码","所属部门","负责产品","工资",""});
->>>>>>> 7b606bf03209e3e17884ef219e493800932c52dc
+        model.setColumnIdentifiers(new String[]{"员工编号", "用户名", "员工姓名", "电话号码", "所属部门", "负责产品", "工资", ""});
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
                     contact.getContactId(),
@@ -171,41 +232,15 @@ public class IndexFrame extends JFrame {
             };
             model.addRow(objects);
         }
-<<<<<<< HEAD
-        JTableHeader header= table.getTableHeader();
-        scrollPanel(table,header);
-        table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
-        JPanel myPanel = new JPanel(new BorderLayout());
-        myPanel.setPreferredSize(new Dimension(300, table.getRowCount() * table.getRowHeight()));
-        myPanel.add(header, BorderLayout.NORTH);
-        myPanel.add(table, BorderLayout.CENTER);
-        JScrollPane scrollPane = new JScrollPane(myPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(table.getWidth(), table.getHeight()));
-=======
-        TableColumn tc = Contact_table.getColumnModel().getColumn(7);
-        tc.setMaxWidth(0);
-        tc.setMinWidth(0);
         JTableHeader header = Contact_table.getTableHeader();
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
-        hr.setHorizontalAlignment(JLabel.CENTER);
-        header.setDefaultRenderer(hr);
-        header.setPreferredSize(new Dimension(header.getWidth(), 40));
-        header.setFont(new Font("楷体", Font.PLAIN, 18));
-        Contact_table.setTableHeader(header);
-        Contact_table.setRowHeight(35);
-        Contact_table.setBackground(Color.white);
-        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
-        r.setHorizontalAlignment(JLabel.CENTER);
-        Contact_table.setDefaultRenderer(Object.class, r);
-        Contact_table.setBackground(Color.white);
-        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(),contactContentPanel.getHeight()));
-        JPanel mypane=new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300,Contact_table.getRowCount()*Contact_table.getRowHeight()));
-        mypane.add(header,BorderLayout.NORTH);
-        mypane.add(Contact_table,BorderLayout.CENTER);
+        scrollPanel(Contact_table, header);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(Contact_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(),Contact_table.getHeight()));
->>>>>>> 7b606bf03209e3e17884ef219e493800932c52dc
+        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
         scrollPane.setBackground(Color.white);
         contactBodyPanel.add(scrollPane);
         contactBodyPanel.revalidate();
@@ -223,7 +258,7 @@ public class IndexFrame extends JFrame {
         });
     }
 
-    public static void scrollPanel(JTable table,JTableHeader header) {
+    public static void scrollPanel(JTable table, JTableHeader header) {
         TableColumn tc = table.getColumnModel().getColumn(7);
         tc.setMaxWidth(0);
         tc.setMinWidth(0);
@@ -239,7 +274,6 @@ public class IndexFrame extends JFrame {
         r.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class, r);
         table.setBackground(Color.white);
-
     }
 
     public void contactComboxInit() {

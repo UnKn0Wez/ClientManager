@@ -3,6 +3,7 @@ package com.wt.dao.impl;
 import com.wt.dao.UserDao;
 import com.wt.entity.User;
 import com.wt.utils.JdbcUtil;
+import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.UserVo;
 
@@ -54,8 +55,8 @@ public class UserDaoImpl implements UserDao {
     public void contactRegister(User user) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String ist = "INSERT INTO t_user(user_id,contact_id,user_name,user_phone,dep_id,product_id,user_img,password,user_role,realname)\n" +
-                "values(?,?,?,?,?,?,?,?,?,?);";
+        String ist = "INSERT INTO t_user(user_id,contact_id,user_name,user_phone,dep_id,product_id,user_img,password,user_role,realname,salary)\n" +
+                "values(?,?,?,?,?,?,?,?,?,?,?);";
         PreparedStatement pstmt = connection.prepareStatement(ist);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String date = LocalDateTime.now().format(df);
@@ -70,6 +71,7 @@ public class UserDaoImpl implements UserDao {
         pstmt.setString(2,"Contact"+date);
         pstmt.setString(9,"Contact");
         pstmt.setString(10,user.getRealName());
+        pstmt.setDouble(11,3000);
         pstmt.executeUpdate();
         pstmt.close();
         connection.close();
@@ -98,6 +100,37 @@ public class UserDaoImpl implements UserDao {
                     .salary(rs.getDouble("salary"))
                     .userImag(rs.getString("user_img"))
                     .productName(rs.getString("product_name"))
+                    .build();
+            list.add(student);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return list;
+    }
+
+    @Override
+    public List<ClientVo> selectClientAll() throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="SELECT user_id,client_id,user_name,realname,user_phone,client_credit,buy_time,user_img,client_address" +
+                " FROM t_user " +
+                "where user_role='Client';";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<ClientVo> list = new ArrayList<>();
+        while (rs.next()) {
+            ClientVo student = ClientVo.builder()
+                    .userId(rs.getString("user_id"))
+                    .clientId(rs.getString("client_id"))
+                    .userName(rs.getString("user_name"))
+                    .realName(rs.getString("realname"))
+                    .userPhone(rs.getString("user_phone"))
+                    .clientCredit(rs.getString("client_credit"))
+                    .buyTime(rs.getDate("buy_time"))
+                    .userImg(rs.getString("user_img"))
+                    .clientAddress(rs.getString("client_address"))
+                    .userRole("Client")
                     .build();
             list.add(student);
         }

@@ -61,12 +61,7 @@ public class RegisterFrame extends JFrame{
 
     public RegisterFrame() {
         init();
-        xxField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                dispose();
-            }
-        });
+
         CopeImageUtil copeImageUtil=new CopeImageUtil();
         Border border1=new RoundBorder(10,Color.black);
         clientRegButton.setBorder(border1);
@@ -152,7 +147,12 @@ public class RegisterFrame extends JFrame{
                 bb++;
             }
         });
-
+        xxField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+            }
+        });
 
         cancelButton.addActionListener(e -> {
             dispose();

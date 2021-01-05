@@ -1,6 +1,7 @@
 package com.wt.dao;
 
 import com.wt.entity.User;
+import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 
 import java.sql.SQLException;
@@ -17,4 +18,5 @@ public interface UserDao {
     void clientRegister(User user)throws SQLException;
     void contactRegister(User user)throws SQLException;
     List<ContactVo> selectAll()throws SQLException;
+    List<ClientVo> selectClientAll()throws SQLException;
 }

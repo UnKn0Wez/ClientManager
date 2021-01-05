@@ -2,6 +2,7 @@ package com.wt.service;
 
 import com.wt.entity.User;
 import com.wt.utils.ResultEntity;
+import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface UserService {
     void clientRegister(User user);
     void contactRegister(User user);
     List<ContactVo> selectAll();
+    List<ClientVo> selectClientAll();
 }
