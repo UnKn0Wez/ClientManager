@@ -125,6 +125,7 @@ public class IndexFrame extends JFrame {
         loginName.setText(uv.getuName());
         contactComboxInit();
         proComboxInit();
+        proTypeComboxInit();
         //创建CardLayout
         C = new CardLayout();
         indexPanel.setLayout(C);
@@ -251,6 +252,30 @@ public class IndexFrame extends JFrame {
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
+        productDetailButton.addActionListener(e->{
+            ProductDetailDispose pdd=new ProductDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getuContact_table();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                contact_id = Contact_table.getSelectedRow();
+                ProDetailVo pdv = new ProDetailVo();
+                pdv.setproId(Contact_table.getModel().getValueAt(contact_id, 0).toString());
+                new ProductDetailFrame();
+                WindowState ws = new WindowState();
+                ws.setustates(true);
+                pdd.setAll(true,productContentPanel,productBodyPanel);
+                new Thread(pdd).start();
+                new Thread(pdd).stop();
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一行数据！");
+            }
+        });
+        productSearchButton.addActionListener(e->{
+            productBodyPanel.removeAll();
+            svu.showProducts(ServiceFactory.getProductServiceInstance().searchProduct(productNameField.getText(),productTypeCombo.getSelectedItem().toString()), productContentPanel, productBodyPanel);
+            productBodyPanel.revalidate();
+            productBodyPanel.repaint();
+        });
     }
 
     public void showClient(List<ClientVo> clientVos) {
@@ -329,6 +354,17 @@ public class IndexFrame extends JFrame {
                 }
             }
         });
+    }
+
+    public void proTypeComboxInit() {
+        productTypeCombo.addItem("请选择产品类型");
+        productTypeCombo.addItem("运动产品");
+        productTypeCombo.addItem("电子产品");
+        productTypeCombo.addItem("机械产品");
+        productTypeCombo.addItem("儿童玩具");
+        productTypeCombo.addItem("床上用品");
+        productTypeCombo.addItem("厨房用品");
+        productTypeCombo.addItem("高科技产品");
     }
 
     public void proComboxInit() {

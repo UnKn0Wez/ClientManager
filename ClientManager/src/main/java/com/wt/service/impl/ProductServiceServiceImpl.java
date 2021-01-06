@@ -49,4 +49,35 @@ public class ProductServiceServiceImpl implements ProductService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Product productDetail(String proId) {
+        Product product=null;
+        try {
+            product=productDao.productDetail(proId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
+    @Override
+    public void updateProduct(Product product, String proId) {
+        try {
+            productDao.updateProduct(product,proId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Product> searchProduct(String name, String type) {
+        List<Product> productList=null;
+        try {
+            productList=productDao.searchProduct(name,type);
+        } catch (SQLException e) {
+            System.err.println("查询产品出现错误！");
+        }
+        return productList;
+    }
 }
