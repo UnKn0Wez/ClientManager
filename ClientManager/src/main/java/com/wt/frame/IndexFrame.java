@@ -135,11 +135,11 @@ public class IndexFrame extends JFrame {
         indexPanel.add("6", depPanel);
         indexPanel.add("7", strongPanel);
         hidePanel();
+        ShowValuesUtil svu = new ShowValuesUtil();
         contactLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
-                ShowValuesUtil svu = new ShowValuesUtil();
                 svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
             }
         });
@@ -154,6 +154,7 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
+                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel,productBodyPanel);
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
@@ -180,7 +181,6 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
-        ShowValuesUtil svu = new ShowValuesUtil();
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
         //联系人详细页面切换
         contactDetail_button.addActionListener(e -> {
