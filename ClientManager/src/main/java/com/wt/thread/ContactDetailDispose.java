@@ -27,7 +27,6 @@ public class ContactDetailDispose implements Runnable{
     public void setcontentPanel(JPanel contactContentPanel,JPanel contactBodyPanel,JPanel depPanel){
         this.contactBodyPanel=contactBodyPanel;
         this.contactContentPanel=contactContentPanel;
-        this.depPanel=depPanel;
     }
 
     @Override
@@ -44,7 +43,7 @@ public class ContactDetailDispose implements Runnable{
         if(states==false){
             ShowValuesUtil svu=new ShowValuesUtil();
             contactBodyPanel.removeAll();
-            svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+            svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel);
             contactBodyPanel.revalidate();
             contactBodyPanel.repaint();
         }

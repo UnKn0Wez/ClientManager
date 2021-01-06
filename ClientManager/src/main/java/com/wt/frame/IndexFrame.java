@@ -73,6 +73,14 @@ public class IndexFrame extends JFrame {
     private JPanel depBodyPanel;
     private JPanel depContentPanel;
     private JPanel depSearchPanel;
+    private JPanel productSearchPanel;
+    private JTextField productNameField;
+    private JComboBox productTypeCombo;
+    private JButton productSearchButton;
+    private JPanel productContentPanel;
+    private JPanel productBodyPanel;
+    private JButton addProductButton;
+    private JButton productDetailButton;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
@@ -102,6 +110,11 @@ public class IndexFrame extends JFrame {
         clientSearchText.setBorder(border2);
         clientAddressText.setBorder(border2);
         clientCreditCombobox.setBorder(border2);
+        productNameField.setBorder(border2);
+        productTypeCombo.setBorder(border2);
+        addProductButton.setBorder(border2);
+        productSearchButton.setBorder(border2);
+        productDetailButton.setBorder(border2);
         contactSearchPanel.setBorder(border1);
         contactContentPanel.setBorder(border1);
         clientContentPanel.setBorder(border1);
@@ -109,6 +122,8 @@ public class IndexFrame extends JFrame {
         clientDetailButton.setBorder(border2);
         clientSelectButton.setBorder(border2);
         newClientButton.setBorder(border2);
+        productSearchPanel.setBorder(border1);
+        productBodyPanel.setBorder(border1);
         headLabel.setBorder(border);
         clientCreditCombobox.addItem("信任");
         clientCreditCombobox.addItem("不信任");
@@ -127,12 +142,12 @@ public class IndexFrame extends JFrame {
         indexPanel.add("6", depPanel);
         indexPanel.add("7", strongPanel);
         hidePanel();
+        ShowValuesUtil svu = new ShowValuesUtil();
         contactLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
-                ShowValuesUtil svu = new ShowValuesUtil();
-                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel, depPanel);
+                svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
@@ -146,6 +161,7 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
+                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel,productBodyPanel);
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
@@ -172,8 +188,7 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "7");
             }
         });
-        ShowValuesUtil svu = new ShowValuesUtil();
-        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel, depPanel);
+        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
         //联系人详细页面切换
         contactDetail_button.addActionListener(e -> {
             MyTable myTable = new MyTable();
@@ -207,15 +222,7 @@ public class IndexFrame extends JFrame {
             int index = contactProSearchCombo.getSelectedIndex();
             int index1 = depSearchCombox.getSelectedIndex();
             contactBodyPanel.removeAll();
-            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(), depSearchCombox.getItemAt(index1).getDepId(), contactProSearchCombo.getItemAt(index).getProductId()), contactContentPanel, contactBodyPanel, depPanel);
-            contactBodyPanel.revalidate();
-            contactBodyPanel.repaint();
-        });
-        contactSearchButton.addActionListener(e -> {
-            int index = contactProSearchCombo.getSelectedIndex();
-            int index1 = depSearchCombox.getSelectedIndex();
-            contactBodyPanel.removeAll();
-            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(), depSearchCombox.getItemAt(index1).getDepId(), contactProSearchCombo.getItemAt(index).getProductId()), contactContentPanel, contactBodyPanel, depPanel);
+            svu.showContact(ServiceFactory.getUserServiceInstance().searchInfo(contactSearchText.getText(), depSearchCombox.getItemAt(index1).getDepId(), contactProSearchCombo.getItemAt(index).getProductId()), contactContentPanel, contactBodyPanel);
             contactBodyPanel.revalidate();
             contactBodyPanel.repaint();
         });

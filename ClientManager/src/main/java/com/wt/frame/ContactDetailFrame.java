@@ -59,10 +59,14 @@ public class ContactDetailFrame extends JFrame {
         xxxField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                WindowState ws=new WindowState();
+                ws.setustates(false);
                 dispose();
             }
         });
         contactCelButton.addActionListener(e->{
+            WindowState ws=new WindowState();
+            ws.setustates(false);
             this.dispose();
         });
         contactRegButton.addActionListener(e->{
