@@ -69,6 +69,10 @@ public class IndexFrame extends JFrame {
     private JButton clientSelectButton;
     private JLabel mainXLabel;
     private JButton clientDetailButton;
+    private JButton newClientButton;
+    private JPanel depBodyPanel;
+    private JPanel depContentPanel;
+    private JPanel depSearchPanel;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
@@ -102,6 +106,9 @@ public class IndexFrame extends JFrame {
         contactContentPanel.setBorder(border1);
         clientContentPanel.setBorder(border1);
         clientSearchPanel.setBorder(border1);
+        clientDetailButton.setBorder(border2);
+        clientSelectButton.setBorder(border2);
+        newClientButton.setBorder(border2);
         headLabel.setBorder(border);
         clientCreditCombobox.addItem("信任");
         clientCreditCombobox.addItem("不信任");

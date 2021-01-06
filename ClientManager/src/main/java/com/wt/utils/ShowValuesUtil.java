@@ -24,11 +24,12 @@ public class ShowValuesUtil {
     private JTable Contact_table;
     private JPanel contactContentPanel;
     private JPanel contactBodyPanel;
-    private JPanel depPanel;
-    public void showContact(List<ContactVo> contacts,JPanel contactContentPanel,JPanel contactBodyPanel,JPanel depPanel){
+    private JTable dep_table;
+    private JPanel depContentPanel;
+    private JPanel depBodyPanel;
+    public void showContact(List<ContactVo> contacts,JPanel contactContentPanel,JPanel contactBodyPanel){
         this.contactBodyPanel=contactBodyPanel;
         this.contactContentPanel=contactContentPanel;
-        this.depPanel=depPanel;
         showContact(contacts);
     }
     public void showContact(List<ContactVo> contacts) {
@@ -92,12 +93,12 @@ public class ShowValuesUtil {
                     if(Contact_table.getSelectedRowCount()==1){
                         contact_id=Contact_table.getSelectedRow();
                         deleteItem.addActionListener(e1->{
-                            int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
+                            int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
                             if (choice == 0) {
                                 ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
                                 JOptionPane.showMessageDialog(null,"删除联系人成功");
                                 contactBodyPanel.removeAll();
-                                showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel,depPanel);
+                                showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel);
                                 contactBodyPanel.revalidate();
                                 contactBodyPanel.repaint();
                             }
@@ -109,4 +110,8 @@ public class ShowValuesUtil {
         MyTable myTable =new MyTable();
         myTable.setuContact_table(Contact_table);
     }
+    public void showDep(List<ContactVo> contacts,JPanel contactContentPanel,JPanel contactBodyPanel){
+
+    }
+
 }
