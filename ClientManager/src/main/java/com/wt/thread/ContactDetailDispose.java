@@ -20,11 +20,10 @@ public class ContactDetailDispose implements Runnable{
     Boolean states;
     JPanel contactContentPanel;
     JPanel contactBodyPanel;
-    JPanel depPanel;
     public void setCdf(Boolean states){
         this.states=states;
     }
-    public void setcontentPanel(JPanel contactContentPanel,JPanel contactBodyPanel,JPanel depPanel){
+    public void setcontentPanel(JPanel contactContentPanel,JPanel contactBodyPanel){
         this.contactBodyPanel=contactBodyPanel;
         this.contactContentPanel=contactContentPanel;
     }

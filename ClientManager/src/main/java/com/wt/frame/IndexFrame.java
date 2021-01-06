@@ -4,6 +4,7 @@ import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
+import com.wt.thread.ProductDetailDispose;
 import com.wt.vo.ClientVo;
 import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
@@ -116,7 +117,7 @@ public class IndexFrame extends JFrame {
         clientContentPanel.setBorder(border1);
         clientSearchPanel.setBorder(border1);
         productSearchPanel.setBorder(border1);
-        productBodyPanel.setBorder(border1);
+        productContentPanel.setBorder(border1);
         headLabel.setBorder(border);
         clientCreditCombobox.addItem("信任");
         clientCreditCombobox.addItem("不信任");
@@ -184,22 +185,33 @@ public class IndexFrame extends JFrame {
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
         //联系人详细页面切换
         contactDetail_button.addActionListener(e -> {
+            ContactDetailDispose cdd=new ContactDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getuContact_table();
             if (Contact_table.getSelectedRowCount() == 1) {
                 contact_id = Contact_table.getSelectedRow();
                 UserDetailVo udv = new UserDetailVo();
                 udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id, 0).toString());
-                ContactDetailDispose cdd = new ContactDetailDispose();
                 new ContactDetailFrame();
                 WindowState ws = new WindowState();
                 ws.setustates(true);
                 cdd.setCdf(true);
-                cdd.setcontentPanel(contactContentPanel, contactBodyPanel, depPanel);
+                cdd.setcontentPanel(contactContentPanel, contactBodyPanel);
                 new Thread(cdd).start();
+                new Thread(cdd).stop();
             } else {
                 JOptionPane.showMessageDialog(null, "请选择一行数据！");
             }
+        });
+        addContact_button.addActionListener(e->{
+            ContactDetailDispose cdd=new ContactDetailDispose();
+            new AddContactFrame();
+            WindowState ws=new WindowState();
+            ws.setustates(true);
+            cdd.setCdf(true);
+            cdd.setcontentPanel(contactContentPanel,contactBodyPanel);
+            new Thread(cdd).start();
+            new Thread(cdd).stop();
         });
         clientSelectButton.addActionListener(e -> {
             String realName = clientSearchText.getText();
@@ -229,6 +241,15 @@ public class IndexFrame extends JFrame {
                 JOptionPane.showMessageDialog(null,"清选择一条数据");
                 return;
             }
+        });
+        addProductButton.addActionListener(e->{
+            ProductDetailDispose pdd=new ProductDetailDispose();
+            new AddProductFrame();
+            WindowState ws=new WindowState();
+            ws.setustates(true);
+            pdd.setAll(true,productContentPanel,productBodyPanel);
+            new Thread(pdd).start();
+            new Thread(pdd).stop();
         });
     }
 

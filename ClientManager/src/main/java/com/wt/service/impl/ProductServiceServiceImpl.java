@@ -8,6 +8,7 @@ import com.wt.factory.DaoFactory;
 import com.wt.service.ProductService;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -24,8 +25,28 @@ public class ProductServiceServiceImpl implements ProductService {
         try {
             productList=productDao.selectAllPro();
         } catch (SQLException e) {
-            System.err.println("查询部门出现错误！");
+            System.err.println("查询产品出现错误！");
         }
         return productList;
+    }
+
+    @Override
+    public void addProduct(Product product) {
+        try {
+            productDao.addProduct(product);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delProduct(String proId) {
+        try {
+            productDao.delProduct(proId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

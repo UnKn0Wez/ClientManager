@@ -288,10 +288,10 @@ public class UserDaoImpl implements UserDao {
             sql += "and realname like '%" + contactName + "%'";
         }
         if (depId != null && !"1".equals(depId)) {
-            sql += "and dep_id = '" + depId + "'";
+            sql += "and t_user.dep_id = '" + depId + "'";
         }
         if (proId != null && !"1".equals(proId)) {
-            sql += "and product_id = '" + proId + "'";
+            sql += "and t_user.product_id = '" + proId + "'";
         }
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();

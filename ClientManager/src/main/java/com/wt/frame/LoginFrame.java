@@ -10,6 +10,8 @@ import org.apache.poi.ss.formula.functions.Index;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @ClassName LoginFrame
@@ -51,6 +53,9 @@ public class LoginFrame extends JFrame {
                 uNameText.setText("");
                 passWordText.setText("");
             }
+        });
+        registButton.addActionListener(e->{
+            new RegisterFrame();
         });
     }
 
