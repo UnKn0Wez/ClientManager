@@ -57,7 +57,7 @@ public class ProductDaoImpl implements ProductDao {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         Date date = new Date();
         String mybirth= FormatUtil.formatDate(date);
-        long time = test2(mybirth, DATE_FORMAT);
+        long time = FormatUtil.longFormat(mybirth, DATE_FORMAT);
         java.sql.Date sqlDate = new java.sql.Date(time);
         String date1 = LocalDateTime.now().format(df);
         String sql="insert into t_product(product_id,product_name,product_date,product_type,price) values('"+date1+"','"+product.getProductName()+"','"+ sqlDate +"','"+product.getProductType()+"',"+product.getPrice()+")";
@@ -74,10 +74,9 @@ public class ProductDaoImpl implements ProductDao {
         String sql="delete from t_product where product_id='"+proId+"'";
         PreparedStatement pstmt=connection.prepareStatement(sql);
         pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
     }
 
-    static long test2(String date, String format) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-        return dateFormat.parse(date).getTime();
-    }
+
 }

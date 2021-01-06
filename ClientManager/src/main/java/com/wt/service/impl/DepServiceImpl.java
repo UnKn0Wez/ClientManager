@@ -8,6 +8,7 @@ import com.wt.factory.DaoFactory;
 import com.wt.service.DepService;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -40,5 +41,43 @@ public class DepServiceImpl implements DepService {
         return departmentList;
     }
 
+    @Override
+    public void deleteDep(String depId) {
+        try {
+            depDao.deleteDep(depId);
+        } catch (SQLException e) {
+            System.err.println("删除部门出现错误！");
+        }
+    }
 
+    @Override
+    public void addDep(Department department) {
+        try {
+            depDao.addDep(department);
+        } catch (SQLException e) {
+            System.err.println("添加部门发生错误！");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Department department) {
+        try {
+            depDao.update(department);
+        } catch (SQLException e) {
+            System.err.println("更新部门信息发生错误！");
+        }
+    }
+
+    @Override
+    public Department selectDepById(String depID) {
+        Department department=null;
+        try {
+            department=depDao.selectDepById(depID);
+        } catch (SQLException e) {
+            System.err.println("根据部门ID查询发生错误！");
+        }
+        return department;
+    }
 }
