@@ -13,6 +13,6 @@ import java.util.List;
  * @Date 2020/12/30
  **/
 public interface DepDao {
-    List<Department> selectDep(String num) throws SQLException;
+    List<Department> selectDep(String name,Integer time) throws SQLException;
     List<Department> selectAllDep()throws SQLException;
 }

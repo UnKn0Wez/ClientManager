@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -81,6 +82,12 @@ public class IndexFrame extends JFrame {
     private JPanel productBodyPanel;
     private JButton addProductButton;
     private JButton productDetailButton;
+    private JTextField depSearchText;
+    private JTextField depTimeSearch;
+    private JButton depSearchButton;
+    private JButton depDetailButton;
+    private JButton newDepButton;
+    private JComboBox<String> depTimeCombobox;
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
@@ -98,6 +105,10 @@ public class IndexFrame extends JFrame {
                 dispose();
             }
         });
+        depTimeCombobox.addItem("请选择年份");
+        for (int i=2010;i<= LocalDate.now().getYear();i++){
+            depTimeCombobox.addItem(String.valueOf(i));
+        }
         Border border = new RoundBorder(250, Color.black);
         Border border1 = new RoundBorder(15, Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10, Color.decode("#838383"));
@@ -125,6 +136,13 @@ public class IndexFrame extends JFrame {
         productSearchPanel.setBorder(border1);
         productBodyPanel.setBorder(border1);
         headLabel.setBorder(border);
+        depContentPanel.setBorder(border1);
+        depSearchPanel.setBorder(border1);
+        depSearchText.setBorder(border2);
+        depTimeCombobox.setBorder(border2);
+        depSearchButton.setBorder(border2);
+        depDetailButton.setBorder(border2);
+        newDepButton.setBorder(border2);
         clientCreditCombobox.addItem("信任");
         clientCreditCombobox.addItem("不信任");
         headLabel.setText("<html><img src='" + uv.getuImg() + "' width='160' height='160'/></html>");
@@ -180,6 +198,7 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "6");
+                svu.showDep(ServiceFactory.getDepServiceInstance().selectDepAll(),depContentPanel,depBodyPanel);
             }
         });
         strongLael.addMouseListener(new MouseAdapter() {
@@ -227,7 +246,7 @@ public class IndexFrame extends JFrame {
             contactBodyPanel.repaint();
         });
         clientDetailButton.addActionListener(e -> {
-            if(Client_table.getRowCount()==1){
+            if(Client_table.getSelectedRowCount()==1){
                 int index=Client_table.getSelectedRow();
                 ClientDetailVo cdv = new ClientDetailVo();
                 cdv.setClientDetailId(Client_table.getValueAt(index,0).toString());
@@ -236,6 +255,20 @@ public class IndexFrame extends JFrame {
                 JOptionPane.showMessageDialog(null,"清选择一条数据");
                 return;
             }
+        });
+        newClientButton.addActionListener(e -> {
+            new AddClientFrame();
+        });
+        depSearchButton.addActionListener(e -> {
+            int index=depTimeCombobox.getSelectedIndex();
+            depBodyPanel.removeAll();
+            if(index!=0){
+                svu.showDep(ServiceFactory.getDepServiceInstance().selectDep(depSearchText.getText(),Integer.parseInt(depTimeCombobox.getItemAt(index))));
+            }else{
+                svu.showDep(ServiceFactory.getDepServiceInstance().selectDep(depSearchText.getText(),0));
+            }
+            depBodyPanel.revalidate();
+            depBodyPanel.repaint();
         });
     }
 

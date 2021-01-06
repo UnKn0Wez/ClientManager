@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Annotation;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +24,33 @@ import java.util.List;
  **/
 public class DepDaoImpl implements DepDao {
     @Override
-    public List<Department> selectDep(String num) throws SQLException {
+    public List<Department> selectDep(String name,Integer time) throws SQLException {
         JdbcUtil jdbcUtil=JdbcUtil.getInitJdbcUtil();
         Connection connection=jdbcUtil.getConnection();
-        String sql="Select * from t_department where dep_id=?";
-        PreparedStatement pstmt=connection.prepareStatement(sql);
+        PreparedStatement pstmt;
+        String sql="Select * from t_department where";
+        if(!"".equals(name)&&name!=null){
+            if(sql.contains("and")){
+                sql+= " and ";
+            }
+            sql+= " dep_name like '%"+name+"%' and ";
+        }
+        if(time!=0&&time!=null){
+            if(sql.contains("and")){
+                sql+= " and ";
+            }
+            sql+= " YEAR(dep_time)="+time+" and ";
+        }
+        pstmt=connection.prepareStatement(sql);
         ResultSet rs=pstmt.executeQuery();
-        pstmt.setString(1,num);
         List<Department> departmentList = new ArrayList<>();
         Department department;
         while (rs.next()){
             department= Department.builder()
                     .depId(rs.getString("dep_id"))
-                    .depName(rs.getString("dep_name")).build();
+                    .depName(rs.getString("dep_name"))
+                    .depTime(rs.getDate("dep_time"))
+                    .build();
             departmentList.add(department);
         }
         rs.close();
@@ -55,6 +70,7 @@ public class DepDaoImpl implements DepDao {
             Department department = new Department();
             department.setDepId(rs.getString("dep_id"));
             department.setDepName(rs.getString("dep_name"));
+            department.setDepTime(rs.getDate("dep_time"));
             departmentList.add(department);
         }
         rs.close();

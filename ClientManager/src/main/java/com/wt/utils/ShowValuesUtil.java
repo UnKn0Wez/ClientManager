@@ -1,5 +1,6 @@
 package com.wt.utils;
 
+import com.wt.entity.Department;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ContactVo;
@@ -29,19 +30,24 @@ public class ShowValuesUtil {
     private JPanel depContentPanel;
     private JPanel depBodyPanel;
 
-    public void showContact(List<ContactVo> contacts,JPanel contactContentPanel,JPanel contactBodyPanel){
-        this.contactBodyPanel=contactBodyPanel;
-        this.contactContentPanel=contactContentPanel;
+    public void showContact(List<ContactVo> contacts, JPanel contactContentPanel, JPanel contactBodyPanel) {
+        this.contactBodyPanel = contactBodyPanel;
+        this.contactContentPanel = contactContentPanel;
         showContact(contacts);
     }
+
     public void showContact(List<ContactVo> contacts) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
-        Contact_table= new JTable(tableModel){ @Override
-        public boolean isCellEditable(int row, int column) { return false; }};
+        Contact_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"员工编号","员工姓名","用户名","电话号码","所属部门","负责产品","工资",""});
+        model.setColumnIdentifiers(new String[]{"员工编号", "员工姓名", "用户名", "电话号码", "所属部门", "负责产品", "工资", ""});
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
                     contact.getContactId(),
@@ -67,13 +73,13 @@ public class ShowValuesUtil {
         r.setHorizontalAlignment(JLabel.CENTER);
         Contact_table.setDefaultRenderer(Object.class, r);
         Contact_table.setBackground(Color.white);
-        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(),contactContentPanel.getHeight()));
-        JPanel mypane=new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300,Contact_table.getRowCount()*Contact_table.getRowHeight()));
-        mypane.add(header,BorderLayout.NORTH);
-        mypane.add(Contact_table,BorderLayout.CENTER);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(Contact_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(),Contact_table.getHeight()));
+        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
         scrollPane.setBackground(Color.white);
         contactBodyPanel.add(scrollPane);
         contactBodyPanel.revalidate();
@@ -92,15 +98,15 @@ public class ShowValuesUtil {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 3) {
                     jPopupMenu.show(Contact_table, e.getX(), e.getY());
-                    if(Contact_table.getSelectedRowCount()==1){
-                        contact_id=Contact_table.getSelectedRow();
-                        deleteItem.addActionListener(e1->{
+                    if (Contact_table.getSelectedRowCount() == 1) {
+                        contact_id = Contact_table.getSelectedRow();
+                        deleteItem.addActionListener(e1 -> {
                             int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
                             if (choice == 0) {
-                                ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
-                                JOptionPane.showMessageDialog(null,"删除联系人成功");
+                                ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id, 0).toString());
+                                JOptionPane.showMessageDialog(null, "删除联系人成功");
                                 contactBodyPanel.removeAll();
-                                showContact(ServiceFactory.getUserServiceInstance().selectAll(),contactContentPanel,contactBodyPanel);
+                                showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
                                 contactBodyPanel.revalidate();
                                 contactBodyPanel.repaint();
                             }
@@ -109,24 +115,28 @@ public class ShowValuesUtil {
                 }
             }
         });
-        MyTable myTable =new MyTable();
+        MyTable myTable = new MyTable();
         myTable.setuContact_table(Contact_table);
     }
 
-    public void showProducts(List<Product> products,JPanel contactContentPanel,JPanel contactBodyPanel){
-        this.contactBodyPanel=contactBodyPanel;
-        this.contactContentPanel=contactContentPanel;
+    public void showProducts(List<Product> products, JPanel contactContentPanel, JPanel contactBodyPanel) {
+        this.contactBodyPanel = contactBodyPanel;
+        this.contactContentPanel = contactContentPanel;
         showProducts(products);
     }
 
-    public void showProducts(List<Product> products){
+    public void showProducts(List<Product> products) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
-        Contact_table= new JTable(tableModel){ @Override
-        public boolean isCellEditable(int row, int column) { return false; }};
+        Contact_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"产品编号","产品名称","生产日期","产品类型","产品单价",""});
+        model.setColumnIdentifiers(new String[]{"产品编号", "产品名称", "生产日期", "产品类型", "产品单价", ""});
         for (Product product : products) {
             Object[] objects = new Object[]{
                     product.getProductId(),
@@ -151,13 +161,13 @@ public class ShowValuesUtil {
         r.setHorizontalAlignment(JLabel.CENTER);
         Contact_table.setDefaultRenderer(Object.class, r);
         Contact_table.setBackground(Color.white);
-        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(),contactContentPanel.getHeight()));
-        JPanel mypane=new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300,Contact_table.getRowCount()*Contact_table.getRowHeight()));
-        mypane.add(header,BorderLayout.NORTH);
-        mypane.add(Contact_table,BorderLayout.CENTER);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(Contact_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(),Contact_table.getHeight()));
+        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
         scrollPane.setBackground(Color.white);
         contactBodyPanel.add(scrollPane);
         contactBodyPanel.revalidate();
@@ -176,15 +186,15 @@ public class ShowValuesUtil {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 3) {
                     jPopupMenu.show(Contact_table, e.getX(), e.getY());
-                    if(Contact_table.getSelectedRowCount()==1){
-                        contact_id=Contact_table.getSelectedRow();
-                        deleteItem.addActionListener(e1->{
+                    if (Contact_table.getSelectedRowCount() == 1) {
+                        contact_id = Contact_table.getSelectedRow();
+                        deleteItem.addActionListener(e1 -> {
                             int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
                             if (choice == 0) {
-                                ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id,0).toString());
-                                JOptionPane.showMessageDialog(null,"删除产品成功");
+                                ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id, 0).toString());
+                                JOptionPane.showMessageDialog(null, "删除产品成功");
                                 contactBodyPanel.removeAll();
-                                showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(),contactContentPanel,contactBodyPanel);
+                                showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), contactContentPanel, contactBodyPanel);
                                 contactBodyPanel.revalidate();
                                 contactBodyPanel.repaint();
                             }
@@ -193,11 +203,93 @@ public class ShowValuesUtil {
                 }
             }
         });
-        MyTable myTable =new MyTable();
+        MyTable myTable = new MyTable();
         myTable.setuContact_table(Contact_table);
     }
-    public void showDep(List<ContactVo> contacts,JPanel contactContentPanel,JPanel contactBodyPanel){
 
+    public void showDep(List<Department> deps, JPanel depContentPanel, JPanel depBodyPanel) {
+        this.depContentPanel = depContentPanel;
+        this.depBodyPanel = depBodyPanel;
+        showDep(deps);
+    }
+
+    public void showDep(List<Department> deps) {
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        dep_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        DefaultTableModel model = new DefaultTableModel();
+        dep_table.setModel(model);
+        model.setColumnIdentifiers(new String[]{"部门编号", "部门名称", "部门创建日期"});
+        for (Department dep : deps) {
+            Object[] objects = new Object[]{
+                    dep.getDepId(),
+                    dep.getDepName(),
+                    dep.getDepTime()
+            };
+            model.addRow(objects);
+        }
+        JTableHeader header = dep_table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setFont(new Font("楷体", Font.PLAIN, 18));
+        dep_table.setTableHeader(header);
+        dep_table.setRowHeight(35);
+        dep_table.setBackground(Color.white);
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        dep_table.setDefaultRenderer(Object.class, r);
+        dep_table.setBackground(Color.white);
+        dep_table.setPreferredSize(new Dimension(depContentPanel.getWidth(), depContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, dep_table.getRowCount() * dep_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(dep_table, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(dep_table.getWidth(), dep_table.getHeight()));
+        scrollPane.setBackground(Color.white);
+        depBodyPanel.add(scrollPane);
+        depBodyPanel.revalidate();
+        depBodyPanel.repaint();
+        dep_table.getSelectionModel().addListSelectionListener(e -> {
+        });
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem deleteItem = new JMenuItem("删除");
+        JMenuItem outItem = new JMenuItem("导出");
+        jPopupMenu.add(deleteItem);
+        jPopupMenu.add(outItem);
+        dep_table.add(jPopupMenu);
+        //删除联系人
+        dep_table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    jPopupMenu.show(dep_table, e.getX(), e.getY());
+                    if (dep_table.getSelectedRowCount() == 1) {
+                        contact_id = dep_table.getSelectedRow();
+                        deleteItem.addActionListener(e1 -> {
+                            int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
+                            if (choice == 0) {
+                                ServiceFactory.getUserServiceInstance().deleteContact(dep_table.getModel().getValueAt(contact_id, 0).toString());
+                                JOptionPane.showMessageDialog(null, "删除产品成功");
+                                depBodyPanel.removeAll();
+                                showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), depContentPanel, depBodyPanel);
+                                depBodyPanel.revalidate();
+                                depBodyPanel.repaint();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        MyTable myTable = new MyTable();
+        myTable.setuContact_table(dep_table);
     }
 
 }

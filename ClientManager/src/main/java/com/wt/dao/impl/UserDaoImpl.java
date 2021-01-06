@@ -284,14 +284,14 @@ public class UserDaoImpl implements UserDao {
                 "where t_user.dep_id=t_department.dep_id " +
                 "and t_user.product_id=t_product.product_id " +
                 "and user_role = 'Contact'";
-        if (contactName != null) {
+        if (contactName != null&&!("".equals(contactName))) {
             sql += "and realname like '%" + contactName + "%'";
         }
         if (depId != null && !"1".equals(depId)) {
-            sql += "and dep_id = '" + depId + "'";
+            sql += "and t_user.dep_id = '" + depId + "'";
         }
         if (proId != null && !"1".equals(proId)) {
-            sql += "and product_id = '" + proId + "'";
+            sql += "and t_user.product_id = '" + proId + "'";
         }
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
@@ -326,12 +326,26 @@ public class UserDaoImpl implements UserDao {
                 "user_img=?,"+
                 "client_address=?"+
                 "where client_id=?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1,clientVo.getRealName());
-        pstmt.setString(2,clientVo.getUserPhone());
-        pstmt.setString(3,clientVo.getUserImg());
-        pstmt.setString(4,clientVo.getClientAddress());
-        pstmt.setString(5,clientVo.getClientId());
+        String sql1 = "update t_user " +
+                "set realname=?,"+
+                "user_phone=?,"+
+                "client_address=?"+
+                "where client_id=?";
+        PreparedStatement pstmt;
+        if("".equals(clientVo.getUserImg())||clientVo.getUserImg()==null){
+            pstmt = connection.prepareStatement(sql1);
+            pstmt.setString(1,clientVo.getRealName());
+            pstmt.setString(2,clientVo.getUserPhone());
+            pstmt.setString(3,clientVo.getClientAddress());
+            pstmt.setString(4,clientVo.getClientId());
+        }else{
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1,clientVo.getRealName());
+            pstmt.setString(2,clientVo.getUserPhone());
+            pstmt.setString(3,clientVo.getUserImg());
+            pstmt.setString(4,clientVo.getClientAddress());
+            pstmt.setString(5,clientVo.getClientId());
+        }
         pstmt.execute();
         pstmt.close();
         jdbcUtil.closeConnection();
@@ -380,8 +394,8 @@ public class UserDaoImpl implements UserDao {
     public void clientRegister(User user) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String ist = "INSERT INTO t_user(user_id,user_name,realname,user_phone,client_address,`password`,user_role,user_img,client_id) " +
-                "values(?,?,?,?,?,?,?,?,?)";
+        String ist = "INSERT INTO t_user(user_id,user_name,realname,user_phone,client_address,`password`,user_role,user_img,client_id,client_credit) " +
+                "values(?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt = connection.prepareStatement(ist);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String date = LocalDateTime.now().format(df);
@@ -394,6 +408,7 @@ public class UserDaoImpl implements UserDao {
         pstmt.setString(7, user.getUserRole());
         pstmt.setString(8, user.getUserImag());
         pstmt.setString(9, "Client" + date);
+        pstmt.setString(10,"100");
         pstmt.executeUpdate();
         pstmt.close();
         connection.close();

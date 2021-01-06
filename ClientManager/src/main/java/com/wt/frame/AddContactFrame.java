@@ -88,7 +88,7 @@ public class AddContactFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new File("C:/Users/UnKnW/Pictures"));
+                fileChooser.setCurrentDirectory(new File("C:/Users/public/Pictures"));
                 int result = fileChooser.showOpenDialog(rootPane);
                 if(result == JFileChooser.APPROVE_OPTION){
                     file = fileChooser.getSelectedFile();

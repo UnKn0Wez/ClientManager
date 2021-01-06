@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @ClassName Department
  * @Description TODO
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Department {
     private String depId;
     private String depName;
-
+    private Date depTime;
     @Override
     public String toString() {
         return depName;

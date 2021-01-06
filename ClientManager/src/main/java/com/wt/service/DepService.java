@@ -3,6 +3,7 @@ package com.wt.service;
 import com.wt.entity.Department;
 import com.wt.entity.Product;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -13,4 +14,5 @@ import java.util.List;
  **/
 public interface DepService {
     List<Department> selectDepAll();
+    List<Department> selectDep(String name,Integer time);
 }

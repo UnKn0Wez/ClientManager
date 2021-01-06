@@ -29,5 +29,16 @@ public class DepServiceImpl implements DepService {
         return departmentList;
     }
 
+    @Override
+    public List<Department> selectDep(String name, Integer time) {
+        List<Department> departmentList=null;
+        try {
+            departmentList=depDao.selectDep(name,time);
+        } catch (SQLException e) {
+            System.err.println("根据关键查询部门出现错误！");
+        }
+        return departmentList;
+    }
+
 
 }
