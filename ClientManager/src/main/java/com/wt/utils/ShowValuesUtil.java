@@ -136,7 +136,7 @@ public class ShowValuesUtil {
         };
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"产品编号", "产品名称", "生产日期", "产品类型", "产品单价", ""});
+        model.setColumnIdentifiers(new String[]{"产品编号","产品名称","入库日期","产品类型","产品单价",""});
         for (Product product : products) {
             Object[] objects = new Object[]{
                     product.getProductId(),
@@ -191,8 +191,9 @@ public class ShowValuesUtil {
                         deleteItem.addActionListener(e1 -> {
                             int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
                             if (choice == 0) {
-                                ServiceFactory.getUserServiceInstance().deleteContact(Contact_table.getModel().getValueAt(contact_id, 0).toString());
-                                JOptionPane.showMessageDialog(null, "删除产品成功");
+
+                                ServiceFactory.getProductServiceInstance().delProduct(Contact_table.getModel().getValueAt(contact_id,0).toString());
+                                JOptionPane.showMessageDialog(null,"删除产品成功");
                                 contactBodyPanel.removeAll();
                                 showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), contactContentPanel, contactBodyPanel);
                                 contactBodyPanel.revalidate();

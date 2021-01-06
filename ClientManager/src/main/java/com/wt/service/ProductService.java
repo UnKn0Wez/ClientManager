@@ -13,4 +13,6 @@ import java.util.List;
  **/
 public interface ProductService {
     List<Product> selectAllProduct();
+    void addProduct(Product product);
+    void delProduct(String proId);
 }

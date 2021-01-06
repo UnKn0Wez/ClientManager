@@ -190,7 +190,6 @@ public class AddContactFrame extends JFrame {
     }
 
 
-
     public void proComboxInit() {
         proCombobox.addItem(Product.builder().productName("请选择产品").productId("1").build());
         this.productId="1";
