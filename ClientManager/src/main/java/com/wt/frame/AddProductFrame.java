@@ -89,7 +89,6 @@ public class AddProductFrame extends JFrame{
 
     void init(){
         setUndecorated(true);
-        setTitle("registerFrame");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700,500);

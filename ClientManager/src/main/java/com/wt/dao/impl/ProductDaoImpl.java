@@ -74,6 +74,80 @@ public class ProductDaoImpl implements ProductDao {
         String sql="delete from t_product where product_id='"+proId+"'";
         PreparedStatement pstmt=connection.prepareStatement(sql);
         pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+    }
+
+    @Override
+    public Product productDetail(String proId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="select * from t_product where product_id='"+proId+"'";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        Product product=null;
+        while (rs.next()) {
+            product= Product.builder()
+                    .productId(rs.getString("product_id"))
+                    .price(rs.getDouble("price"))
+                    .productName(rs.getString("product_name"))
+                    .productType(rs.getString("product_type"))
+                    .productDate(rs.getDate("product_date")).build();
+        }
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return product;
+    }
+
+    @Override
+    public void updateProduct(Product product, String proId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="update t_product set product_name = '"+product.getProductName()+"'" +
+                ",product_type='"+product.getProductType()+"'" +
+                ",price="+product.getPrice()+" " +
+                "where product_id='"+proId+"'";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+    }
+
+    @Override
+    public List<Product> searchProduct(String name, String type) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="select * from t_product ";
+        if(!"".equals(name)&&name!=null){
+            if(!sql.contains("where")){
+                sql+=" where product_name like '%"+name+"%'";
+            }else {
+                sql+=" and product_name like '%"+name+"%'";
+            }
+        }
+        if(!"请选择产品类型".equals(type)&&name!=null){
+            if(!sql.contains("where")){
+                sql+=" where product_type = '"+type+"'";
+            }else {
+                sql+=" and product_type = '"+type+"'";
+            }
+        }
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<Product> productList = new ArrayList<>();
+        while(rs.next()){
+            Product product = new Product();
+            product.setProductId(rs.getString("product_id"));
+            product.setProductName(rs.getString("product_name"));
+            product.setPrice(rs.getDouble("price"));
+            product.setProductDate(rs.getDate("product_date"));
+            product.setProductType(rs.getString("product_type"));
+            productList.add(product);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return productList;
     }
 
     static long test2(String date, String format) throws ParseException {

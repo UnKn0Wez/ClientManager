@@ -17,4 +17,7 @@ public interface ProductDao {
     List<Product> selectAllPro()throws SQLException;
     void addProduct(Product product) throws SQLException, ParseException;
     void delProduct(String proId)throws SQLException;
+    Product productDetail(String proId)throws SQLException;
+    void updateProduct(Product product,String proId)throws SQLException;
+    List<Product> searchProduct(String name,String type)throws SQLException;
 }
