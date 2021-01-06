@@ -9,7 +9,11 @@ import javax.swing.*;
  * @Date 2021/1/5 12:32
  **/
 public class MyTable {
-    public static JTable Contact_table;
+    private static JTable Contact_table;
+    private static JTable Client_table;
+    private static JTable Dep_table;
+    private static JTable Product_table;
+
     public void setuContact_table(JTable Contact_table) {
         this.Contact_table = Contact_table;
     }
@@ -17,4 +21,28 @@ public class MyTable {
     public JTable getuContact_table() {
         return this.Contact_table;
     }
+    public void setClient_table(JTable Client_table) {
+        this.Client_table = Client_table;
+    }
+
+    public JTable getClient_table() {
+        return this.Client_table;
+    }
+    public void setDep_table(JTable Dep_table) {
+        this.Dep_table = Dep_table;
+    }
+
+    public JTable getDep_table() {
+        return this.Dep_table;
+    }
+
+    public void setProduct_table(JTable Product_table) {
+        this.Product_table = Product_table;
+    }
+
+    public JTable getProduct_table() {
+        return this.Product_table;
+    }
+
+
 }

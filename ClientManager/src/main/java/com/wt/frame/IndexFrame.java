@@ -89,9 +89,6 @@ public class IndexFrame extends JFrame {
     private final CardLayout C;
     private UserVo uv = new UserVo();
     private int contact_id;
-    private JTable Contact_table;
-    private JTable Client_table;
-    private JTable dep_table;
     private String ClientCredit;
     private String clientId;
     IndexFrame() {
@@ -206,26 +203,7 @@ public class IndexFrame extends JFrame {
             }
         });
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
-        //联系人详细页面切换
-        contactDetail_button.addActionListener(e -> {
-            ContactDetailDispose cdd=new ContactDetailDispose();
-            MyTable myTable = new MyTable();
-            JTable Contact_table = myTable.getuContact_table();
-            if (Contact_table.getSelectedRowCount() == 1) {
-                contact_id = Contact_table.getSelectedRow();
-                UserDetailVo udv = new UserDetailVo();
-                udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id, 0).toString());
-                new ContactDetailFrame();
-                WindowState ws = new WindowState();
-                ws.setustates(true);
-                cdd.setCdf(true);
-                cdd.setcontentPanel(contactContentPanel, contactBodyPanel);
-                new Thread(cdd).start();
-                new Thread(cdd).stop();
-            } else {
-                JOptionPane.showMessageDialog(null, "请选择一行数据！");
-            }
-        });
+
         addContact_button.addActionListener(e->{
             ContactDetailDispose cdd=new ContactDetailDispose();
             new AddContactFrame();
@@ -254,14 +232,35 @@ public class IndexFrame extends JFrame {
             contactBodyPanel.revalidate();
             contactBodyPanel.repaint();
         });
+        //联系人详细页面切换
+        contactDetail_button.addActionListener(e -> {
+            ContactDetailDispose cdd=new ContactDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getuContact_table();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                contact_id = Contact_table.getSelectedRow();
+                UserDetailVo udv = new UserDetailVo();
+                udv.setdetail_Id(Contact_table.getModel().getValueAt(contact_id, 0).toString());
+                new ContactDetailFrame();
+                WindowState ws = new WindowState();
+                ws.setustates(true);
+                cdd.setCdf(true);
+                cdd.setcontentPanel(contactContentPanel, contactBodyPanel);
+                new Thread(cdd).start();
+                new Thread(cdd).stop();
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一行数据！");
+            }
+        });
+        //客户详细页面切换
         clientDetailButton.addActionListener(e -> {
             ClientDetailDispose cdd = new ClientDetailDispose();
             MyTable myTable = new MyTable();
-            JTable Contact_table = myTable.getuContact_table();
-            if(Contact_table.getSelectedRowCount()==1){
-                int index=Contact_table.getSelectedRow();
+            JTable clientTable = myTable.getClient_table();
+            if(clientTable.getSelectedRowCount()==1){
+                int index=clientTable.getSelectedRow();
                 ClientDetailVo cdv = new ClientDetailVo();
-                cdv.setClientDetailId(Contact_table.getValueAt(index,0).toString());
+                cdv.setClientDetailId(clientTable.getValueAt(index,0).toString());
                 WindowState ws=new WindowState();
                 ws.setustates(true);
                 new ClientDetailFrame();
@@ -273,6 +272,7 @@ public class IndexFrame extends JFrame {
                 return;
             }
         });
+        //新增客户
         newClientButton.addActionListener(e -> {
             new AddClientFrame();
             ClientDetailDispose cdd =new ClientDetailDispose();
@@ -282,6 +282,7 @@ public class IndexFrame extends JFrame {
             new Thread(cdd).start();
             new Thread(cdd).stop();
         });
+        //部门查询按钮监听
         depSearchButton.addActionListener(e -> {
                     int index = depTimeCombobox.getSelectedIndex();
                     depBodyPanel.removeAll();
@@ -302,7 +303,7 @@ public class IndexFrame extends JFrame {
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
-
+        //新增部门按钮监听
         newDepButton.addActionListener(e -> {
             DepDetailDispose pdd=new DepDetailDispose();
             new AddDepFrame();
@@ -312,10 +313,11 @@ public class IndexFrame extends JFrame {
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
+        //部门详细信息界面切换
         depDetailButton.addActionListener(e -> {
             DepDetailDispose ddd = new DepDetailDispose();
             MyTable myTable = new MyTable();
-            JTable Contact_table = myTable.getuContact_table();
+            JTable Contact_table = myTable.getDep_table();
             if(Contact_table.getSelectedRowCount()==1){
                 int index=Contact_table.getSelectedRow();
                 DepDetailVo.setDepId(Contact_table.getValueAt(index,0).toString());
