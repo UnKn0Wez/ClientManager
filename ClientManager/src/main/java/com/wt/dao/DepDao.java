@@ -4,6 +4,7 @@ import com.wt.entity.Department;
 import com.wt.entity.Product;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -15,4 +16,8 @@ import java.util.List;
 public interface DepDao {
     List<Department> selectDep(String name,Integer time) throws SQLException;
     List<Department> selectAllDep()throws SQLException;
+    void deleteDep(String depId)throws SQLException;
+    void addDep(Department department) throws SQLException, ParseException;
+    void update(Department department)throws SQLException;
+    Department selectDepById(String depId)throws SQLException;
 }

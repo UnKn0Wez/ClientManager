@@ -4,21 +4,18 @@ import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
+import com.wt.thread.ClientDetailDispose;
+import com.wt.thread.DepDetailDispose;
 import com.wt.thread.ProductDetailDispose;
-import com.wt.vo.ClientVo;
 import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
 import com.wt.thread.ContactDetailDispose;
 import com.wt.utils.ShowValuesUtil;
 import com.wt.vo.*;
-import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -94,10 +91,9 @@ public class IndexFrame extends JFrame {
     private int contact_id;
     private JTable Contact_table;
     private JTable Client_table;
+    private JTable dep_table;
     private String ClientCredit;
     private String clientId;
-
-
     IndexFrame() {
         init();
         mainXLabel.addMouseListener(new MouseAdapter() {
@@ -174,7 +170,7 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "2");
-                showClient(ServiceFactory.getUserServiceInstance().selectClientAll());
+                svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(),clientContentPanel,clientBodyPanel);
             }
         });
         productLabel.addMouseListener(new MouseAdapter() {
@@ -245,7 +241,7 @@ public class IndexFrame extends JFrame {
             String address = clientAddressText.getText();
             int index = clientCreditCombobox.getSelectedIndex();
             ClientCredit = clientCreditCombobox.getItemAt(index);
-            showClient(ServiceFactory.getUserServiceInstance().selectByClient(realName, address, ClientCredit));
+            svu.showClient(ServiceFactory.getUserServiceInstance().selectByClient(realName, address, ClientCredit));
             clientBodyPanel.revalidate();
             clientBodyPanel.repaint();
 
@@ -259,11 +255,19 @@ public class IndexFrame extends JFrame {
             contactBodyPanel.repaint();
         });
         clientDetailButton.addActionListener(e -> {
-            if(Client_table.getSelectedRowCount()==1){
-                int index=Client_table.getSelectedRow();
+            ClientDetailDispose cdd = new ClientDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getuContact_table();
+            if(Contact_table.getSelectedRowCount()==1){
+                int index=Contact_table.getSelectedRow();
                 ClientDetailVo cdv = new ClientDetailVo();
-                cdv.setClientDetailId(Client_table.getValueAt(index,0).toString());
+                cdv.setClientDetailId(Contact_table.getValueAt(index,0).toString());
+                WindowState ws=new WindowState();
+                ws.setustates(true);
                 new ClientDetailFrame();
+                cdd.setAll(true,clientContentPanel,clientBodyPanel);
+                new Thread(cdd).start();
+                new Thread(cdd).stop();
             }else{
                 JOptionPane.showMessageDialog(null,"清选择一条数据");
                 return;
@@ -271,6 +275,12 @@ public class IndexFrame extends JFrame {
         });
         newClientButton.addActionListener(e -> {
             new AddClientFrame();
+            ClientDetailDispose cdd =new ClientDetailDispose();
+            WindowState ws=new WindowState();
+            ws.setustates(true);
+            cdd.setAll(true,clientContentPanel,clientBodyPanel);
+            new Thread(cdd).start();
+            new Thread(cdd).stop();
         });
         depSearchButton.addActionListener(e -> {
                     int index = depTimeCombobox.getSelectedIndex();
@@ -292,106 +302,32 @@ public class IndexFrame extends JFrame {
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
-        productDetailButton.addActionListener(e->{
-            ProductDetailDispose pdd=new ProductDetailDispose();
+
+        newDepButton.addActionListener(e -> {
+            DepDetailDispose pdd=new DepDetailDispose();
+            new AddDepFrame();
+            WindowState ws=new WindowState();
+            ws.setustates(true);
+            pdd.setAll(true,depContentPanel,depBodyPanel);
+            new Thread(pdd).start();
+            new Thread(pdd).stop();
+        });
+        depDetailButton.addActionListener(e -> {
+            DepDetailDispose ddd = new DepDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getuContact_table();
-            if (Contact_table.getSelectedRowCount() == 1) {
-                contact_id = Contact_table.getSelectedRow();
-                ProDetailVo pdv = new ProDetailVo();
-                pdv.setproId(Contact_table.getModel().getValueAt(contact_id, 0).toString());
-                new ProductDetailFrame();
-                WindowState ws = new WindowState();
+            if(Contact_table.getSelectedRowCount()==1){
+                int index=Contact_table.getSelectedRow();
+                DepDetailVo.setDepId(Contact_table.getValueAt(index,0).toString());
+                WindowState ws=new WindowState();
                 ws.setustates(true);
-                pdd.setAll(true,productContentPanel,productBodyPanel);
-                new Thread(pdd).start();
-                new Thread(pdd).stop();
-            } else {
-                JOptionPane.showMessageDialog(null, "请选择一行数据！");
-            }
-        });
-        productSearchButton.addActionListener(e->{
-            productBodyPanel.removeAll();
-            svu.showProducts(ServiceFactory.getProductServiceInstance().searchProduct(productNameField.getText(),productTypeCombo.getSelectedItem().toString()), productContentPanel, productBodyPanel);
-            productBodyPanel.revalidate();
-            productBodyPanel.repaint();
-        });
-    }
-
-    public void showClient(List<ClientVo> clientVos) {
-        clientBodyPanel.removeAll();
-        TableModel tableModel;
-        tableModel = new DefaultTableModel();
-        Client_table = new JTable(tableModel) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        DefaultTableModel model = new DefaultTableModel();
-        Client_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"客户编号", "用户名", "客户姓名", "电话号码", "信任度", "家庭地址"});
-        for (ClientVo clientVo : clientVos) {
-            Object[] objects = new Object[]{
-                    clientVo.getClientId(), clientVo.getUserName(),
-                    clientVo.getRealName(), clientVo.getUserPhone(),
-                    clientVo.getClientCredit(), clientVo.getClientAddress(),
-            };
-            model.addRow(objects);
-        }
-        JTableHeader header = Client_table.getTableHeader();
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
-        hr.setHorizontalAlignment(JLabel.CENTER);
-        header.setDefaultRenderer(hr);
-        header.setPreferredSize(new Dimension(header.getWidth(), 40));
-        header.setFont(new Font("楷体", Font.PLAIN, 18));
-        Client_table.setTableHeader(header);
-        Client_table.setRowHeight(35);
-        Client_table.setBackground(Color.white);
-        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
-        r.setHorizontalAlignment(JLabel.CENTER);
-        Client_table.setDefaultRenderer(Object.class, r);
-        Client_table.setBackground(Color.white);
-        Client_table.setPreferredSize(new Dimension(clientContentPanel.getWidth(), clientContentPanel.getHeight()));
-        JPanel mypanel = new JPanel(new BorderLayout());
-        mypanel.setPreferredSize(new Dimension(300, Client_table.getRowCount() * Client_table.getRowHeight()));
-        mypanel.add(header, BorderLayout.NORTH);
-        mypanel.add(Client_table, BorderLayout.CENTER);
-        JScrollPane scrollPanel = new JScrollPane(mypanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPanel.setPreferredSize(new Dimension(Client_table.getWidth(), Client_table.getHeight()));
-        scrollPanel.setBackground(Color.white);
-        clientBodyPanel.add(scrollPanel);
-        clientBodyPanel.revalidate();
-        clientBodyPanel.repaint();
-        Client_table.getSelectionModel().addListSelectionListener(e -> {
-        });
-        JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem deleteItem = new JMenuItem("删除");
-        JMenuItem outItem = new JMenuItem("导出");
-        jPopupMenu.add(deleteItem);
-        jPopupMenu.add(outItem);
-        Client_table.add(jPopupMenu);
-        Client_table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int index = Client_table.getSelectedRow();
-                if (e.getButton() == 3) {
-                    jPopupMenu.show(Client_table, e.getX(), e.getY());
-                    if (Client_table.getSelectedRowCount() == 1) {
-                        clientId = Client_table.getValueAt(index, 0).toString();
-                        deleteItem.addActionListener(e1 -> {
-                            int choice = JOptionPane.showConfirmDialog(depPanel, "确定删除吗？");
-                            if (choice == 0) {
-                                ServiceFactory.getUserServiceInstance().deleteClient(clientId);
-                                JOptionPane.showMessageDialog(null, "删除客户成功");
-                                clientBodyPanel.removeAll();
-                                showClient(ServiceFactory.getUserServiceInstance().selectClientAll());
-                                clientBodyPanel.revalidate();
-                                clientBodyPanel.repaint();
-                            }
-                        });
-                    }
-                }
+                new DeoDetailFrame();
+                ddd.setAll(true,depContentPanel,depBodyPanel);
+                new Thread(ddd).start();
+                new Thread(ddd).stop();
+            }else{
+                JOptionPane.showMessageDialog(null,"清选择一条数据");
+                return;
             }
         });
     }
@@ -406,6 +342,7 @@ public class IndexFrame extends JFrame {
         productTypeCombo.addItem("厨房用品");
         productTypeCombo.addItem("高科技产品");
     }
+
 
     public void proComboxInit() {
         contactProSearchCombo.addItem(Product.builder().productName("请选择产品").productId("1").build());

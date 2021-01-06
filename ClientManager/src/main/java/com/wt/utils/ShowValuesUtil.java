@@ -3,6 +3,7 @@ package com.wt.utils;
 import com.wt.entity.Department;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
+import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.MyTable;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
@@ -277,10 +278,10 @@ public class ShowValuesUtil {
                         deleteItem.addActionListener(e1 -> {
                             int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
                             if (choice == 0) {
-                                ServiceFactory.getUserServiceInstance().deleteContact(dep_table.getModel().getValueAt(contact_id, 0).toString());
-                                JOptionPane.showMessageDialog(null, "删除产品成功");
+                                ServiceFactory.getDepServiceInstance().deleteDep(dep_table.getModel().getValueAt(contact_id, 0).toString());
+                                JOptionPane.showMessageDialog(null, "删除部门成功");
                                 depBodyPanel.removeAll();
-                                showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), depContentPanel, depBodyPanel);
+                                showDep(ServiceFactory.getDepServiceInstance().selectDepAll(), depContentPanel, depBodyPanel);
                                 depBodyPanel.revalidate();
                                 depBodyPanel.repaint();
                             }
@@ -291,6 +292,87 @@ public class ShowValuesUtil {
         });
         MyTable myTable = new MyTable();
         myTable.setuContact_table(dep_table);
+    }
+    public void showClient(List<ClientVo> clientVos, JPanel contactContentPanel, JPanel contactBodyPanel) {
+        this.contactBodyPanel = contactBodyPanel;
+        this.contactContentPanel = contactContentPanel;
+        showClient(clientVos);
+    }
+    public void showClient(List<ClientVo> clientVos) {
+        contactBodyPanel.removeAll();
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        Contact_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        DefaultTableModel model = new DefaultTableModel();
+        Contact_table.setModel(model);
+        model.setColumnIdentifiers(new String[]{"客户编号", "用户名", "客户姓名", "电话号码", "信任度", "家庭地址"});
+        for (ClientVo clientVo : clientVos) {
+            Object[] objects = new Object[]{
+                    clientVo.getClientId(), clientVo.getUserName(),
+                    clientVo.getRealName(), clientVo.getUserPhone(),
+                    clientVo.getClientCredit(), clientVo.getClientAddress(),
+            };
+            model.addRow(objects);
+        }
+        JTableHeader header = Contact_table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setFont(new Font("楷体", Font.PLAIN, 18));
+        Contact_table.setTableHeader(header);
+        Contact_table.setRowHeight(35);
+        Contact_table.setBackground(Color.white);
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        Contact_table.setDefaultRenderer(Object.class, r);
+        Contact_table.setBackground(Color.white);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
+        JPanel mypanel = new JPanel(new BorderLayout());
+        mypanel.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypanel.add(header, BorderLayout.NORTH);
+        mypanel.add(Contact_table, BorderLayout.CENTER);
+        JScrollPane scrollPanel = new JScrollPane(mypanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanel.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
+        scrollPanel.setBackground(Color.white);
+        contactBodyPanel.add(scrollPanel);
+        contactBodyPanel.revalidate();
+        contactBodyPanel.repaint();
+        Contact_table.getSelectionModel().addListSelectionListener(e -> {
+        });
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem deleteItem = new JMenuItem("删除");
+        JMenuItem outItem = new JMenuItem("导出");
+        jPopupMenu.add(deleteItem);
+        jPopupMenu.add(outItem);
+        Contact_table.add(jPopupMenu);
+        Contact_table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    jPopupMenu.show(Contact_table, e.getX(), e.getY());
+                    if (Contact_table.getSelectedRowCount() == 1) {
+                        contact_id = Contact_table.getSelectedRow();
+                        deleteItem.addActionListener(e1 -> {
+                            int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
+                            if (choice == 0) {
+                                ServiceFactory.getUserServiceInstance().deleteClient(Contact_table.getModel().getValueAt(contact_id, 0).toString());
+                                JOptionPane.showMessageDialog(null, "删除客户成功");
+                                contactBodyPanel.removeAll();
+                                showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), contactContentPanel, contactBodyPanel);
+                                contactBodyPanel.revalidate();
+                                contactBodyPanel.repaint();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
 }
