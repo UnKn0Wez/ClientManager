@@ -1,11 +1,13 @@
 package com.wt.utils;
 
 import com.wt.entity.Department;
+import com.wt.entity.Order;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.MyTable;
+import com.wt.vo.UserVo;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
@@ -54,7 +56,7 @@ public class ShowValuesUtil {
         };
         DefaultTableModel model = new DefaultTableModel();
         Contact_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"员工编号", "员工姓名", "用户名", "电话号码", "所属部门", "负责产品", "工资", ""});
+        model.setColumnIdentifiers(new String[]{"员工编号", "员工姓名", "用户名", "电话号码", "所属部门", "负责产品", "工资"});
         for (ContactVo contact : contacts) {
             Object[] objects = new Object[]{
                     contact.getContactId(),
@@ -64,9 +66,6 @@ public class ShowValuesUtil {
             };
             model.addRow(objects);
         }
-        TableColumn tc = Contact_table.getColumnModel().getColumn(7);
-        tc.setMaxWidth(0);
-        tc.setMinWidth(0);
         JTableHeader header = Contact_table.getTableHeader();
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
@@ -142,8 +141,8 @@ public class ShowValuesUtil {
             }
         };
         DefaultTableModel model = new DefaultTableModel();
-        product_table.setModel(model);
-        model.setColumnIdentifiers(new String[]{"产品编号","产品名称","入库日期","产品类型","产品单价",""});
+        Contact_table.setModel(model);
+        model.setColumnIdentifiers(new String[]{"产品编号","产品名称","入库日期","产品类型","产品单价"});
         for (Product product : products) {
             Object[] objects = new Object[]{
                     product.getProductId(),
@@ -152,10 +151,7 @@ public class ShowValuesUtil {
             };
             model.addRow(objects);
         }
-        TableColumn tc = product_table.getColumnModel().getColumn(5);
-        tc.setMaxWidth(0);
-        tc.setMinWidth(0);
-        JTableHeader header = product_table.getTableHeader();
+        JTableHeader header = Contact_table.getTableHeader();
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         header.setDefaultRenderer(hr);
@@ -213,6 +209,121 @@ public class ShowValuesUtil {
         });
         MyTable myTable = new MyTable();
         myTable.setProduct_table(product_table);
+    }
+
+    public void showOrders(List<Order> orders, JPanel contactContentPanel, JPanel contactBodyPanel){
+        this.contactBodyPanel = contactBodyPanel;
+        this.contactContentPanel = contactContentPanel;
+        showOrders(orders);
+    }
+
+
+    public void showOrders(List<Order> orders) {
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        Contact_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        DefaultTableModel model = new DefaultTableModel();
+        Contact_table.setModel(model);
+
+        UserVo uv=new UserVo();
+        String urole=uv.getuRole();
+        String client_id=uv.getclientId();
+        String ucontact_id=uv.getcontactId();
+        if(urole.equals("Admin")){
+            model.setColumnIdentifiers(new String[]{"订单编号", "客户名称","客户联系方式", "产品类型", "产品名称", "购买数量", "单价", "购买时间"});
+            for (Order order : orders) {
+                Object[] objects = new Object[]{
+                        order.getOrder_id(),
+                        order.getClient_name(), order.getClient_phone(),
+                        order.getProduct_type(), order.getProduct_name(),
+                        order.getBuy_num(), order.getPrice(),
+                        order.getBuy_time()
+                };
+                model.addRow(objects);
+            }
+        }
+        else if(urole.equals("Client")){
+            model.setColumnIdentifiers(new String[]{"订单编号","联系人名称","联系人手机号", "产品类型", "产品名称", "购买数量", "单价", "购买时间"});
+            for (Order order : orders) {
+                Object[] objects = new Object[]{
+                        order.getOrder_id(),
+                        order.getContact_name(), order.getContact_phone(),
+                        order.getProduct_type(), order.getProduct_name(),
+                        order.getBuy_num(), order.getPrice(),
+                        order.getBuy_time()
+                };
+                model.addRow(objects);
+            }
+        }
+        else if(urole.equals("Contact")){
+            model.setColumnIdentifiers(new String[]{"订单编号", "客户名称","客户联系方式", "产品类型", "产品名称", "购买数量", "单价", "购买时间"});
+            for (Order order : orders) {
+                Object[] objects = new Object[]{
+                        order.getOrder_id(),
+                        order.getClient_name(), order.getClient_phone(),
+                        order.getProduct_type(), order.getProduct_name(),
+                        order.getBuy_num(), order.getPrice(),
+                        order.getBuy_time()
+                };
+                model.addRow(objects);
+            }
+        }
+
+
+        JTableHeader header = Contact_table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setFont(new Font("楷体", Font.PLAIN, 18));
+        Contact_table.setTableHeader(header);
+        Contact_table.setRowHeight(35);
+        Contact_table.setBackground(Color.white);
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        Contact_table.setDefaultRenderer(Object.class, r);
+        Contact_table.setBackground(Color.white);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(Contact_table, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
+        scrollPane.setBackground(Color.white);
+        contactBodyPanel.add(scrollPane);
+        contactBodyPanel.revalidate();
+        contactBodyPanel.repaint();
+        Contact_table.getSelectionModel().addListSelectionListener(e -> {
+        });
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem requestItem = new JMenuItem("填写反馈");
+        jPopupMenu.add(requestItem);
+        Contact_table.add(jPopupMenu);
+        //订单反馈
+        Contact_table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(urole=="Client"){
+                    if (e.getButton() == 3) {
+                        jPopupMenu.show(Contact_table, e.getX(), e.getY());
+                        if (Contact_table.getSelectedRowCount() == 1) {
+                            contact_id = Contact_table.getSelectedRow();
+                            requestItem.addActionListener(e1 -> {
+
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        MyTable myTable = new MyTable();
+        myTable.setuContact_table(Contact_table);
     }
 
     public void showDep(List<Department> deps, JPanel depContentPanel, JPanel depBodyPanel) {

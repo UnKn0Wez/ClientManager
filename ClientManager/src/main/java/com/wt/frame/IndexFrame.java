@@ -86,8 +86,19 @@ public class IndexFrame extends JFrame {
     private JButton depDetailButton;
     private JButton newDepButton;
     private JComboBox<String> depTimeCombobox;
+    private JPanel orderPanel;
+    private JLabel orderLabel;
+    private JPanel orderSearchPanel;
+    private JPanel orderContentPanel;
+    private JPanel orderBodyPanel;
+    private JLabel 产品名称;
+    private JTextField orderContactText;
+    private JComboBox orderTypeCombox;
+    private JTextField orderProdoductText;
+    private JButton orderSearchBtn;
+    private JButton orderDetailBtn;
     private final CardLayout C;
-    private UserVo uv = new UserVo();
+    private final UserVo uv = new UserVo();
     private int contact_id;
     private String ClientCredit;
     private String clientId;
@@ -106,6 +117,11 @@ public class IndexFrame extends JFrame {
         Border border = new RoundBorder(250, Color.black);
         Border border1 = new RoundBorder(15, Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10, Color.decode("#838383"));
+        orderSearchBtn.setBorder(border2);
+        orderContactText.setBorder(border2);
+        orderTypeCombox.setBorder(border2);
+        orderProdoductText.setBorder(border2);
+        orderDetailBtn.setBorder(border2);
         contactSearchButton.setBorder(border2);
         depSearchCombox.setBorder(border2);
         contactSearchText.setBorder(border2);
@@ -129,6 +145,8 @@ public class IndexFrame extends JFrame {
         newClientButton.setBorder(border2);
         productSearchPanel.setBorder(border1);
         productContentPanel.setBorder(border1);
+        orderSearchPanel.setBorder(border1);
+        orderContentPanel.setBorder(border1);
         headLabel.setBorder(border);
         depContentPanel.setBorder(border1);
         depSearchPanel.setBorder(border1);
@@ -153,7 +171,8 @@ public class IndexFrame extends JFrame {
         indexPanel.add("4", requestPanel);
         indexPanel.add("5", missionPanel);
         indexPanel.add("6", depPanel);
-        indexPanel.add("7", strongPanel);
+        indexPanel.add("7", orderPanel);
+        indexPanel.add("8", strongPanel);
         hidePanel();
         ShowValuesUtil svu = new ShowValuesUtil();
         contactLabel.addMouseListener(new MouseAdapter() {
@@ -196,10 +215,28 @@ public class IndexFrame extends JFrame {
                 svu.showDep(ServiceFactory.getDepServiceInstance().selectDepAll(),depContentPanel,depBodyPanel);
             }
         });
-        strongLael.addMouseListener(new MouseAdapter() {
+        orderLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "7");
+                if(uv.getuRole().equals("Admin")){
+                    svu.showOrders(ServiceFactory.getOrderServiceInstance().selectAllOrder(), orderContentPanel,orderBodyPanel);
+                    return;
+                }
+                if(uv.getuRole().equals("Client")){
+                    svu.showOrders(ServiceFactory.getOrderServiceInstance().selectClientOrder(uv.getclientId()), orderContentPanel,orderBodyPanel);
+                    return;
+                }
+                if(uv.getuRole().equals("Contact")){
+                    svu.showOrders(ServiceFactory.getOrderServiceInstance().selectContactOrder(uv.getcontactId()), orderContentPanel,orderBodyPanel);
+                    return;
+                }
+            }
+        });
+        strongLael.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                C.show(indexPanel, "8");
             }
         });
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
@@ -343,6 +380,16 @@ public class IndexFrame extends JFrame {
         productTypeCombo.addItem("床上用品");
         productTypeCombo.addItem("厨房用品");
         productTypeCombo.addItem("高科技产品");
+
+
+        orderTypeCombox.addItem("请选择产品类型");
+        orderTypeCombox.addItem("运动产品");
+        orderTypeCombox.addItem("电子产品");
+        orderTypeCombox.addItem("机械产品");
+        orderTypeCombox.addItem("儿童玩具");
+        orderTypeCombox.addItem("床上用品");
+        orderTypeCombox.addItem("厨房用品");
+        orderTypeCombox.addItem("高科技产品");
     }
 
 

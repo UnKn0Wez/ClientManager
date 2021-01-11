@@ -40,6 +40,8 @@ public class UserDaoImpl implements UserDao {
             uv.setuName(user.getUserName());
             uv.setuRole(user.getUserRole());
             uv.setuImg(user.getUserImag());
+            uv.setclientId(rs.getString("client_id"));
+            uv.setcontactId(rs.getString("contact_id"));
         }
         rs.close();
         pstmt.close();
