@@ -12,9 +12,26 @@ import lombok.NoArgsConstructor;
  * @Date 2020/12/29 18:30
  **/
 public class UserVo {
+    public static String clientId;
+    public static String contactId;
     public static String uName;
     public static String uRole;
     public static String uImg;
+    public void setcontactId(String contactId) {
+        this.contactId = contactId;
+    }
+
+    public String getcontactId() {
+        return this.contactId;
+    }
+
+    public void setclientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getclientId() {
+        return this.clientId;
+    }
 
     public void setuName(String uName) {
         this.uName = uName;
