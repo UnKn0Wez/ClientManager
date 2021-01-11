@@ -12,6 +12,6 @@ import java.util.List;
  **/
 public interface OrderService {
     List<Order> selectAllOrder();
-    List<Order> selectClientOrder(String clientId);
-    List<Order> selectContactOrder(String contactId);
+    List<Order> searchOrder(String order_id, String type_name, String product_name);
+    Order OrderDetail(String order_id);
 }

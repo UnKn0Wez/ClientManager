@@ -81,7 +81,7 @@ public class ShowValuesUtil {
         Contact_table.setBackground(Color.white);
         Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
         JPanel mypane = new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypane.setPreferredSize(new Dimension(300, (Contact_table.getRowCount()+1) * Contact_table.getRowHeight()));
         mypane.add(header, BorderLayout.NORTH);
         mypane.add(Contact_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -141,7 +141,7 @@ public class ShowValuesUtil {
             }
         };
         DefaultTableModel model = new DefaultTableModel();
-        Contact_table.setModel(model);
+        product_table.setModel(model);
         model.setColumnIdentifiers(new String[]{"产品编号","产品名称","入库日期","产品类型","产品单价"});
         for (Product product : products) {
             Object[] objects = new Object[]{
@@ -151,7 +151,7 @@ public class ShowValuesUtil {
             };
             model.addRow(objects);
         }
-        JTableHeader header = Contact_table.getTableHeader();
+        JTableHeader header = product_table.getTableHeader();
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         header.setDefaultRenderer(hr);
@@ -166,7 +166,7 @@ public class ShowValuesUtil {
         product_table.setBackground(Color.white);
         product_table.setPreferredSize(new Dimension(productContentPanel.getWidth(), productContentPanel.getHeight()));
         JPanel mypane = new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300, product_table.getRowCount() * product_table.getRowHeight()));
+        mypane.setPreferredSize(new Dimension(300, (product_table.getRowCount()+1) * product_table.getRowHeight()));
         mypane.add(header, BorderLayout.NORTH);
         mypane.add(product_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -194,7 +194,6 @@ public class ShowValuesUtil {
                         deleteItem.addActionListener(e1 -> {
                             int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
                             if (choice == 0) {
-
                                 ServiceFactory.getProductServiceInstance().delProduct(product_table.getModel().getValueAt(contact_id,0).toString());
                                 JOptionPane.showMessageDialog(null,"删除产品成功");
                                 productBodyPanel.removeAll();
@@ -232,8 +231,6 @@ public class ShowValuesUtil {
 
         UserVo uv=new UserVo();
         String urole=uv.getuRole();
-        String client_id=uv.getclientId();
-        String ucontact_id=uv.getcontactId();
         if(urole.equals("Admin")){
             model.setColumnIdentifiers(new String[]{"订单编号", "客户名称","客户联系方式", "产品类型", "产品名称", "购买数量", "单价", "购买时间"});
             for (Order order : orders) {
@@ -290,7 +287,7 @@ public class ShowValuesUtil {
         Contact_table.setBackground(Color.white);
         Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
         JPanel mypane = new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300, Contact_table.getRowCount() * Contact_table.getRowHeight()));
+        mypane.setPreferredSize(new Dimension(300, (Contact_table.getRowCount()+1) * Contact_table.getRowHeight()));
         mypane.add(header, BorderLayout.NORTH);
         mypane.add(Contact_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -323,7 +320,7 @@ public class ShowValuesUtil {
             }
         });
         MyTable myTable = new MyTable();
-        myTable.setuContact_table(Contact_table);
+        myTable.setuOrder_table(Contact_table);
     }
 
     public void showDep(List<Department> deps, JPanel depContentPanel, JPanel depBodyPanel) {
@@ -367,7 +364,7 @@ public class ShowValuesUtil {
         dep_table.setBackground(Color.white);
         dep_table.setPreferredSize(new Dimension(depContentPanel.getWidth(), depContentPanel.getHeight()));
         JPanel mypane = new JPanel(new BorderLayout());
-        mypane.setPreferredSize(new Dimension(300, dep_table.getRowCount() * dep_table.getRowHeight()));
+        mypane.setPreferredSize(new Dimension(300, (dep_table.getRowCount()+1) * dep_table.getRowHeight()));
         mypane.add(header, BorderLayout.NORTH);
         mypane.add(dep_table, BorderLayout.CENTER);
         JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -450,7 +447,7 @@ public class ShowValuesUtil {
         client_table.setBackground(Color.white);
         client_table.setPreferredSize(new Dimension(clientContentPanel.getWidth(), clientContentPanel.getHeight()));
         JPanel mypanel = new JPanel(new BorderLayout());
-        mypanel.setPreferredSize(new Dimension(300, client_table.getRowCount() * client_table.getRowHeight()));
+        mypanel.setPreferredSize(new Dimension(300, (client_table.getRowCount()+1) * client_table.getRowHeight()));
         mypanel.add(header, BorderLayout.NORTH);
         mypanel.add(client_table, BorderLayout.CENTER);
         JScrollPane scrollPanel = new JScrollPane(mypanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

@@ -1,5 +1,6 @@
 package com.wt.dao;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.wt.entity.Department;
 import com.wt.entity.Order;
 
@@ -14,6 +15,6 @@ import java.util.List;
  **/
 public interface OrderDao {
     List<Order> selectAllOrder()throws SQLException;
-    List<Order> selectClientOrder(String client_id)throws SQLException;
-    List<Order> selectContactOrder(String contact_id)throws SQLException;
+    List<Order> searchOrder(String order_id,String type_name,String product_name)throws SQLException;
+    Order orderDetail(String order_id)throws SQLException;
 }

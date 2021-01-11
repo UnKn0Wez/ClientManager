@@ -4,18 +4,17 @@ import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
-import com.wt.thread.ClientDetailDispose;
-import com.wt.thread.DepDetailDispose;
-import com.wt.thread.ProductDetailDispose;
+import com.wt.thread.*;
 import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
-import com.wt.thread.ContactDetailDispose;
 import com.wt.utils.ShowValuesUtil;
 import com.wt.vo.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -219,18 +218,7 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "7");
-                if(uv.getuRole().equals("Admin")){
                     svu.showOrders(ServiceFactory.getOrderServiceInstance().selectAllOrder(), orderContentPanel,orderBodyPanel);
-                    return;
-                }
-                if(uv.getuRole().equals("Client")){
-                    svu.showOrders(ServiceFactory.getOrderServiceInstance().selectClientOrder(uv.getclientId()), orderContentPanel,orderBodyPanel);
-                    return;
-                }
-                if(uv.getuRole().equals("Contact")){
-                    svu.showOrders(ServiceFactory.getOrderServiceInstance().selectContactOrder(uv.getcontactId()), orderContentPanel,orderBodyPanel);
-                    return;
-                }
             }
         });
         strongLael.addMouseListener(new MouseAdapter() {
@@ -240,6 +228,7 @@ public class IndexFrame extends JFrame {
             }
         });
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
+        svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
 
         addContact_button.addActionListener(e->{
             ContactDetailDispose cdd=new ContactDetailDispose();
@@ -364,6 +353,32 @@ public class IndexFrame extends JFrame {
                 ddd.setAll(true,depContentPanel,depBodyPanel);
                 new Thread(ddd).start();
                 new Thread(ddd).stop();
+            }else{
+                JOptionPane.showMessageDialog(null,"清选择一条数据");
+                return;
+            }
+        });
+        //订单查询按钮监听
+        orderSearchBtn.addActionListener(e->{
+                orderBodyPanel.removeAll();
+                    svu.showOrders(ServiceFactory.getOrderServiceInstance().searchOrder(orderContactText.getText(),orderTypeCombox.getSelectedItem().toString(),orderProdoductText.getText()),orderContentPanel,orderBodyPanel);
+                orderBodyPanel.revalidate();
+                orderBodyPanel.repaint();
+        });
+        //订单查看详细按钮监听
+        orderDetailBtn.addActionListener(e->{
+            OrderDetailDispose odd = new OrderDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getuOrder_table();
+            if(Contact_table.getSelectedRowCount()==1){
+                int index=Contact_table.getSelectedRow();
+                OrderDetailVo.setorder_id(Contact_table.getValueAt(index,0).toString());
+                WindowState ws=new WindowState();
+                ws.setustates(true);
+                new OrderDetailFrame();
+                odd.setAll(true,orderContentPanel,orderBodyPanel);
+                new Thread(odd).start();
+                new Thread(odd).stop();
             }else{
                 JOptionPane.showMessageDialog(null,"清选择一条数据");
                 return;

@@ -30,10 +30,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> selectClientOrder(String clientId) {
+    public List<Order> searchOrder(String order_id, String type_name, String product_name) {
         List<Order> orderList=null;
         try {
-            orderList=orderDao.selectClientOrder(clientId);
+            orderList=orderDao.searchOrder(order_id,type_name,product_name);
         } catch (SQLException e) {
             System.err.println("查询订单出现错误！");
         }
@@ -41,10 +41,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> selectContactOrder(String contactId) {
-        List<Order> orderList=null;
+    public Order OrderDetail(String order_id) {
+        Order orderList=null;
         try {
-            orderList=orderDao.selectContactOrder(contactId);
+            orderList=orderDao.orderDetail(order_id);
         } catch (SQLException e) {
             System.err.println("查询订单出现错误！");
         }

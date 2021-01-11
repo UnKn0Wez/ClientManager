@@ -13,6 +13,14 @@ public class MyTable {
     private static JTable Client_table;
     private static JTable Dep_table;
     private static JTable Product_table;
+    private static JTable Order_table;
+    public void setuOrder_table(JTable Order_table) {
+        this.Order_table = Order_table;
+    }
+
+    public JTable getuOrder_table() {
+        return this.Order_table;
+    }
 
     public void setuContact_table(JTable Contact_table) {
         this.Contact_table = Contact_table;

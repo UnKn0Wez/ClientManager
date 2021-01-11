@@ -164,7 +164,6 @@ public class ContactDetailFrame extends JFrame {
 
     public void init(){
         setUndecorated(true);
-        setTitle("registerFrame");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600,800);
