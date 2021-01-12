@@ -14,6 +14,15 @@ public class MyTable {
     private static JTable Dep_table;
     private static JTable Product_table;
     private static JTable Order_table;
+    private static JTable Request_table;
+    public void setRequest_table(JTable Request_table) {
+        this.Request_table = Request_table;
+    }
+
+    public JTable getRequest_table() {
+        return this.Request_table;
+    }
+
     public void setuOrder_table(JTable Order_table) {
         this.Order_table = Order_table;
     }
