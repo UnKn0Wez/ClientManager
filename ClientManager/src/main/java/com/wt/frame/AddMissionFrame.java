@@ -1,6 +1,7 @@
 package com.wt.frame;
 
 import com.eltima.components.ui.DatePicker;
+import com.wt.component.RoundBorder;
 import com.wt.entity.Mission;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
@@ -9,6 +10,7 @@ import com.wt.vo.WindowState;
 
 import javax.sound.midi.Soundbank;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -40,6 +42,14 @@ public class AddMissionFrame extends JFrame {
 
     AddMissionFrame() {
         init();
+        Border border = new RoundBorder(10, Color.decode("#838383"));
+        planProfitText.setBorder(border);
+        clientNumText.setBorder(border);
+        productTypeCombox.setBorder(border);
+        productNameCombobox.setBorder(border);
+        addButton.setBorder(border);
+        CancelButton.setBorder(border);
+
         mainXField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

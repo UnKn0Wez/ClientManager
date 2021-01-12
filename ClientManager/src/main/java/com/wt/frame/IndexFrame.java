@@ -218,13 +218,18 @@ public class IndexFrame extends JFrame {
                 svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
                 contactBodyPanel.revalidate();
                 contactBodyPanel.repaint();
+
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "2");
+                clientBodyPanel.removeAll();
                 svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
+                clientBodyPanel.repaint();
+                clientBodyPanel.revalidate();
+
             }
         });
         productLabel.addMouseListener(new MouseAdapter() {
@@ -232,9 +237,10 @@ public class IndexFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
                 productBodyPanel.removeAll();
-                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel,productBodyPanel);
+                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel, productBodyPanel);
                 productBodyPanel.revalidate();
                 productBodyPanel.repaint();
+
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
@@ -242,7 +248,7 @@ public class IndexFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "4");
                 requestBodyPanel.removeAll();
-                svu.showRequest(ServiceFactory.getRequestServiceInstanct().selectAllRequest(), requestContentPanel,requestBodyPanel);
+                svu.showRequest(ServiceFactory.getRequestServiceInstanct().selectAllRequest(), requestContentPanel, requestBodyPanel);
                 requestBodyPanel.revalidate();
                 requestBodyPanel.repaint();
             }
@@ -251,14 +257,20 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "5");
+                planBodyPanel.removeAll();
                 svu.showPlan(ServiceFactory.getPlanServiceInstance().selectAll(), planContentPanel, planBodyPanel);
+                planBodyPanel.repaint();
+                planBodyPanel.revalidate();
             }
         });
         depLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "6");
+                depBodyPanel.removeAll();
                 svu.showDep(ServiceFactory.getDepServiceInstance().selectDepAll(), depContentPanel, depBodyPanel);
+                depBodyPanel.repaint();
+                depBodyPanel.revalidate();
             }
         });
         orderLabel.addMouseListener(new MouseAdapter() {
@@ -266,9 +278,10 @@ public class IndexFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "7");
                 orderBodyPanel.removeAll();
-                    svu.showOrders(ServiceFactory.getOrderServiceInstance().selectAllOrder(), orderContentPanel,orderBodyPanel);
+                svu.showOrders(ServiceFactory.getOrderServiceInstance().selectAllOrder(), orderContentPanel, orderBodyPanel);
                 orderBodyPanel.revalidate();
                 orderBodyPanel.repaint();
+
             }
         });
         strongLael.addMouseListener(new MouseAdapter() {
@@ -280,6 +293,7 @@ public class IndexFrame extends JFrame {
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
         svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
         svu.showRequest(ServiceFactory.getRequestServiceInstanct().selectAllRequest(), requestContentPanel, requestBodyPanel);
+
 
         addContact_button.addActionListener(e -> {
             ContactDetailDispose cdd = new ContactDetailDispose();
@@ -400,6 +414,15 @@ public class IndexFrame extends JFrame {
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
+        addPlanButton.addActionListener(e -> {
+            PlanDetailDispose pdd = new PlanDetailDispose();
+            new AddMissionFrame();
+            WindowState ws = new WindowState();
+            ws.setustates(true);
+            pdd.setAll(true, planContentPanel, planBodyPanel);
+            new Thread(pdd).start();
+            new Thread(pdd).stop();
+        });
         //部门详细信息界面切换
         depDetailButton.addActionListener(e -> {
             DepDetailDispose ddd = new DepDetailDispose();
@@ -420,21 +443,21 @@ public class IndexFrame extends JFrame {
             }
         });
         //订单查询按钮监听
-        orderSearchBtn.addActionListener(e->{
-                orderBodyPanel.removeAll();
-                    svu.showOrders(ServiceFactory.getOrderServiceInstance().searchOrder(orderContactText.getText(),orderTypeCombox.getSelectedItem().toString(),orderProdoductText.getText()),orderContentPanel,orderBodyPanel);
-                orderBodyPanel.revalidate();
-                orderBodyPanel.repaint();
+        orderSearchBtn.addActionListener(e -> {
+            orderBodyPanel.removeAll();
+            svu.showOrders(ServiceFactory.getOrderServiceInstance().searchOrder(orderContactText.getText(), orderTypeCombox.getSelectedItem().toString(), orderProdoductText.getText()), orderContentPanel, orderBodyPanel);
+            orderBodyPanel.revalidate();
+            orderBodyPanel.repaint();
         });
         //订单查看详细按钮监听
-        orderDetailBtn.addActionListener(e->{
+        orderDetailBtn.addActionListener(e -> {
             OrderDetailDispose odd = new OrderDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getuOrder_table();
-            if(Contact_table.getSelectedRowCount()==1){
-                int index=Contact_table.getSelectedRow();
-                OrderDetailVo.setorder_id(Contact_table.getValueAt(index,0).toString());
-                WindowState ws=new WindowState();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                int index = Contact_table.getSelectedRow();
+                OrderDetailVo.setorder_id(Contact_table.getValueAt(index, 0).toString());
+                WindowState ws = new WindowState();
                 ws.setustates(true);
                 ws.setaddStates(true);
                 new OrderDetailFrame();
@@ -442,11 +465,11 @@ public class IndexFrame extends JFrame {
                 PanelVo.setrequestContentPanel(requestContentPanel);
                 PanelVo.setorderBodyPanel(orderBodyPanel);
                 PanelVo.setorderContentPanel(orderContentPanel);
-                odd.setAll(true,orderContentPanel,orderBodyPanel);
+                odd.setAll(true, orderContentPanel, orderBodyPanel);
                 new Thread(odd).start();
                 new Thread(odd).stop();
-            }else{
-                JOptionPane.showMessageDialog(null,"清选择一条数据");
+            } else {
+                JOptionPane.showMessageDialog(null, "清选择一条数据");
                 return;
             }
         });
@@ -469,46 +492,46 @@ public class IndexFrame extends JFrame {
                 return;
             }
         });
-        if("Admin".equals(uv.getuRole())||"Contact".equals(uv.getuRole())){
+        if ("Admin".equals(uv.getuRole()) || "Contact".equals(uv.getuRole())) {
             addPlanButton.setVisible(true);
         }
-        if("Client".equals(uv.getuRole())){
+        if ("Client".equals(uv.getuRole())) {
             addPlanButton.setVisible(false);
         }
         //反馈信息查询按钮监听
-        requestSearchBtn.addActionListener(e->{
+        requestSearchBtn.addActionListener(e -> {
             requestBodyPanel.removeAll();
-            svu.showRequest(ServiceFactory.getRequestServiceInstanct().searchRequest(requestClientText.getText(),requestOrderText.getText()),requestContentPanel,requestBodyPanel);
+            svu.showRequest(ServiceFactory.getRequestServiceInstanct().searchRequest(requestClientText.getText(), requestOrderText.getText()), requestContentPanel, requestBodyPanel);
             requestBodyPanel.revalidate();
             requestBodyPanel.repaint();
         });
         //反馈详细按钮监听
-        requestDetailBtn.addActionListener(e->{
+        requestDetailBtn.addActionListener(e -> {
             RequestDetailDispose rdd = new RequestDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getRequest_table();
-            if(Contact_table.getSelectedRowCount()==1){
-                int index=Contact_table.getSelectedRow();
-                RequestDetailVo.setrequestId(Contact_table.getValueAt(index,0).toString());
-                WindowState ws=new WindowState();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                int index = Contact_table.getSelectedRow();
+                RequestDetailVo.setrequestId(Contact_table.getValueAt(index, 0).toString());
+                WindowState ws = new WindowState();
                 ws.setaddStates(true);
                 new RequestDetailFrame();
-                rdd.setAll(true,requestContentPanel,requestBodyPanel);
+                rdd.setAll(true, requestContentPanel, requestBodyPanel);
                 new Thread(rdd).start();
                 new Thread(rdd).stop();
-            }else{
-                JOptionPane.showMessageDialog(null,"请选择一条数据");
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一条数据");
                 return;
             }
         });
         //产品详细按钮监听
-        productDetailButton.addActionListener(e->{
+        productDetailButton.addActionListener(e -> {
             ProductDetailDispose pdd = new ProductDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getProduct_table();
             if (Contact_table.getSelectedRowCount() == 1) {
                 int index = Contact_table.getSelectedRow();
-                ProDetailVo pdv=new ProDetailVo();
+                ProDetailVo pdv = new ProDetailVo();
                 pdv.setproId(Contact_table.getValueAt(index, 0).toString());
                 WindowState ws = new WindowState();
                 ws.setustates(true);

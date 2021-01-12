@@ -38,6 +38,7 @@ public class MyTable {
     public JTable getuContact_table() {
         return this.Contact_table;
     }
+
     public void setClient_table(JTable Client_table) {
         this.Client_table = Client_table;
     }
@@ -45,6 +46,7 @@ public class MyTable {
     public JTable getClient_table() {
         return this.Client_table;
     }
+
     public void setDep_table(JTable Dep_table) {
         this.Dep_table = Dep_table;
     }
