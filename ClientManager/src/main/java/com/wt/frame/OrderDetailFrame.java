@@ -6,11 +6,10 @@ import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
 import com.wt.entity.Order;
 import com.wt.factory.ServiceFactory;
+import com.wt.thread.OrderDetailDispose;
+import com.wt.thread.RequestDetailDispose;
 import com.wt.utils.FormatUtil;
-import com.wt.vo.DepDetailVo;
-import com.wt.vo.OrderDetailVo;
-import com.wt.vo.UserVo;
-import com.wt.vo.WindowState;
+import com.wt.vo.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -78,6 +77,22 @@ public class OrderDetailFrame extends JFrame {
             dispose();
         });
         showDetail();
+        //添加反馈信息
+        request_Btn.addActionListener(e->{
+            RequestDetailDispose rdd = new RequestDetailDispose();
+            OrderDetailDispose odd = new OrderDetailDispose();
+            new AddRequestFrame();
+            WindowState ws=new WindowState();
+            ws.setustates(true);
+            rdd.setAll(true, PanelVo.getrequestContentPanel(),PanelVo.getrequestBodyPanel());
+            new Thread(rdd).start();
+            odd.setAll(true, PanelVo.getorderContentPanel(),PanelVo.getorderBodyPanel());
+            new Thread(odd).start();
+            new Thread(rdd).stop();
+            new Thread(odd).stop();
+            ws.setustates(false);
+            this.dispose();
+        });
     }
     public void showDetail(){
         UserVo uv=new UserVo();
@@ -104,6 +119,10 @@ public class OrderDetailFrame extends JFrame {
         if("Client".equals(uv.getuRole())){
             client_label.setVisible(false);
             client_text.setVisible(false);
+            int requestCount=ServiceFactory.getRequestServiceInstanct().Requested(order.getOrder_id(),uv.getclientId());
+            if(requestCount>0){
+                request_Btn.setVisible(false);
+            }
         }
     }
 

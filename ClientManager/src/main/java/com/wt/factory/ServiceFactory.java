@@ -14,6 +14,8 @@ import com.wt.service.impl.DepServiceImpl;
 import com.wt.service.impl.PlanServiceImpl;
 import com.wt.service.impl.ProductServiceServiceImpl;
 import com.wt.service.impl.UserServiceImpl;
+import com.wt.service.*;
+import com.wt.service.impl.*;
 
 /**
  * @ClassName ServiceFactory
@@ -27,4 +29,5 @@ public class ServiceFactory {
     public static ProductService getProductServiceInstance(){return new ProductServiceServiceImpl();}
     public static OrderService getOrderServiceInstance(){return new OrderServiceImpl();}
     public static PlanService getPlanServiceInstance(){return new PlanServiceImpl(); }
+    public static RequestService getRequestServiceInstanct(){return new RequestServiceImpl();}
 }

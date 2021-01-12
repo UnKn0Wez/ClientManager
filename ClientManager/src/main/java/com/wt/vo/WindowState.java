@@ -10,6 +10,14 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
  **/
 public class WindowState {
     public static Boolean states;
+    public static Boolean addStates;
+    public void setaddStates(Boolean addStates) {
+        this.addStates = addStates;
+    }
+
+    public Boolean getaddStates() {
+        return this.addStates;
+    }
     public void setustates(Boolean states) {
         this.states = states;
     }

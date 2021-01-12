@@ -3,6 +3,7 @@ package com.wt.utils;
 import com.wt.entity.Department;
 import com.wt.entity.Order;
 import com.wt.entity.Product;
+import com.wt.entity.Request;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
@@ -221,7 +222,6 @@ public class ShowValuesUtil {
         showOrders(orders);
     }
 
-
     public void showOrders(List<Order> orders) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();
@@ -303,29 +303,95 @@ public class ShowValuesUtil {
         contactBodyPanel.repaint();
         Contact_table.getSelectionModel().addListSelectionListener(e -> {
         });
-        JPopupMenu jPopupMenu = new JPopupMenu();
-        JMenuItem requestItem = new JMenuItem("填写反馈");
-        jPopupMenu.add(requestItem);
-        Contact_table.add(jPopupMenu);
-        //订单反馈
-        Contact_table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(urole=="Client"){
-                    if (e.getButton() == 3) {
-                        jPopupMenu.show(Contact_table, e.getX(), e.getY());
-                        if (Contact_table.getSelectedRowCount() == 1) {
-                            contact_id = Contact_table.getSelectedRow();
-                            requestItem.addActionListener(e1 -> {
-
-                            });
-                        }
-                    }
-                }
-            }
-        });
         MyTable myTable = new MyTable();
         myTable.setuOrder_table(Contact_table);
+    }
+
+    public void showRequest(List<Request> requests, JPanel contactContentPanel, JPanel contactBodyPanel){
+        this.contactBodyPanel = contactBodyPanel;
+        this.contactContentPanel = contactContentPanel;
+        showRequest(requests);
+    }
+    public void showRequest(List<Request> requests){
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        Contact_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        DefaultTableModel model = new DefaultTableModel();
+        Contact_table.setModel(model);
+
+        UserVo uv=new UserVo();
+        String urole=uv.getuRole();
+        if(urole.equals("Admin")){
+            model.setColumnIdentifiers(new String[]{"反馈单号", "订单编号","客户名称", "反馈时间"});
+            for (Request request : requests) {
+                Object[] objects = new Object[]{
+                        request.getRequest_id(),
+                        request.getOrder_id(),
+                        request.getClient_name(),
+                        request.getRequest_time()
+                };
+                model.addRow(objects);
+            }
+        }
+        else if(urole.equals("Client")){
+            model.setColumnIdentifiers(new String[]{"反馈单号","订单编号","联系人名称","反馈时间"});
+            for (Request request : requests) {
+                Object[] objects = new Object[]{
+                        request.getRequest_id(),
+                        request.getOrder_id(),
+                        request.getContact_name(),
+                        request.getRequest_time()
+                };
+                model.addRow(objects);
+            }
+        }
+        else if(urole.equals("Contact")){
+            model.setColumnIdentifiers(new String[]{"反馈单号", "订单编号","客户名称", "反馈时间"});
+            for (Request request : requests) {
+                Object[] objects = new Object[]{
+                        request.getRequest_id(),
+                        request.getOrder_id(),
+                        request.getClient_name(),
+                        request.getRequest_time()
+                };
+                model.addRow(objects);
+            }
+        }
+
+
+        JTableHeader header = Contact_table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setFont(new Font("楷体", Font.PLAIN, 18));
+        Contact_table.setTableHeader(header);
+        Contact_table.setRowHeight(35);
+        Contact_table.setBackground(Color.white);
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        Contact_table.setDefaultRenderer(Object.class, r);
+        Contact_table.setBackground(Color.white);
+        Contact_table.setPreferredSize(new Dimension(contactContentPanel.getWidth(), contactContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, (Contact_table.getRowCount()+1) * Contact_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(Contact_table, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(Contact_table.getWidth(), Contact_table.getHeight()));
+        scrollPane.setBackground(Color.white);
+        contactBodyPanel.add(scrollPane);
+        contactBodyPanel.revalidate();
+        contactBodyPanel.repaint();
+        Contact_table.getSelectionModel().addListSelectionListener(e -> {
+        });
+        MyTable myTable = new MyTable();
+        myTable.setRequest_table(Contact_table);
     }
 
     public void showDep(List<Department> deps, JPanel depContentPanel, JPanel depBodyPanel) {
@@ -519,11 +585,13 @@ public class ShowValuesUtil {
         MyTable myTable = new MyTable();
         myTable.setDep_table(dep_table);
     }
+
     public void showClient(List<ClientVo> clientVos, JPanel clientContentPanel, JPanel clientBodyPanel) {
         this.clientContentPanel = clientContentPanel;
         this.clientBodyPanel = clientBodyPanel;
         showClient(clientVos);
     }
+
     public void showClient(List<ClientVo> clientVos) {
         TableModel tableModel;
         tableModel = new DefaultTableModel();

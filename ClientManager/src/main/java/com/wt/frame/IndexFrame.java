@@ -135,6 +135,11 @@ public class IndexFrame extends JFrame {
         Border border = new RoundBorder(250, Color.black);
         Border border1 = new RoundBorder(15, Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10, Color.decode("#838383"));
+
+        requestClientText.setBorder(border2);
+        requestOrderText.setBorder(border2);
+        requestSearchBtn.setBorder(border2);
+        requestDetailBtn.setBorder(border2);
         orderSearchBtn.setBorder(border2);
         orderContactText.setBorder(border2);
         orderTypeCombox.setBorder(border2);
@@ -170,6 +175,8 @@ public class IndexFrame extends JFrame {
         headLabel.setBorder(border);
         depContentPanel.setBorder(border1);
         depSearchPanel.setBorder(border1);
+        requestSearchPanel.setBorder(border1);
+        requestContentPanel.setBorder(border1);
         depSearchText.setBorder(border2);
         depTimeCombobox.setBorder(border2);
         depSearchButton.setBorder(border2);
@@ -207,7 +214,10 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
+                contactBodyPanel.removeAll();
                 svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
+                contactBodyPanel.revalidate();
+                contactBodyPanel.repaint();
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
@@ -221,13 +231,20 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
-                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel, productBodyPanel);
+                productBodyPanel.removeAll();
+                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel,productBodyPanel);
+                productBodyPanel.revalidate();
+                productBodyPanel.repaint();
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "4");
+                requestBodyPanel.removeAll();
+                svu.showRequest(ServiceFactory.getRequestServiceInstanct().selectAllRequest(), requestContentPanel,requestBodyPanel);
+                requestBodyPanel.revalidate();
+                requestBodyPanel.repaint();
             }
         });
         missionLabel.addMouseListener(new MouseAdapter() {
@@ -248,7 +265,10 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "7");
+                orderBodyPanel.removeAll();
                     svu.showOrders(ServiceFactory.getOrderServiceInstance().selectAllOrder(), orderContentPanel,orderBodyPanel);
+                orderBodyPanel.revalidate();
+                orderBodyPanel.repaint();
             }
         });
         strongLael.addMouseListener(new MouseAdapter() {
@@ -259,6 +279,7 @@ public class IndexFrame extends JFrame {
         });
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
         svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
+        svu.showRequest(ServiceFactory.getRequestServiceInstanct().selectAllRequest(), requestContentPanel, requestBodyPanel);
 
         addContact_button.addActionListener(e -> {
             ContactDetailDispose cdd = new ContactDetailDispose();
@@ -415,7 +436,12 @@ public class IndexFrame extends JFrame {
                 OrderDetailVo.setorder_id(Contact_table.getValueAt(index,0).toString());
                 WindowState ws=new WindowState();
                 ws.setustates(true);
+                ws.setaddStates(true);
                 new OrderDetailFrame();
+                PanelVo.setrequestBodyPanel(requestBodyPanel);
+                PanelVo.setrequestContentPanel(requestContentPanel);
+                PanelVo.setorderBodyPanel(orderBodyPanel);
+                PanelVo.setorderContentPanel(orderContentPanel);
                 odd.setAll(true,orderContentPanel,orderBodyPanel);
                 new Thread(odd).start();
                 new Thread(odd).stop();
@@ -449,6 +475,52 @@ public class IndexFrame extends JFrame {
         if("Client".equals(uv.getuRole())){
             addPlanButton.setVisible(false);
         }
+        //反馈信息查询按钮监听
+        requestSearchBtn.addActionListener(e->{
+            requestBodyPanel.removeAll();
+            svu.showRequest(ServiceFactory.getRequestServiceInstanct().searchRequest(requestClientText.getText(),requestOrderText.getText()),requestContentPanel,requestBodyPanel);
+            requestBodyPanel.revalidate();
+            requestBodyPanel.repaint();
+        });
+        //反馈详细按钮监听
+        requestDetailBtn.addActionListener(e->{
+            RequestDetailDispose rdd = new RequestDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getRequest_table();
+            if(Contact_table.getSelectedRowCount()==1){
+                int index=Contact_table.getSelectedRow();
+                RequestDetailVo.setrequestId(Contact_table.getValueAt(index,0).toString());
+                WindowState ws=new WindowState();
+                ws.setaddStates(true);
+                new RequestDetailFrame();
+                rdd.setAll(true,requestContentPanel,requestBodyPanel);
+                new Thread(rdd).start();
+                new Thread(rdd).stop();
+            }else{
+                JOptionPane.showMessageDialog(null,"请选择一条数据");
+                return;
+            }
+        });
+        //产品详细按钮监听
+        productDetailButton.addActionListener(e->{
+            ProductDetailDispose pdd = new ProductDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getProduct_table();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                int index = Contact_table.getSelectedRow();
+                ProDetailVo pdv=new ProDetailVo();
+                pdv.setproId(Contact_table.getValueAt(index, 0).toString());
+                WindowState ws = new WindowState();
+                ws.setustates(true);
+                new ProductDetailFrame();
+                pdd.setAll(true, productContentPanel, productBodyPanel);
+                new Thread(pdd).start();
+                new Thread(pdd).stop();
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一条数据");
+                return;
+            }
+        });
     }
 
     public void proTypeComboxInit() {
