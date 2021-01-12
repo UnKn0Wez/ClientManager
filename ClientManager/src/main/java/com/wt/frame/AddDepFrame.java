@@ -1,10 +1,13 @@
 package com.wt.frame;
 
+import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.WindowState;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -29,6 +32,10 @@ public class AddDepFrame extends JFrame{
     }
     AddDepFrame(){
         init();
+        Border border = new RoundBorder(10, Color.decode("#838383"));
+        depNameText.setBorder(border);
+        addButton.setBorder(border);
+        CancelButton.setBorder(border);
         mainXField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

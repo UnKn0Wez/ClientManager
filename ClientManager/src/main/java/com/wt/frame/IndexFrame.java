@@ -207,21 +207,31 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "1");
+                contactBodyPanel.removeAll();
                 svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
+                contactBodyPanel.repaint();
+                contactBodyPanel.revalidate();
             }
         });
         clientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "2");
+                clientBodyPanel.removeAll();
                 svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
+                clientBodyPanel.repaint();
+                clientBodyPanel.revalidate();
+
             }
         });
         productLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
+                productBodyPanel.removeAll();
                 svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel, productBodyPanel);
+                productBodyPanel.repaint();
+                productBodyPanel.revalidate();
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
@@ -234,21 +244,30 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "5");
+                planBodyPanel.removeAll();
                 svu.showPlan(ServiceFactory.getPlanServiceInstance().selectAll(), planContentPanel, planBodyPanel);
+                planBodyPanel.repaint();
+                planBodyPanel.revalidate();
             }
         });
         depLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "6");
+                depBodyPanel.removeAll();
                 svu.showDep(ServiceFactory.getDepServiceInstance().selectDepAll(), depContentPanel, depBodyPanel);
+                depBodyPanel.repaint();
+                depBodyPanel.revalidate();
             }
         });
         orderLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "7");
+                orderBodyPanel.removeAll();
                     svu.showOrders(ServiceFactory.getOrderServiceInstance().selectAllOrder(), orderContentPanel,orderBodyPanel);
+                    orderBodyPanel.repaint();
+                    orderBodyPanel.revalidate();
             }
         });
         strongLael.addMouseListener(new MouseAdapter() {
@@ -257,8 +276,6 @@ public class IndexFrame extends JFrame {
                 C.show(indexPanel, "8");
             }
         });
-        svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
-        svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
 
         addContact_button.addActionListener(e -> {
             ContactDetailDispose cdd = new ContactDetailDispose();
@@ -376,6 +393,15 @@ public class IndexFrame extends JFrame {
             WindowState ws = new WindowState();
             ws.setustates(true);
             pdd.setAll(true, depContentPanel, depBodyPanel);
+            new Thread(pdd).start();
+            new Thread(pdd).stop();
+        });
+        addPlanButton.addActionListener(e ->{
+            PlanDetailDispose pdd = new PlanDetailDispose();
+            new AddMissionFrame();
+            WindowState ws = new WindowState();
+            ws.setustates(true);
+            pdd.setAll(true, planContentPanel, planBodyPanel);
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });

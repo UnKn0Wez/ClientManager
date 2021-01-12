@@ -1,5 +1,6 @@
 package com.wt.frame;
 
+import com.wt.component.RoundBorder;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.MissionVo;
@@ -8,6 +9,8 @@ import com.wt.vo.UserVo;
 import com.wt.vo.WindowState;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,6 +49,14 @@ public class MissionDetailFrame extends JFrame {
     MissionDetailFrame() {
         init();
         showDetail();
+        Border border = new RoundBorder(10, Color.decode("#838383"));
+        planNumText.setBorder(border);
+        planProfitText.setBorder(border);
+        planStateCombobox.setBorder(border);
+        finishField.setBorder(border);
+        productNameCombox.setBorder(border);
+        updateButton.setBorder(border);
+        CancelButton.setBorder(border);
         mainXField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -143,6 +154,7 @@ public class MissionDetailFrame extends JFrame {
         setSize(600, 800);
         setVisible(true);
     }
+
 
 
 }

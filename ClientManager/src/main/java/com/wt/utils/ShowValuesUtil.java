@@ -598,6 +598,7 @@ public class ShowValuesUtil {
                 }
             }
         });
+
         MyTable myTable = new MyTable();
         myTable.setClient_table(client_table);
     }
