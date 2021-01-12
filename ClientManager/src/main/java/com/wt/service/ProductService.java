@@ -18,4 +18,5 @@ public interface ProductService {
     Product productDetail(String proId);
     void updateProduct(Product product,String proId);
     List<Product> searchProduct(String name,String type);
+    Product selectProByName(String proName);
 }

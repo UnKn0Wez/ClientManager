@@ -151,5 +151,26 @@ public class ProductDaoImpl implements ProductDao {
 
     }
 
+    @Override
+    public Product selectProByName(String proName) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql="select * from t_product where product_name='"+proName+"'";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        Product product=null;
+        while (rs.next()) {
+            product= Product.builder()
+                    .productId(rs.getString("product_id"))
+                    .price(rs.getDouble("price"))
+                    .productName(rs.getString("product_name"))
+                    .productType(rs.getString("product_type"))
+                    .productDate(rs.getDate("product_date")).build();
+        }
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return product;
+    }
+
 
 }

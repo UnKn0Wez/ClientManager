@@ -20,4 +20,5 @@ public interface ProductDao {
     Product productDetail(String proId)throws SQLException;
     void updateProduct(Product product,String proId)throws SQLException;
     List<Product> searchProduct(String name,String type)throws SQLException;
+    Product selectProByName(String proName)throws SQLException;
 }

@@ -8,6 +8,10 @@ import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.MyTable;
 import com.wt.vo.UserVo;
+import com.wt.entity.Mission;
+import com.wt.entity.Product;
+import com.wt.factory.ServiceFactory;
+import com.wt.vo.*;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
@@ -38,6 +42,7 @@ public class ShowValuesUtil {
     private JTable product_table;
     private JPanel productContentPanel;
     private JPanel productBodyPanel;
+    private UserVo uv = new UserVo();
 
     public void showContact(List<ContactVo> contacts, JPanel contactContentPanel, JPanel contactBodyPanel) {
         this.contactBodyPanel = contactBodyPanel;
@@ -373,8 +378,6 @@ public class ShowValuesUtil {
         depBodyPanel.add(scrollPane);
         depBodyPanel.revalidate();
         depBodyPanel.repaint();
-        dep_table.getSelectionModel().addListSelectionListener(e -> {
-        });
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("删除");
         JMenuItem outItem = new JMenuItem("导出");
@@ -404,6 +407,115 @@ public class ShowValuesUtil {
                 }
             }
         });
+        MyTable myTable = new MyTable();
+        myTable.setDep_table(dep_table);
+    }
+    public void showPlan(List<MissionVo> plans, JPanel depContentPanel, JPanel depBodyPanel) {
+        this.depContentPanel = depContentPanel;
+        this.depBodyPanel = depBodyPanel;
+        showPlan(plans);
+    }
+
+    public void showPlan(List<MissionVo> plans) {
+        TableModel tableModel;
+        tableModel = new DefaultTableModel();
+        dep_table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        DefaultTableModel model = new DefaultTableModel();
+        dep_table.setModel(model);
+        if("Admin".equals(uv.getuRole())||"Contact".equals(uv.getuRole())){
+            model.setColumnIdentifiers(new String[]{"计划编号", "客户数量", "计划利润","实施情况","开始时间","结束时间","产品类型","产品名称","负责人"});
+            for (MissionVo plan : plans) {
+                Object[] objects = new Object[]{
+                        plan.getPlanId(),
+                        plan.getClientNum(),
+                        plan.getPlanProfit(),
+                        plan.getPlanState(),
+                        plan.getStartTime(),
+                        plan.getFinishTime(),
+                        plan.getProductType(),
+                        plan.getProductName(),
+                        plan.getRealName()
+                };
+                model.addRow(objects);
+            }
+        }else if("Client".equals(uv.getuRole())){
+            model.setColumnIdentifiers(new String[]{"计划编号","实施情况","开始时间","结束时间","产品类型","产品名称","负责人"});
+            for (MissionVo plan : plans) {
+                Object[] objects = new Object[]{
+                        plan.getPlanId(),
+                        //plan.getClientNum(),
+                        //plan.getPlanProfit(),
+                        plan.getPlanState(),
+                        plan.getStartTime(),
+                        plan.getFinishTime(),
+                        plan.getProductType(),
+                        plan.getProductName(),
+                        plan.getRealName()
+                };
+                model.addRow(objects);
+            }
+        }
+
+        JTableHeader header = dep_table.getTableHeader();
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setFont(new Font("楷体", Font.PLAIN, 18));
+        dep_table.setTableHeader(header);
+        dep_table.setRowHeight(35);
+        dep_table.setBackground(Color.white);
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        dep_table.setDefaultRenderer(Object.class, r);
+        dep_table.setBackground(Color.white);
+        dep_table.setPreferredSize(new Dimension(depContentPanel.getWidth(), depContentPanel.getHeight()));
+        JPanel mypane = new JPanel(new BorderLayout());
+        mypane.setPreferredSize(new Dimension(300, dep_table.getRowCount() * dep_table.getRowHeight()));
+        mypane.add(header, BorderLayout.NORTH);
+        mypane.add(dep_table, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(mypane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(dep_table.getWidth(), dep_table.getHeight()));
+        scrollPane.setBackground(Color.white);
+        depBodyPanel.add(scrollPane);
+        depBodyPanel.revalidate();
+        depBodyPanel.repaint();
+        if("Admin".equals(uv.getuRole())||"Contact".equals(uv.getuRole())){
+            JPopupMenu jPopupMenu = new JPopupMenu();
+            JMenuItem deleteItem = new JMenuItem("删除");
+            JMenuItem outItem = new JMenuItem("导出");
+            jPopupMenu.add(deleteItem);
+            jPopupMenu.add(outItem);
+            dep_table.add(jPopupMenu);
+            //删除联系人
+            dep_table.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getButton() == 3) {
+                        jPopupMenu.show(dep_table, e.getX(), e.getY());
+                        if (dep_table.getSelectedRowCount() == 1) {
+                            contact_id = dep_table.getSelectedRow();
+                            deleteItem.addActionListener(e1 -> {
+                                int choice = JOptionPane.showConfirmDialog(null, "确定删除吗？");
+                                if (choice == 0) {
+                                    ServiceFactory.getPlanServiceInstance().deletePlanById(dep_table.getModel().getValueAt(contact_id, 0).toString());
+                                    JOptionPane.showMessageDialog(null, "删除计划成功");
+                                    depBodyPanel.removeAll();
+                                    showDep(ServiceFactory.getDepServiceInstance().selectDepAll(), depContentPanel, depBodyPanel);
+                                    depBodyPanel.revalidate();
+                                    depBodyPanel.repaint();
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
         MyTable myTable = new MyTable();
         myTable.setDep_table(dep_table);
     }

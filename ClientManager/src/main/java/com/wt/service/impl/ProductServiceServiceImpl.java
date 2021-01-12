@@ -80,4 +80,15 @@ public class ProductServiceServiceImpl implements ProductService {
         }
         return productList;
     }
+
+    @Override
+    public Product selectProByName(String proName) {
+        Product product=null;
+        try {
+            product=productDao.selectProByName(proName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
 }

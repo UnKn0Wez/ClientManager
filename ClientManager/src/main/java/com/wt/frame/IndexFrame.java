@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class IndexFrame extends JFrame {
     private JPanel depSearchPanel;
     private JPanel productSearchPanel;
     private JTextField productNameField;
-    private JComboBox productTypeCombo;
+    private JComboBox<String> productTypeCombo;
     private JButton productSearchButton;
     private JPanel productContentPanel;
     private JPanel productBodyPanel;
@@ -96,11 +97,29 @@ public class IndexFrame extends JFrame {
     private JTextField orderProdoductText;
     private JButton orderSearchBtn;
     private JButton orderDetailBtn;
+    private JPanel planContentPanel;
+    private JPanel planSearchPanel;
+    private JPanel planBodyPanel;
+    private JTextField planRealNameField;
+    private JTextField planProductName;
+    private JComboBox<String> planProductType;
+    private JComboBox<String> planState;
+    private JButton addPlanButton;
+    private JButton planSearchButton;
+    private JButton planDetailButton;
+    private JButton requestDetailBtn;
+    private JPanel requestSearchPanel;
+    private JTextField requestClientText;
+    private JTextField requestOrderText;
+    private JButton requestSearchBtn;
+    private JPanel requestContentPanel;
+    private JPanel requestBodyPanel;
     private final CardLayout C;
     private final UserVo uv = new UserVo();
     private int contact_id;
     private String ClientCredit;
     private String clientId;
+
     IndexFrame() {
         init();
         mainXLabel.addMouseListener(new MouseAdapter() {
@@ -110,7 +129,7 @@ public class IndexFrame extends JFrame {
             }
         });
         depTimeCombobox.addItem("请选择年份");
-        for (int i=2010;i<= LocalDate.now().getYear();i++){
+        for (int i = 2010; i <= LocalDate.now().getYear(); i++) {
             depTimeCombobox.addItem(String.valueOf(i));
         }
         Border border = new RoundBorder(250, Color.black);
@@ -125,6 +144,8 @@ public class IndexFrame extends JFrame {
         depSearchCombox.setBorder(border2);
         contactSearchText.setBorder(border2);
         contactProSearchCombo.setBorder(border2);
+        planSearchPanel.setBorder(border1);
+        planContentPanel.setBorder(border1);
         addContact_button.setBorder(border2);
         contactDetail_button.setBorder(border2);
         clientSearchText.setBorder(border2);
@@ -153,7 +174,13 @@ public class IndexFrame extends JFrame {
         depTimeCombobox.setBorder(border2);
         depSearchButton.setBorder(border2);
         depDetailButton.setBorder(border2);
+        planDetailButton.setBorder(border2);
         newDepButton.setBorder(border2);
+        planRealNameField.setBorder(border2);
+        planProductType.setBorder(border2);
+        planState.setBorder(border2);
+        planSearchButton.setBorder(border2);
+        addPlanButton.setBorder(border2);
         clientCreditCombobox.addItem("信任");
         clientCreditCombobox.addItem("不信任");
         headLabel.setText("<html><img src='" + uv.getuImg() + "' width='160' height='160'/></html>");
@@ -161,6 +188,8 @@ public class IndexFrame extends JFrame {
         contactComboxInit();
         proComboxInit();
         proTypeComboxInit();
+        planProductTypeInit();
+        planStateInit();
         //创建CardLayout
         C = new CardLayout();
         indexPanel.setLayout(C);
@@ -185,14 +214,14 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "2");
-                svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(),clientContentPanel,clientBodyPanel);
+                svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
             }
         });
         productLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "3");
-                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel,productBodyPanel);
+                svu.showProducts(ServiceFactory.getProductServiceInstance().selectAllProduct(), productContentPanel, productBodyPanel);
             }
         });
         requestLabel.addMouseListener(new MouseAdapter() {
@@ -205,13 +234,14 @@ public class IndexFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "5");
+                svu.showPlan(ServiceFactory.getPlanServiceInstance().selectAll(), planContentPanel, planBodyPanel);
             }
         });
         depLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 C.show(indexPanel, "6");
-                svu.showDep(ServiceFactory.getDepServiceInstance().selectDepAll(),depContentPanel,depBodyPanel);
+                svu.showDep(ServiceFactory.getDepServiceInstance().selectDepAll(), depContentPanel, depBodyPanel);
             }
         });
         orderLabel.addMouseListener(new MouseAdapter() {
@@ -230,13 +260,13 @@ public class IndexFrame extends JFrame {
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);
         svu.showClient(ServiceFactory.getUserServiceInstance().selectClientAll(), clientContentPanel, clientBodyPanel);
 
-        addContact_button.addActionListener(e->{
-            ContactDetailDispose cdd=new ContactDetailDispose();
+        addContact_button.addActionListener(e -> {
+            ContactDetailDispose cdd = new ContactDetailDispose();
             new AddContactFrame();
-            WindowState ws=new WindowState();
+            WindowState ws = new WindowState();
             ws.setustates(true);
             cdd.setCdf(true);
-            cdd.setcontentPanel(contactContentPanel,contactBodyPanel);
+            cdd.setcontentPanel(contactContentPanel, contactBodyPanel);
             new Thread(cdd).start();
             new Thread(cdd).stop();
         });
@@ -260,7 +290,7 @@ public class IndexFrame extends JFrame {
         });
         //联系人详细页面切换
         contactDetail_button.addActionListener(e -> {
-            ContactDetailDispose cdd=new ContactDetailDispose();
+            ContactDetailDispose cdd = new ContactDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getuContact_table();
             if (Contact_table.getSelectedRowCount() == 1) {
@@ -283,59 +313,69 @@ public class IndexFrame extends JFrame {
             ClientDetailDispose cdd = new ClientDetailDispose();
             MyTable myTable = new MyTable();
             JTable clientTable = myTable.getClient_table();
-            if(clientTable.getSelectedRowCount()==1){
-                int index=clientTable.getSelectedRow();
+            if (clientTable.getSelectedRowCount() == 1) {
+                int index = clientTable.getSelectedRow();
                 ClientDetailVo cdv = new ClientDetailVo();
-                cdv.setClientDetailId(clientTable.getValueAt(index,0).toString());
-                WindowState ws=new WindowState();
+                cdv.setClientDetailId(clientTable.getValueAt(index, 0).toString());
+                WindowState ws = new WindowState();
                 ws.setustates(true);
                 new ClientDetailFrame();
-                cdd.setAll(true,clientContentPanel,clientBodyPanel);
+                cdd.setAll(true, clientContentPanel, clientBodyPanel);
                 new Thread(cdd).start();
                 new Thread(cdd).stop();
-            }else{
-                JOptionPane.showMessageDialog(null,"清选择一条数据");
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一条数据");
                 return;
             }
         });
         //新增客户
         newClientButton.addActionListener(e -> {
             new AddClientFrame();
-            ClientDetailDispose cdd =new ClientDetailDispose();
-            WindowState ws=new WindowState();
+            ClientDetailDispose cdd = new ClientDetailDispose();
+            WindowState ws = new WindowState();
             ws.setustates(true);
-            cdd.setAll(true,clientContentPanel,clientBodyPanel);
+            cdd.setAll(true, clientContentPanel, clientBodyPanel);
             new Thread(cdd).start();
             new Thread(cdd).stop();
         });
         //部门查询按钮监听
         depSearchButton.addActionListener(e -> {
-                    int index = depTimeCombobox.getSelectedIndex();
-                    depBodyPanel.removeAll();
-                    if (index != 0) {
-                        svu.showDep(ServiceFactory.getDepServiceInstance().selectDep(depSearchText.getText(), Integer.parseInt(depTimeCombobox.getItemAt(index))));
-                    } else {
-                        svu.showDep(ServiceFactory.getDepServiceInstance().selectDep(depSearchText.getText(), 0));
-                    }
-                    depBodyPanel.revalidate();
-                    depBodyPanel.repaint();
-                });
-        addProductButton.addActionListener(e->{
-            ProductDetailDispose pdd=new ProductDetailDispose();
+            int index = depTimeCombobox.getSelectedIndex();
+            depBodyPanel.removeAll();
+            if (index != 0) {
+                svu.showDep(ServiceFactory.getDepServiceInstance().selectDep(depSearchText.getText(), Integer.parseInt(depTimeCombobox.getItemAt(index))));
+            } else {
+                svu.showDep(ServiceFactory.getDepServiceInstance().selectDep(depSearchText.getText(), 0));
+            }
+            depBodyPanel.revalidate();
+            depBodyPanel.repaint();
+        });
+        //任务计划页面查询
+        planSearchButton.addActionListener(e -> {
+            planBodyPanel.removeAll();
+            int typeIndex = planProductType.getSelectedIndex();
+            int stateIndex = planState.getSelectedIndex();
+            svu.showPlan(ServiceFactory.getPlanServiceInstance().searchPlan(planState.getItemAt(stateIndex), planProductType.getItemAt(typeIndex), planRealNameField.getText()));
+            planBodyPanel.revalidate();
+            planBodyPanel.repaint();
+        });
+        addProductButton.addActionListener(e -> {
+            ProductDetailDispose pdd = new ProductDetailDispose();
             new AddProductFrame();
-            WindowState ws=new WindowState();
+            WindowState ws = new WindowState();
             ws.setustates(true);
-            pdd.setAll(true,productContentPanel,productBodyPanel);
+            pdd.setAll(true, productContentPanel, productBodyPanel);
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
+
         //新增部门按钮监听
         newDepButton.addActionListener(e -> {
-            DepDetailDispose pdd=new DepDetailDispose();
+            DepDetailDispose pdd = new DepDetailDispose();
             new AddDepFrame();
-            WindowState ws=new WindowState();
+            WindowState ws = new WindowState();
             ws.setustates(true);
-            pdd.setAll(true,depContentPanel,depBodyPanel);
+            pdd.setAll(true, depContentPanel, depBodyPanel);
             new Thread(pdd).start();
             new Thread(pdd).stop();
         });
@@ -344,17 +384,17 @@ public class IndexFrame extends JFrame {
             DepDetailDispose ddd = new DepDetailDispose();
             MyTable myTable = new MyTable();
             JTable Contact_table = myTable.getDep_table();
-            if(Contact_table.getSelectedRowCount()==1){
-                int index=Contact_table.getSelectedRow();
-                DepDetailVo.setDepId(Contact_table.getValueAt(index,0).toString());
-                WindowState ws=new WindowState();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                int index = Contact_table.getSelectedRow();
+                DepDetailVo.setDepId(Contact_table.getValueAt(index, 0).toString());
+                WindowState ws = new WindowState();
                 ws.setustates(true);
                 new DeoDetailFrame();
-                ddd.setAll(true,depContentPanel,depBodyPanel);
+                ddd.setAll(true, depContentPanel, depBodyPanel);
                 new Thread(ddd).start();
                 new Thread(ddd).stop();
-            }else{
-                JOptionPane.showMessageDialog(null,"清选择一条数据");
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一条数据");
                 return;
             }
         });
@@ -384,6 +424,31 @@ public class IndexFrame extends JFrame {
                 return;
             }
         });
+        //任务计划详细信息界面切换
+        planDetailButton.addActionListener(e -> {
+            PlanDetailDispose pdd = new PlanDetailDispose();
+            MyTable myTable = new MyTable();
+            JTable Contact_table = myTable.getDep_table();
+            if (Contact_table.getSelectedRowCount() == 1) {
+                int index = Contact_table.getSelectedRow();
+                PlanDetailVo.setPlanDetailId(Contact_table.getValueAt(index, 0).toString());
+                WindowState ws = new WindowState();
+                ws.setustates(true);
+                new MissionDetailFrame();
+                pdd.setAll(true, planContentPanel, planBodyPanel);
+                new Thread(pdd).start();
+                new Thread(pdd).stop();
+            } else {
+                JOptionPane.showMessageDialog(null, "请选择一条数据");
+                return;
+            }
+        });
+        if("Admin".equals(uv.getuRole())||"Contact".equals(uv.getuRole())){
+            addPlanButton.setVisible(true);
+        }
+        if("Client".equals(uv.getuRole())){
+            addPlanButton.setVisible(false);
+        }
     }
 
     public void proTypeComboxInit() {
@@ -407,6 +472,23 @@ public class IndexFrame extends JFrame {
         orderTypeCombox.addItem("高科技产品");
     }
 
+    public void planProductTypeInit() {
+        planProductType.addItem("请选择产品类型");
+        planProductType.addItem("运动产品");
+        planProductType.addItem("电子产品");
+        planProductType.addItem("机械产品");
+        planProductType.addItem("儿童玩具");
+        planProductType.addItem("床上用品");
+        planProductType.addItem("厨房用品");
+        planProductType.addItem("高科技产品");
+    }
+
+    public void planStateInit() {
+        planState.addItem("请选择完成情况");
+        planState.addItem("已完成");
+        planState.addItem("已失败");
+        planState.addItem("进行中");
+    }
 
     public void proComboxInit() {
         contactProSearchCombo.addItem(Product.builder().productName("请选择产品").productId("1").build());
@@ -415,6 +497,7 @@ public class IndexFrame extends JFrame {
             contactProSearchCombo.addItem(product);
         }
     }
+
 
     public void contactComboxInit() {
         depSearchCombox.addItem(Department.builder().depName("请选择部门").depId("1").build());

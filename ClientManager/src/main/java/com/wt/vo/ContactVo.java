@@ -40,4 +40,9 @@ public class ContactVo {
     private String depId;
     //产品ID
     private String ProId;
+
+    @Override
+    public String toString() {
+        return realName;
+    }
 }

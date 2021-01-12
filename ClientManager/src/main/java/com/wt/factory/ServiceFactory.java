@@ -1,11 +1,17 @@
 package com.wt.factory;
 
+import com.wt.dao.PlanDao;
 import com.wt.service.DepService;
 import com.wt.service.OrderService;
 import com.wt.service.ProductService;
 import com.wt.service.UserService;
 import com.wt.service.impl.DepServiceImpl;
 import com.wt.service.impl.OrderServiceImpl;
+import com.wt.service.PlanService;
+import com.wt.service.ProductService;
+import com.wt.service.UserService;
+import com.wt.service.impl.DepServiceImpl;
+import com.wt.service.impl.PlanServiceImpl;
 import com.wt.service.impl.ProductServiceServiceImpl;
 import com.wt.service.impl.UserServiceImpl;
 
@@ -20,4 +26,5 @@ public class ServiceFactory {
     public static DepService getDepServiceInstance(){return new DepServiceImpl();}
     public static ProductService getProductServiceInstance(){return new ProductServiceServiceImpl();}
     public static OrderService getOrderServiceInstance(){return new OrderServiceImpl();}
+    public static PlanService getPlanServiceInstance(){return new PlanServiceImpl(); }
 }
