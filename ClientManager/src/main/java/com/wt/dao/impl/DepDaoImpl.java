@@ -112,9 +112,6 @@ public class DepDaoImpl implements DepDao {
         String sql = "insert into t_department(dep_id,dep_name,dep_time) " +
                 "values('"+date+"','"+department.getDepName()+"','"+sqlDate+"')";
         PreparedStatement pstmt = connection.prepareStatement(sql);
-        //pstmt.setString(1, date);
-        //pstmt.setString(2, department.getDepName());
-        //pstmt.setDate(3, sqlDate);
         pstmt.execute();
         pstmt.close();
         jdbcUtil.closeConnection();

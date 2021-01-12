@@ -27,4 +27,5 @@ public interface UserDao {
     List<ContactVo> searchInfo(String contactName, String depId, String proID)throws SQLException;
     void updateClient(ClientVo clientVo)throws SQLException;
     ClientVo selectByClient(String clientId)throws SQLException;
+    ContactVo selectContactIdByName(String contactName)throws SQLException;
 }

@@ -6,6 +6,7 @@ import com.wt.entity.Order;
 import com.wt.entity.Product;
 import com.wt.factory.DaoFactory;
 import com.wt.service.OrderService;
+import com.wt.vo.OrderVo;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -49,5 +50,14 @@ public class OrderServiceImpl implements OrderService {
             System.err.println("查询订单出现错误！");
         }
         return orderList;
+    }
+
+    @Override
+    public void newOrder(OrderVo order) {
+        try {
+            orderDao.newOrder(order);
+        } catch (SQLException e) {
+            System.err.println("添加订单发生错误！");
+        }
     }
 }

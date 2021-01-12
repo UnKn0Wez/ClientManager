@@ -1,7 +1,9 @@
 package com.wt.service;
 
 import com.wt.entity.Order;
+import com.wt.vo.OrderVo;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -14,4 +16,5 @@ public interface OrderService {
     List<Order> selectAllOrder();
     List<Order> searchOrder(String order_id, String type_name, String product_name);
     Order OrderDetail(String order_id);
+    void newOrder(OrderVo order);
 }

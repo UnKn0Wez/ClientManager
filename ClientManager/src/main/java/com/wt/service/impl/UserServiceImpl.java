@@ -159,4 +159,15 @@ public class UserServiceImpl implements UserService {
         }
         return clientVo;
     }
+
+    @Override
+    public ContactVo selectContactIdByName(String contactName) {
+        ContactVo contactVo=null;
+        try {
+            contactVo=userDao.selectContactIdByName(contactName);
+        } catch (SQLException e) {
+            System.err.println("根据姓名查询员工ID发生异常！");
+        }
+        return contactVo;
+    }
 }

@@ -179,6 +179,7 @@
                 </constraints>
                 <properties>
                   <background color="-1"/>
+                  <lineWrap value="true"/>
                 </properties>
               </component>
             </children>
