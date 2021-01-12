@@ -3,6 +3,7 @@ package com.wt.dao;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import com.wt.entity.Department;
 import com.wt.entity.Order;
+import com.wt.vo.OrderVo;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,4 +18,5 @@ public interface OrderDao {
     List<Order> selectAllOrder()throws SQLException;
     List<Order> searchOrder(String order_id,String type_name,String product_name)throws SQLException;
     Order orderDetail(String order_id)throws SQLException;
+    void newOrder(OrderVo order)throws SQLException;
 }

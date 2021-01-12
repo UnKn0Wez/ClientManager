@@ -3,15 +3,21 @@ package com.wt.dao.impl;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import com.wt.dao.OrderDao;
 import com.wt.entity.Order;
+import com.wt.utils.FormatUtil;
 import com.wt.utils.JdbcUtil;
 import com.wt.vo.ContactVo;
+import com.wt.vo.OrderVo;
 import com.wt.vo.UserVo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -333,5 +339,30 @@ public class OrderDaoImpl implements OrderDao {
         }
         jdbcUtil.closeConnection();
         return order;
+    }
+
+    @Override
+    public void newOrder(OrderVo order) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String date = LocalDateTime.now().format(df);
+        String longFormat = "yyyy-MM-dd";
+        Date date1 = new Date();
+        String scDate = FormatUtil.formatDate(date1);
+        long time = 0;
+        try {
+            time = FormatUtil.longFormat(scDate, longFormat);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        java.sql.Date sqlDate = new java.sql.Date(time);
+        String sql = "insert into t_order(order_id,contact_id,client_id,buy_time,plan_id,buy_num) " +
+                "values('"+date+"','"+order.getContactId()+"','"+order.getClientId()+"','"+sqlDate+"','"+order.getPlanId()+"',"+order.getBuy_num()+")";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.execute();
+        pstmt.close();
+        jdbcUtil.closeConnection();
     }
 }

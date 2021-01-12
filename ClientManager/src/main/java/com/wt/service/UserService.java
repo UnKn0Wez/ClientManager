@@ -28,4 +28,5 @@ public interface UserService {
     void deleteClient(String clientId);
     void updateClient(ClientVo clientVo);
     ClientVo selectByClient(String clientId);
+    ContactVo selectContactIdByName(String contactName);
 }

@@ -88,15 +88,19 @@ public class AddMissionFrame extends JFrame {
             int nameIndex = productNameCombobox.getSelectedIndex();
             if ("".equals(planProfitText.getText()) && planProfitText.getText() == null) {
                 JOptionPane.showMessageDialog(null, "请输入计划利润！");
+                return;
             }
             if ("".equals(clientNumText.getText()) && clientNumText.getText() == null) {
                 JOptionPane.showMessageDialog(null, "请输入计划数量！");
+                return;
             }
             if (typeIndex == 0) {
                 JOptionPane.showMessageDialog(null, "请选择产品类型！");
+                return;
             }
             if (nameIndex == 0) {
                 JOptionPane.showMessageDialog(null, "请选择产品名称！");
+                return;
             }
             Mission mission=new Mission();
             mission.setClientNum(Integer.parseInt(clientNumText.getText()));

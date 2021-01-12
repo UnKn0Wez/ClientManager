@@ -381,6 +381,26 @@ public class UserDaoImpl implements UserDao {
         return clientVo;
     }
 
+    @Override
+    public ContactVo selectContactIdByName(String contactName) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT user_id,user_name,realname,user_phone,client_credit,user_img,client_address,contact_id\n" +
+                "              from t_user where user_role='Contact' and realname=?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,contactName);
+        ResultSet rs = pstmt.executeQuery();
+        ContactVo contactVo = null;
+        while (rs.next()) {
+            contactVo = ContactVo.builder()
+                    .contactId(rs.getString("contact_id"))
+                    .build();
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return contactVo;
+    }
 
 
     @Override

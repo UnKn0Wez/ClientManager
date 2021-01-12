@@ -46,8 +46,9 @@ public class AddDepFrame extends JFrame{
             dispose();
         });
         addButton.addActionListener(e -> {
-            if("".equals(depNameText.getText())&&depNameText.getText()==null){
+            if("".equals(depNameText.getText())||depNameText.getText()==null){
                 JOptionPane.showMessageDialog(null,"请输入部门名称！");
+                return;
             }
             Department department = new Department();
             department.setDepName(depNameText.getText());
