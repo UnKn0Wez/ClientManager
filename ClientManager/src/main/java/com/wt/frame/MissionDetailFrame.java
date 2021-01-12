@@ -1,7 +1,10 @@
 package com.wt.frame;
 
 import com.wt.component.RoundBorder;
+import com.wt.entity.Message;
+import com.wt.entity.Mission;
 import com.wt.entity.Product;
+import com.wt.entity.User;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.*;
 
@@ -9,9 +12,13 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -124,7 +131,26 @@ public class MissionDetailFrame extends JFrame {
             productNameLabel.setVisible(true);
             butNumLabel.setVisible(false);
             buyNum.setVisible(false);
-            updateButton.setText("修改");
+            updateButton.setText("推送");
+            updateButton.addActionListener(e->{
+                Message message =new Message();
+                message.setPlanId(planIdLabel.getText());
+                message.setSendId(uv.getcontactId());
+                DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+                String date = LocalDateTime.now().format(df);
+
+                MissionVo mission = ServiceFactory.getPlanServiceInstance().selectPlanById(planIdLabel.getText());
+                String email="我们推出了新产品："+mission.getProductName()+"，请问您需要点这个产品吗，我们保证质量优秀";
+                message.setMessageContent(email);
+                List<ClientVo> list=ServiceFactory.getUserServiceInstance().selectClientAll();
+                for(int i=0;i<list.size();i++){
+                    date+=i;
+                    message.setMessageId(date);
+                    ServiceFactory.getMessageServiceInstance().newMessage(message,list.get(i).getClientId());
+                }
+                JOptionPane.showMessageDialog(null,"推送成功");
+                dispose();
+            });
         }
         if("Admin".equals(uv.getuRole())){
             planNumText.setVisible(true);

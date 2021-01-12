@@ -1,15 +1,11 @@
 package com.wt.utils;
 
-import com.wt.entity.Department;
-import com.wt.entity.Order;
-import com.wt.entity.Product;
-import com.wt.entity.Request;
+import com.wt.entity.*;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
 import com.wt.vo.MyTable;
 import com.wt.vo.UserVo;
-import com.wt.entity.Mission;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
 import com.wt.vo.*;
@@ -100,9 +96,7 @@ public class ShowValuesUtil {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("删除");
-        JMenuItem outItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
-        jPopupMenu.add(outItem);
         Contact_table.add(jPopupMenu);
         //删除联系人
         Contact_table.addMouseListener(new MouseAdapter() {
@@ -185,9 +179,7 @@ public class ShowValuesUtil {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("删除");
-        JMenuItem outItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
-        jPopupMenu.add(outItem);
         product_table.add(jPopupMenu);
         //删除联系人
         product_table.addMouseListener(new MouseAdapter() {
@@ -446,9 +438,7 @@ public class ShowValuesUtil {
         depBodyPanel.repaint();
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("删除");
-        JMenuItem outItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
-        jPopupMenu.add(outItem);
         dep_table.add(jPopupMenu);
         //删除联系人
         dep_table.addMouseListener(new MouseAdapter() {
@@ -554,9 +544,7 @@ public class ShowValuesUtil {
         if("Admin".equals(uv.getuRole())||"Contact".equals(uv.getuRole())){
             JPopupMenu jPopupMenu = new JPopupMenu();
             JMenuItem deleteItem = new JMenuItem("删除");
-            JMenuItem outItem = new JMenuItem("导出");
             jPopupMenu.add(deleteItem);
-            jPopupMenu.add(outItem);
             dep_table.add(jPopupMenu);
             //删除联系人
             dep_table.addMouseListener(new MouseAdapter() {
@@ -640,9 +628,7 @@ public class ShowValuesUtil {
         });
         JPopupMenu jPopupMenu = new JPopupMenu();
         JMenuItem deleteItem = new JMenuItem("删除");
-        JMenuItem outItem = new JMenuItem("导出");
         jPopupMenu.add(deleteItem);
-        jPopupMenu.add(outItem);
         client_table.add(jPopupMenu);
         client_table.addMouseListener(new MouseAdapter() {
             @Override
@@ -670,5 +656,9 @@ public class ShowValuesUtil {
         MyTable myTable = new MyTable();
         myTable.setClient_table(client_table);
     }
+
+
+
+
 
 }

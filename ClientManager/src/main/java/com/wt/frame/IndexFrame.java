@@ -2,6 +2,7 @@ package com.wt.frame;
 
 import com.wt.component.RoundBorder;
 import com.wt.entity.Department;
+import com.wt.entity.Message;
 import com.wt.entity.Product;
 import com.wt.factory.ServiceFactory;
 import com.wt.thread.*;
@@ -10,14 +11,16 @@ import com.wt.vo.UserVo;
 import com.wt.utils.ShowValuesUtil;
 import com.wt.vo.*;
 import org.apache.poi.ss.formula.functions.Index;
+import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
 import java.util.List;
@@ -575,6 +578,12 @@ public class IndexFrame extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "请选择一条数据");
                 return;
+            }
+        });
+        messageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new MessageFrame();
             }
         });
     }

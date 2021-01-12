@@ -101,7 +101,6 @@ public class DepDaoImpl implements DepDao {
     public void addDep(Department department) throws SQLException, ParseException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String date = LocalDateTime.now().format(df);
         String longFormat = "yyyy-MM-dd";

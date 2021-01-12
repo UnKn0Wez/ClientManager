@@ -29,5 +29,6 @@ public class ServiceFactory {
     public static ProductService getProductServiceInstance(){return new ProductServiceServiceImpl();}
     public static OrderService getOrderServiceInstance(){return new OrderServiceImpl();}
     public static PlanService getPlanServiceInstance(){return new PlanServiceImpl(); }
+    public static MessageService getMessageServiceInstance(){return new MessageServiceImpl(); }
     public static RequestService getRequestServiceInstanct(){return new RequestServiceImpl();}
 }

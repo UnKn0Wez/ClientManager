@@ -15,6 +15,7 @@ public class MyTable {
     private static JTable Product_table;
     private static JTable Order_table;
     private static JTable Request_table;
+    private static JTable Message_table;
     public void setRequest_table(JTable Request_table) {
         this.Request_table = Request_table;
     }
@@ -63,5 +64,11 @@ public class MyTable {
         return this.Product_table;
     }
 
+    public void setMessage_table(JTable Message_table) {
+        this.Message_table = Message_table;
+    }
 
+    public JTable getMessage_table() {
+        return this.Message_table;
+    }
 }

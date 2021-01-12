@@ -114,7 +114,8 @@ public class RequestDaoImpl implements RequestDao {
         int count=0;
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "select * from t_request,t_order where t_request.order_id=t_order.order_id and t_request.order_id='"+order_id+"' and t_request.client_id='"+client_id+"'";
+        String sql = "select * from t_request,t_order where t_request.order_id=t_order.order_id " +
+                "and t_request.order_id='"+order_id+"' and t_request.client_id='"+client_id+"'";
         PreparedStatement pstmt=connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()){

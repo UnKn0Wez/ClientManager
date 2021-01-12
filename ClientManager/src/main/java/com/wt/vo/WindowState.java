@@ -2,6 +2,9 @@ package com.wt.vo;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * @ClassName WindowState
  * @Description TODO
@@ -25,4 +28,5 @@ public class WindowState {
     public Boolean getstates() {
         return this.states;
     }
+
 }

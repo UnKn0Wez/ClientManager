@@ -29,4 +29,5 @@ public class DaoFactory {
     public static ProductDao getProDaoInstance(){return new ProductDaoImpl();}
     public static PlanDao getPlanDaoInstance(){return new PlanDaoImpl();}
     public static RequestDao getRequestInstance(){return new RequestDaoImpl();}
+    public static MessageDao getMessageInstance(){return new MessageDaoImpl();}
 }
