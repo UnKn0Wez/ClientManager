@@ -7,6 +7,7 @@ import com.wt.service.UserService;
 import com.wt.utils.ResultEntity;
 import com.wt.vo.ClientVo;
 import com.wt.vo.ContactVo;
+import com.wt.vo.UserVo;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;

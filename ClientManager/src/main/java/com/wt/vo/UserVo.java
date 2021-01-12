@@ -17,6 +17,14 @@ public class UserVo {
     public static String uName;
     public static String uRole;
     public static String uImg;
+    public static String password;
+    public void setpassword(String password) {
+        this.password = password;
+    }
+
+    public String getpassword() {
+        return this.password;
+    }
     public void setcontactId(String contactId) {
         this.contactId = contactId;
     }

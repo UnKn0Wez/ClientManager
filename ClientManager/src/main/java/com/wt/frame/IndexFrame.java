@@ -9,6 +9,7 @@ import com.wt.vo.UserDetailVo;
 import com.wt.vo.UserVo;
 import com.wt.utils.ShowValuesUtil;
 import com.wt.vo.*;
+import org.apache.poi.ss.formula.functions.Index;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -114,12 +115,16 @@ public class IndexFrame extends JFrame {
     private JButton requestSearchBtn;
     private JPanel requestContentPanel;
     private JPanel requestBodyPanel;
+    private JLabel SystemTimeLabel;
+    private JLabel xiLabel;
+    private JLabel messageLabel;
+    private JLabel suopinLabel;
+    private JLabel zhuxiaoLabel;
     private final CardLayout C;
     private final UserVo uv = new UserVo();
     private int contact_id;
     private String ClientCredit;
     private String clientId;
-
     IndexFrame() {
         init();
         mainXLabel.addMouseListener(new MouseAdapter() {
@@ -132,6 +137,35 @@ public class IndexFrame extends JFrame {
         for (int i = 2010; i <= LocalDate.now().getYear(); i++) {
             depTimeCombobox.addItem(String.valueOf(i));
         }
+        messageLabel.setText("<html><img src='https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201230103312.png' height='25' width='25'/></html>");
+        suopinLabel.setText("<html><img src='https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201230103850.png' height='25' width='25'/></html>");
+        zhuxiaoLabel.setText("<html><img src='https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201230103313.png' height='25' width='25'/></html>");
+        zhuxiaoLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int choice = JOptionPane.showConfirmDialog(null, "确定注销用户吗？");
+                if (choice == 0) {
+                    new LoginFrame();
+                    UserVo uv=new UserVo();
+                    uv.setcontactId(null);
+                    uv.setclientId(null);
+                    uv.setuImg(null);
+                    uv.setuRole(null);
+                    uv.setuName(null);
+                    dispose();
+                }
+            }
+        });
+        suopinLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int choice = JOptionPane.showConfirmDialog(null, "确定锁屏吗？");
+                if (choice == 0) {
+                    new LockOnFrame();
+                    dispose();
+                }
+            }
+        });
         Border border = new RoundBorder(250, Color.black);
         Border border1 = new RoundBorder(15, Color.decode("#E2E2E2"));
         Border border2 = new RoundBorder(10, Color.decode("#838383"));
@@ -197,6 +231,12 @@ public class IndexFrame extends JFrame {
         proTypeComboxInit();
         planProductTypeInit();
         planStateInit();
+        TimeThread tt=new TimeThread();
+        XiWordThread xwt=new XiWordThread();
+        xwt.setXiLabel(xiLabel);
+        tt.setTimeLabel(SystemTimeLabel);
+        new Thread(tt).start();
+        new Thread(xwt).start();
         //创建CardLayout
         C = new CardLayout();
         indexPanel.setLayout(C);
@@ -207,7 +247,6 @@ public class IndexFrame extends JFrame {
         indexPanel.add("5", missionPanel);
         indexPanel.add("6", depPanel);
         indexPanel.add("7", orderPanel);
-        indexPanel.add("8", strongPanel);
         hidePanel();
         ShowValuesUtil svu = new ShowValuesUtil();
         contactLabel.addMouseListener(new MouseAdapter() {
@@ -282,12 +321,6 @@ public class IndexFrame extends JFrame {
                 orderBodyPanel.revalidate();
                 orderBodyPanel.repaint();
 
-            }
-        });
-        strongLael.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                C.show(indexPanel, "8");
             }
         });
         svu.showContact(ServiceFactory.getUserServiceInstance().selectAll(), contactContentPanel, contactBodyPanel);

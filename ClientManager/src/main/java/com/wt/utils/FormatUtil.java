@@ -19,4 +19,9 @@ public class FormatUtil {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.parse(date).getTime();
     }
+
+    public static String formatDatetime(Date date){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(date);
+    }
 }

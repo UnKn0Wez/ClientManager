@@ -46,6 +46,7 @@ public class LoginFrame extends JFrame {
             JOptionPane.showMessageDialog(null,resultEntity.getMessage());
             if(resultEntity.getCode()==0){
                 UserVo uv=new UserVo();
+                uv.setpassword(passWordText.getText());
                 this.dispose();
                 new IndexFrame();
             }
