@@ -137,7 +137,7 @@ public class IndexFrame extends JFrame {
             }
         });
         depTimeCombobox.addItem("请选择年份");
-        for (int i = 2010; i <= LocalDate.now().getYear(); i++) {
+        for (int i = 2015; i <= LocalDate.now().getYear(); i++) {
             depTimeCombobox.addItem(String.valueOf(i));
         }
         messageLabel.setText("<html><img src='https://image-un.oss-cn-zhangjiakou.aliyuncs.com/image/qzw/20201230103312.png' height='25' width='25'/></html>");
@@ -528,10 +528,10 @@ public class IndexFrame extends JFrame {
                 return;
             }
         });
-        if ("Admin".equals(uv.getuRole()) || "Contact".equals(uv.getuRole())) {
+        if ("Admin".equals(uv.getuRole())) {
             addPlanButton.setVisible(true);
         }
-        if ("Client".equals(uv.getuRole())) {
+        if ("Client".equals(uv.getuRole()) || "Contact".equals(uv.getuRole())) {
             addPlanButton.setVisible(false);
         }
         //反馈信息查询按钮监听
@@ -649,6 +649,8 @@ public class IndexFrame extends JFrame {
         String role = uv.getuRole();
         if ("Admin".equals(role)) {
             C.show(indexPanel, "1");
+            newClientButton.setVisible(true);
+            addPlanButton.setVisible(true);
             return;
         }
         if ("Client".equals(role)) {
@@ -664,6 +666,8 @@ public class IndexFrame extends JFrame {
             contactLabel.setVisible(false);
             productLabel.setVisible(false);
             depLabel.setVisible(false);
+            newClientButton.setVisible(false);
+            addPlanButton.setVisible(false);
             return;
         }
     }

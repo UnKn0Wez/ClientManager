@@ -1412,7 +1412,7 @@
                 </constraints>
                 <properties>
                   <background color="-1"/>
-                  <visible value="false"/>
+                  <visible value="true"/>
                 </properties>
                 <border type="none"/>
                 <children>
@@ -1694,6 +1694,7 @@
                         <properties>
                           <background color="-1"/>
                           <text value="新增任务"/>
+                          <visible value="true"/>
                         </properties>
                       </component>
                       <hspacer id="670d5">
