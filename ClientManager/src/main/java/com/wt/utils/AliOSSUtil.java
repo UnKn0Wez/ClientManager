@@ -17,7 +17,7 @@ public class AliOSSUtil {
         String bucketDomian="https://image-un.oss-cn-zhangjiakou.aliyuncs.com";
         String endpoint="https://oss-cn-zhangjiakou.aliyuncs.com";
         String accessKeyId="LTAI4GAVLwLkPD7pvz5JhPZV";
-        String accessKeySecret="e8ZEEjBy0llxzoYFfSApCjJnF4G6jj";
+        String accessKeySecret="*******************";
         String bucketName="image-un";
         String fileDir="image/qzw";
         String fileName=file.getName();
